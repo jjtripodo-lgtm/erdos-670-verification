@@ -1,0 +1,16 @@
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Tactic
+
+open scoped BigOperators Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- Subtract the common squared radius from off-diagonal entries only. -/
+def offDiagonalShift {ι : Type*} [DecidableEq ι]
+    (D : Matrix ι ι ℝ) (r : ℝ) : Matrix ι ι ℝ :=
+  fun i j => if i=j then 0 else D i j - 2*r
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

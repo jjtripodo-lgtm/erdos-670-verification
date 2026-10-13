@@ -1,0 +1,40 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+noncomputable def sourceDigit (k i : ℕ) : ℝ :=
+  sineDigit (Real.sqrt (1/32)/(k : ℝ)) (((k : ℝ)-1)/2) i
+noncomputable def sourceCrossBaseline (K : ℝ) (k a : ℕ) : ℝ :=
+  sourceBaseline K k+sourceMacroStep k*a
+noncomputable def sourceAlpha (k i : ℕ) : ℝ := (9/8 : ℝ)*((9/8)*(k : ℝ))*sourceDigit k i
+noncomputable def sourceBeta (k i : ℕ) : ℝ := (9/8 : ℝ)*sourceDigit k i
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

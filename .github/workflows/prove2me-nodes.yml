@@ -1,0 +1,104 @@
+name: Pinned Prove2Me transformed-node preflight
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prove2me-nodes-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check_nodes:
+    if: github.event.repository.private == false
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    env:
+      BASE_HARNESS_SHA: 5510ffd94156d48dbe393ac619586b935212da79
+      LEAN_NUM_THREADS: '2'
+      MATHLIB_NO_CACHE_ON_UPDATE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Read exact public inputs and test the node preflight
+        id: inputs
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'jjtripodo-lgtm/erdos-670-verification'
+          [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]]
+          for item in "wrapper:$GITHUB_SHA" "verifier:$BASE_HARNESS_SHA"; do
+            folder="${item%%:*}"
+            commit="${item#*:}"
+            git init --quiet "$RUNNER_TEMP/$folder"
+            git -C "$RUNNER_TEMP/$folder" remote add origin "https://github.com/$GITHUB_REPOSITORY.git"
+            git -C "$RUNNER_TEMP/$folder" fetch --quiet --depth=1 origin "$commit"
+            git -C "$RUNNER_TEMP/$folder" checkout --quiet --detach "$commit"
+            test "$(git -C "$RUNNER_TEMP/$folder" rev-parse HEAD)" = "$commit"
+          done
+          {
+            echo "MATHLIB_CACHE_DIR=$RUNNER_TEMP/mathlib-cache"
+            echo "LAKE_CACHE_DIR=$RUNNER_TEMP/lake-cache"
+          } >> "$GITHUB_ENV"
+          echo "Node wrapper: $GITHUB_REPOSITORY@$GITHUB_SHA"
+          echo "Frozen helper harness: $BASE_HARNESS_SHA"
+          echo "Runner image: ${ImageOS:-unknown} ${ImageVersion:-unknown}"
+          python3 --version
+          df -h "$RUNNER_TEMP"
+          free -h
+          python3 - <<'PY'
+          import os, shutil
+          free = shutil.disk_usage(os.environ["RUNNER_TEMP"]).free
+          print("Initial free GiB:", free / 2**30)
+          if free < 16 * 2**30:
+              raise RuntimeError("Need at least 16 GiB free; no automatic cleanup")
+          PY
+          python3 "$RUNNER_TEMP/wrapper/extraction/check_payload.py"
+          python3 -O -m unittest discover -s "$RUNNER_TEMP/wrapper/nodes" -p 'test_validate_nodes.py' -v
+
+      - name: Materialize the exact reviewed 28 definition bundles and 10 node pairs
+        id: candidate
+        run: python3 "$RUNNER_TEMP/wrapper/nodes/validate_nodes.py" materialize --candidate "$RUNNER_TEMP/nodes"
+
+      - name: Install the hash-pinned official Lean 4.33.1 toolchain
+        id: toolchain
+        run: bash "$RUNNER_TEMP/verifier/scripts/install_lean.sh" prove2me "$RUNNER_TEMP/toolchain"
+
+      - name: Fetch the nine exact public dependency commits
+        id: dependencies
+        run: python3 "$RUNNER_TEMP/wrapper/nodes/validate_nodes.py" dependencies --candidate "$RUNNER_TEMP/nodes" --verifier "$RUNNER_TEMP/verifier" --execute
+
+      - name: Read only the targeted canonical Mathlib cache
+        id: cache
+        run: python3 "$RUNNER_TEMP/wrapper/nodes/validate_nodes.py" cache --candidate "$RUNNER_TEMP/nodes" --verifier "$RUNNER_TEMP/verifier" --execute
+
+      - name: Compile all 48 modules and check 20 exact types and 92 definition axiom reports
+        id: validation
+        run: python3 "$RUNNER_TEMP/wrapper/nodes/validate_nodes.py" validate --candidate "$RUNNER_TEMP/nodes" --verifier "$RUNNER_TEMP/verifier" --execute
+
+      - name: Record exact preflight outcomes
+        if: always()
+        env:
+          INPUTS: ${{ steps.inputs.outcome }}
+          CANDIDATE: ${{ steps.candidate.outcome }}
+          TOOLCHAIN: ${{ steps.toolchain.outcome }}
+          DEPENDENCIES: ${{ steps.dependencies.outcome }}
+          CACHE: ${{ steps.cache.outcome }}
+          VALIDATION: ${{ steps.validation.outcome }}
+        run: |
+          {
+            echo '## Prove2Me transformed-node preflight'
+            echo "Exact wrapper commit: $GITHUB_SHA"
+            echo 'Extraction input: 2b2b59a951c2df97230ab73d7ca50b672941be9e, successful run 38350587663'
+            for phase in INPUTS CANDIDATE TOOLCHAIN DEPENDENCIES CACHE VALIDATION; do
+              echo "- $phase: ${!phase}"
+            done
+            echo 'The ordinary job log includes the machine-readable NODE_VALIDATION_REPORT.'
+            echo 'Theorem stubs deliberately contain sorry; solutions use only their listed reduction dependencies. Definitions must have no sorry axiom.'
+            echo 'This checks exact prepared text, types and axiom boundaries. No Prove2Me platform upload or acceptance is performed.'
+            echo 'No artifact uploads or reusable GitHub cache writes. Standard public runner only; logs and summary follow repository retention.'
+          } >> "$GITHUB_STEP_SUMMARY"
+          df -h "$RUNNER_TEMP"

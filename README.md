@@ -1,9 +1,26 @@
 # Fixed-dimension Erdős 670 compatibility checks
 
-This repository contains the code-only [Palomar proof project](palomar/README.md)
-and reproducible compatibility checks for the public fixed-dimensional result.
-It is separate from the frozen manuscript repository. It is not a Prove2Me
-node package.
+This repository contains the code-only [Palomar proof project](palomar/README.md),
+compatibility checks, and a [Prove2Me node candidate](nodes/README.md) for the
+public fixed-dimensional result. It is separate from the frozen manuscript
+repository.
+
+## Current Prove2Me status: candidate awaiting hosted validation
+
+The prepared candidate contains 10 theorem/solution pairs and 28 definition
+bundles. Its static tests passed. The transformed Lean 4.33.1 build and all
+20 exact type comparisons have **not run**. It is not yet platform-ready and
+has not been submitted to Prove2Me.
+
+The next step is the manual
+[Pinned Prove2Me transformed-node preflight](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/workflows/prove2me-nodes.yml):
+choose **Run workflow**, select **main**, then **Run workflow**. This workflow
+does not run automatically. It checks the exact candidate text, compiled types,
+and axiom boundaries on a standard public runner, with no platform submission,
+artifact uploads, or reusable cache writes. A successful run would establish
+these mechanical checks only; platform metadata and submission gates remain.
+
+The existing Palomar results below apply to their recorded immutable commits.
 
 The paper and original formalization remain in the separate
 [frozen v1.0.0 release](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/releases/tag/v1.0.0).
@@ -175,3 +192,12 @@ publication and subsequent pushes must be explicitly authorized by the owner.
 This harness, its code templates, and the original formalization are MIT
 licensed. The manuscript in the source repository has separate reserved-rights
 terms and is referenced only by link; it is not included or relicensed here.
+
+## Transformed Prove2Me nodes
+
+The real extraction passed in [run 38350587663](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38350587663).
+A compact 10-node, 28-definition-bundle candidate and a separate manual
+[exact-text preflight](nodes/README.md) are now included. Generation is not
+Lean validation or platform acceptance; consult that workflow’s actual result.
+This new check uses only a standard public runner and ordinary logs, without
+artifact uploads or reusable cache writes.

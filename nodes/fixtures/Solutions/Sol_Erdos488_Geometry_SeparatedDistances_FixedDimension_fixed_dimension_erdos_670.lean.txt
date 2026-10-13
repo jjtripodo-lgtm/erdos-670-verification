@@ -1,0 +1,2110 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Real.Sqrt
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Bertrand
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding
+import Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated
+import Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics
+import Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.AllNArithmetic
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- Every sufficiently large requested size is contained in a rectangular
+cluster size with a bounded number of clusters. This closes only the integer
+rounding step of PR 2974; configuration existence is not a premise or conclusion. -/
+theorem every_large_n_cluster_parameters (n : ℕ) (hn : 68000 ≤ n) :
+    ∃ k m : ℕ, 2 ≤ k ∧ 34000 ≤ m ∧ m ≤ 51000 ∧
+      n ≤ m*k ∧ m*k < n+k ∧ 34000*k ≤ n := by
+  let k := n / 34000
+  let r := n % 34000
+  have hk : 2 ≤ k := by dsimp [k]; omega
+  have hk0 : 0 < k := by omega
+  have hr : r < 34000 := Nat.mod_lt _ (by norm_num)
+  have hnkr : 34000*k+r = n := Nat.div_add_mod n 34000
+  have hsub : r+k-1+1 = r+k := by omega
+  let q := (r+k-1)/k
+  have hqUpper : q ≤ 17000 := by
+    have hnum : r+k-1 < (17000+1)*k := by omega
+    have := (Nat.div_lt_iff_lt_mul hk0).2 hnum
+    change q < 17001 at this
+    omega
+  have hqmul : q*k ≤ r+k-1 := Nat.div_mul_le_self _ _
+  have hnext : r+k-1 < (q+1)*k := by
+    simpa [q, Nat.mul_comm] using Nat.lt_mul_div_succ (r+k-1) hk0
+  refine ⟨k, 34000+q, hk, Nat.le_add_right _ _, by linarith, ?_, ?_, ?_⟩
+  · nlinarith
+  · nlinarith
+  · omega
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.UnorderedEdgeSeparation
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+
+
+/-- The independently proved minimum distance implies injectivity. -/
+theorem injective_of_unit_minimum_distance
+    {ι E : Type*} [PseudoMetricSpace E] (p : ι → E)
+    (hmin : ∀ i j, i ≠ j → 1 ≤ dist (p i) (p j)) : Function.Injective p := by
+  intro i j heq
+  by_contra hne
+  have h := hmin i j hne
+  rw [heq,dist_self] at h
+  norm_num at h
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.ClusterEdgeAssembly
+/-! Exhaustive genuinely unordered cluster-edge classification and assembly.
+Local separation, canonical cross separation and mixed band isolation are
+explicit inputs; this module constructs no Gram matrix or scalar certificate. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- Each non-diagonal edge is either local with increasing local endpoints,
+or cross-cluster with increasing macro endpoints. -/
+theorem cluster_edge_cases {α β : Type*} [LinearOrder α] [LinearOrder β]
+    (e : Edge (α × β)) :
+    (∃ A i j, i < j ∧ e.val=s((A,i),(A,j))) ∨
+      (∃ A B i j, A < B ∧ e.val=s((A,i),(B,j))) := by
+  obtain ⟨e,he⟩ := e
+  induction e using Sym2.inductionOn with
+  | hf x y =>
+    obtain ⟨A,i⟩ := x
+    obtain ⟨B,j⟩ := y
+    by_cases hAB : A=B
+    · subst B
+      have hij : i ≠ j := by
+        intro h
+        subst j
+        exact he (Sym2.mk_isDiag_iff.mpr rfl)
+      rcases lt_or_gt_of_ne hij with hij | hji
+      · exact Or.inl ⟨A,i,j,hij,rfl⟩
+      · exact Or.inl ⟨A,j,i,hji,Sym2.eq_swap⟩
+    · rcases lt_or_gt_of_ne hAB with hAB | hBA
+      · exact Or.inr ⟨A,B,i,j,hAB,rfl⟩
+      · exact Or.inr ⟨B,A,j,i,hBA,Sym2.eq_swap⟩
+
+/-- All four combinations of unordered edge classes are checked. -/
+theorem separatedConfiguration_of_cluster_gaps
+    {α β E : Type*} [LinearOrder α] [LinearOrder β] [PseudoMetricSpace E]
+    (p : α × β → E)
+    (hlocal : ∀ A i j B u v, i < j → u < v → (A,i,j) ≠ (B,u,v) →
+      1 ≤ |dist (p (A,i)) (p (A,j))-dist (p (B,u)) (p (B,v))|)
+    (hcross : ∀ A B i j C D u v, A < B → C < D → (A,B,i,j) ≠ (C,D,u,v) →
+      1 ≤ |dist (p (A,i)) (p (B,j))-dist (p (C,u)) (p (D,v))|)
+    (hmixed : ∀ A i j B C u v, i < j → B < C →
+      1 ≤ dist (p (B,u)) (p (C,v))-dist (p (A,i)) (p (A,j))) :
+    SeparatedConfiguration p := by
+  intro e f hef
+  have hval : e.val ≠ f.val := fun h => hef (Subtype.ext h)
+  rcases cluster_edge_cases e with ⟨A,i,j,hij,he⟩ | ⟨A,B,i,j,hAB,he⟩
+  · rcases cluster_edge_cases f with ⟨B,u,v,huv,hf⟩ | ⟨B,C,u,v,hBC,hf⟩
+    · have hne : (A,i,j) ≠ (B,u,v) := by
+        intro h
+        have hA : A=B := congrArg Prod.fst h
+        have hi : i=u := congrArg (fun q => q.2.1) h
+        have hj : j=v := congrArg (fun q => q.2.2) h
+        apply hval
+        simpa only [he,hf,hA,hi,hj]
+      simpa only [he,hf,edgeDistance,Sym2.lift_mk] using hlocal A i j B u v hij huv hne
+    · have h := (hmixed A i j B C u v hij hBC).trans
+        (le_abs_self (dist (p (B,u)) (p (C,v))-dist (p (A,i)) (p (A,j))))
+      rw [abs_sub_comm] at h
+      simpa only [he,hf,edgeDistance,Sym2.lift_mk] using h
+  · rcases cluster_edge_cases f with ⟨C,u,v,huv,hf⟩ | ⟨C,D,u,v,hCD,hf⟩
+    · have h := (hmixed C u v A B i j huv hAB).trans (le_abs_self _)
+      simpa only [he,hf,edgeDistance,Sym2.lift_mk] using h
+    · have hne : (A,B,i,j) ≠ (C,D,u,v) := by
+        intro h
+        have hA : A=C := congrArg Prod.fst h
+        have hB : B=D := congrArg (fun q => q.2.1) h
+        have hi : i=u := congrArg (fun q => q.2.2.1) h
+        have hj : j=v := congrArg (fun q => q.2.2.2) h
+        apply hval
+        simpa only [he,hf,hA,hB,hi,hj]
+      simpa only [he,hf,edgeDistance,Sym2.lift_mk] using hcross A B i j C D u v hAB hCD hne
+
+/-- The two nonzero-distance classes must each clear zero independently. -/
+theorem cluster_minimum_distance
+    {α β E : Type*} [LinearOrder α] [LinearOrder β] [PseudoMetricSpace E]
+    (p : α × β → E)
+    (hlocal : ∀ A i j, i < j → 1 ≤ dist (p (A,i)) (p (A,j)))
+    (hcross : ∀ A B i j, A < B → 1 ≤ dist (p (A,i)) (p (B,j))) :
+    ∀ x y, x ≠ y → 1 ≤ dist (p x) (p y) := by
+  rintro ⟨A,i⟩ ⟨B,j⟩ hxy
+  by_cases hAB : A=B
+  · subst B
+    have hij : i ≠ j := by intro h; subst j; exact hxy rfl
+    rcases lt_or_gt_of_ne hij with h | h
+    · exact hlocal A i j h
+    · simpa only [dist_comm] using hlocal A j i h
+  · rcases lt_or_gt_of_ne hAB with h | h
+    · exact hcross A B i j h
+    · simpa only [dist_comm] using hcross B A j i h
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.TrigonometricChord
+/-! Actual trigonometric circle identities and uniform chord lower slope.
+These provide analytic inputs, not an assumed final Euclidean configuration. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+/-- The derivative of the actual scaled circle chord. -/
+theorem hasDerivAt_circleChord (R d : ℝ) (hR : R ≠ 0) :
+    HasDerivAt (circleChord R) (Real.cos (d/(2*R))) d := by
+  have h := (((hasDerivAt_id d).div_const (2*R)).sin).const_mul (2*R)
+  have he : 2*R*(Real.cos (d/(2*R))*(1/(2*R)))=Real.cos (d/(2*R)) := by
+    field_simp
+  convert h using 1 <;> first | rfl | exact he.symm
+
+/-- Uniform lower slope on the full ruler interval, not merely at sampled points. -/
+theorem circleChord_lower_difference (R Y x y : ℝ) (hR : 0 < R)
+    (hangle : Y/(2*R) ≤ Real.pi) (hx : 0 ≤ x) (hxy : x ≤ y) (hy : y ≤ Y) :
+    Real.cos (Y/(2*R))*(y-x) ≤ circleChord R y-circleChord R x := by
+  have hd (z : ℝ) := hasDerivAt_circleChord R z hR.ne'
+  apply (convex_Icc (0 : ℝ) Y).mul_sub_le_image_sub_of_le_deriv
+    (fun z _ => (hd z).continuousAt.continuousWithinAt)
+    (fun z _ => (hd z).differentiableAt.differentiableWithinAt)
+    ?_ x ⟨hx, hxy.trans hy⟩ y ⟨hx.trans hxy,hy⟩ hxy
+  intro z hz
+  have hz' : z ∈ Set.Icc (0 : ℝ) Y := interior_subset hz
+  rw [(hd z).deriv]
+  exact Real.cos_le_cos_of_nonneg_of_le_pi (div_nonneg hz'.1 (by positivity)) hangle
+    ((div_le_div_iff_of_pos_right (by positivity)).2 hz'.2)
+
+/-- In particular every ruler chord has a certified positive linear lower bound. -/
+theorem circleChord_lower (R Y d : ℝ) (hR : 0 < R)
+    (hangle : Y/(2*R) ≤ Real.pi) (hd : 0 ≤ d) (hdY : d ≤ Y) :
+    Real.cos (Y/(2*R))*d ≤ circleChord R d := by
+  have h := circleChord_lower_difference R Y 0 d hR hangle (by norm_num) hd hdY
+  simpa [circleChord] using h
+
+
+
+/-- Algebraic replacement for differentiating the full square-root length.
+The feature energy may increase between endpoints. This is essential for
+comparisons between different lag classes. -/
+theorem augmented_length_lower_gap (C₀ C₁ Q₀ Q₁ D₀ D₁ K : ℝ)
+    (hC₀ : 0 < C₀) (hC : C₀ ≤ C₁) (hQ : Q₀ ≤ Q₁)
+    (hD₀ : 0 ≤ D₀) (hD₁ : 0 ≤ D₁) (hK : 0 < K)
+    (hsq₀ : D₀^2=C₀^2+Q₀) (hsq₁ : D₁^2=C₁^2+Q₁)
+    (hcone₀ : D₀ ≤ K*C₀) (hcone₁ : D₁ ≤ K*C₁) :
+    (C₁-C₀)/K ≤ D₁-D₀ := by
+  have hmono : 0 ≤ D₁-D₀ := by nlinarith
+  have hmul := mul_le_mul_of_nonneg_left
+    (show D₁+D₀ ≤ K*(C₁+C₀) by nlinarith) hmono
+  have hsqgap : (C₁-C₀)*(C₁+C₀) ≤ (D₁-D₀)*(D₁+D₀) := by nlinarith
+  have hcancel : C₁-C₀ ≤ K*(D₁-D₀) :=
+    (mul_le_mul_iff_of_pos_right (show 0 < C₁+C₀ by linarith)).1 (by nlinarith [hmul])
+  apply (div_le_iff₀ hK).2
+  nlinarith
+
+/-- A quadratic feature-to-chord bound gives the exact cone constant. -/
+theorem augmented_length_cone (C Q D q : ℝ) (hC : 0 ≤ C) (hD : 0 ≤ D)
+    (hsq : D^2=C^2+Q) (hQ : Q ≤ q^2*C^2) :
+    D ≤ Real.sqrt (1+q^2)*C := by
+  have hs : Real.sqrt (1+q^2)^2=1+q^2 := Real.sq_sqrt (by positivity)
+  have hp : 0 ≤ Real.sqrt (1+q^2)*C := mul_nonneg (Real.sqrt_nonneg _) hC
+  have he : (Real.sqrt (1+q^2)*C)^2=(1+q^2)*C^2 := by
+    rw [mul_pow,hs]
+  nlinarith [sq_nonneg (D-Real.sqrt (1+q^2)*C)]
+
+/-- Local distance lower slope, allowing a nondecreasing harmonic feature energy.
+The full square identity and both cone bounds are visible hypotheses. -/
+theorem local_length_lower_difference (R Y x y Q₀ Q₁ D₀ D₁ K : ℝ)
+    (hR : 0 < R) (hangle : Y/(2*R) ≤ Real.pi)
+    (hx : 0 ≤ x) (hxy : x ≤ y) (hy : y ≤ Y)
+    (hchord : 0 < circleChord R x) (hγ : 0 ≤ Real.cos (Y/(2*R)))
+    (hQ : Q₀ ≤ Q₁) (hD₀ : 0 ≤ D₀) (hD₁ : 0 ≤ D₁) (hK : 0 < K)
+    (hsq₀ : D₀^2=(circleChord R x)^2+Q₀)
+    (hsq₁ : D₁^2=(circleChord R y)^2+Q₁)
+    (hcone₀ : D₀ ≤ K*circleChord R x) (hcone₁ : D₁ ≤ K*circleChord R y) :
+    (Real.cos (Y/(2*R))/K)*(y-x) ≤ D₁-D₀ := by
+  have hch := circleChord_lower_difference R Y x y hR hangle hx hxy hy
+  have hmon : circleChord R x ≤ circleChord R y := by
+    nlinarith [mul_nonneg hγ (sub_nonneg.mpr hxy)]
+  have h := augmented_length_lower_gap (circleChord R x) (circleChord R y)
+    Q₀ Q₁ D₀ D₁ K hchord hmon hQ hD₀ hD₁ hK hsq₀ hsq₁ hcone₀ hcone₁
+  have hd := div_le_div_of_nonneg_right hch hK.le
+  have he : Real.cos (Y/(2*R))*(y-x)/K=(Real.cos (Y/(2*R))/K)*(y-x) := by ring
+  rw [he] at hd
+  exact hd.trans h
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.HarmonicLocalModel
+/-! Literal two-harmonic local distance model: feature monotonicity, cone bounds,
+and uniform lower separation transfer. This is independent of the global Gram construction. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+theorem harmonicEnergy_nonneg (θ b₁ b₂ δ : ℝ) : 0 ≤ harmonicEnergy θ b₁ b₂ δ := by
+  unfold harmonicEnergy
+  positivity
+
+/-- Increasing positive lags increase both squared harmonic features. -/
+theorem harmonicEnergy_mono (θ b₁ b₂ δ ε : ℝ) (hθ : 0 ≤ θ)
+    (hδ : 0 ≤ δ) (hδε : δ ≤ ε) (hangle : θ*ε ≤ Real.pi/2) :
+    harmonicEnergy θ b₁ b₂ δ ≤ harmonicEnergy θ b₁ b₂ ε := by
+  have hmul : θ*δ ≤ θ*ε := mul_le_mul_of_nonneg_left hδε hθ
+  have hzero : 0 ≤ θ*δ := mul_nonneg hθ hδ
+  have hs₁ : Real.sin (θ*δ/2) ≤ Real.sin (θ*ε/2) :=
+    Real.monotoneOn_sin ⟨by linarith [Real.pi_pos],by linarith⟩
+      ⟨by linarith [Real.pi_pos],by linarith⟩ (by linarith)
+  have hs₂ : Real.sin (θ*δ) ≤ Real.sin (θ*ε) :=
+    Real.monotoneOn_sin ⟨by linarith [Real.pi_pos],by linarith⟩
+      ⟨by linarith [Real.pi_pos],hangle⟩ hmul
+  have hp₁ : 0 ≤ Real.sin (θ*δ/2) :=
+    Real.sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith [Real.pi_pos])
+  have hp₂ : 0 ≤ Real.sin (θ*δ) :=
+    Real.sin_nonneg_of_nonneg_of_le_pi hzero (by linarith [Real.pi_pos])
+  have hsq₁ := sq_le_sq₀ hp₁ (hp₁.trans hs₁) |>.2 hs₁
+  have hsq₂ := sq_le_sq₀ hp₂ (hp₂.trans hs₂) |>.2 hs₂
+  have hm₁ := mul_le_mul_of_nonneg_left hsq₁ (show 0 ≤ 4*b₁^2 by positivity)
+  have hm₂ := mul_le_mul_of_nonneg_left hsq₂ (show 0 ≤ 4*b₂^2 by positivity)
+  unfold harmonicEnergy
+  nlinarith
+
+/-- Exact global quadratic envelope for both harmonic features. -/
+theorem harmonicEnergy_le_quadratic (θ b₁ b₂ δ : ℝ) :
+    harmonicEnergy θ b₁ b₂ δ ≤ θ^2*(b₁^2+4*b₂^2)*δ^2 := by
+  have h₁ := mul_le_mul_of_nonneg_left (Real.sin_sq_le_sq (x := θ*δ/2))
+    (show 0 ≤ 4*b₁^2 by positivity)
+  have h₂ := mul_le_mul_of_nonneg_left (Real.sin_sq_le_sq (x := θ*δ))
+    (show 0 ≤ 4*b₂^2 by positivity)
+  unfold harmonicEnergy
+  nlinarith
+
+theorem localDistanceModel_nonneg (R θ b₁ b₂ δ d : ℝ) :
+    0 ≤ localDistanceModel R θ b₁ b₂ δ d := Real.sqrt_nonneg _
+
+theorem localDistanceModel_square (R θ b₁ b₂ δ d : ℝ) :
+    (localDistanceModel R θ b₁ b₂ δ d)^2 =
+      (circleChord R d)^2+harmonicEnergy θ b₁ b₂ δ := by
+  exact Real.sq_sqrt (add_nonneg (sq_nonneg _) (harmonicEnergy_nonneg _ _ _ _))
+
+/-- A lower ruler-arc bound gives the cone ratio used by the local separation proof. -/
+theorem localDistanceModel_cone (R Y θ b₁ b₂ δ d J c : ℝ)
+    (hR : 0 < R) (hangle : Y/(2*R) ≤ Real.pi)
+    (hγ : 0 < Real.cos (Y/(2*R))) (hδ : 0 ≤ δ) (hc : 0 < c)
+    (hd : c*δ ≤ d) (hdY : d ≤ Y) (hJ : 0 ≤ J)
+    (hJbound : θ^2*(b₁^2+4*b₂^2) ≤ J^2) :
+    localDistanceModel R θ b₁ b₂ δ d ≤
+      Real.sqrt (1+(J/(c*Real.cos (Y/(2*R))))^2)*circleChord R d := by
+  have hd₀ : 0 ≤ d := le_trans (mul_nonneg hc.le hδ) hd
+  have hch := circleChord_lower R Y d hR hangle hd₀ hdY
+  have hC : 0 ≤ circleChord R d := le_trans (mul_nonneg hγ.le hd₀) hch
+  have hbase : c*Real.cos (Y/(2*R))*δ ≤ circleChord R d := by
+    have h := mul_le_mul_of_nonneg_left hd hγ.le
+    nlinarith
+  have hprod := mul_le_mul_of_nonneg_left hbase hJ
+  have hratio : J*δ ≤ (J/(c*Real.cos (Y/(2*R))))*circleChord R d := by
+    calc
+      J*δ ≤ J*circleChord R d/(c*Real.cos (Y/(2*R))) :=
+        (le_div_iff₀ (mul_pos hc hγ)).2 (by nlinarith)
+      _ = _ := by ring
+  have hQ := harmonicEnergy_le_quadratic θ b₁ b₂ δ
+  have hJδ := mul_le_mul_of_nonneg_right hJbound (sq_nonneg δ)
+  have hsq := sq_le_sq₀ (mul_nonneg hJ hδ)
+    ((mul_nonneg hJ hδ).trans hratio) |>.2 hratio
+  apply augmented_length_cone _ _ _ _ hC (localDistanceModel_nonneg _ _ _ _ _ _)
+    (localDistanceModel_square _ _ _ _ _ _)
+  nlinarith
+
+/-- Uniform local-model lower gap across equal or increasing lags. -/
+theorem localDistanceModel_lower_gap (R Y θ b₁ b₂ δ ε x y J c : ℝ)
+    (hR : 0 < R) (hangle : Y/(2*R) ≤ Real.pi)
+    (hγ : 0 < Real.cos (Y/(2*R))) (hθ : 0 ≤ θ) (hδ : 0 < δ)
+    (hδε : δ ≤ ε) (hfeature : θ*ε ≤ Real.pi/2)
+    (hc : 0 < c) (hx : c*δ ≤ x) (hy : c*ε ≤ y)
+    (hxy : x ≤ y) (hyY : y ≤ Y) (hJ : 0 ≤ J)
+    (hJbound : θ^2*(b₁^2+4*b₂^2) ≤ J^2) :
+    (Real.cos (Y/(2*R))/Real.sqrt (1+(J/(c*Real.cos (Y/(2*R))))^2))*(y-x) ≤
+      localDistanceModel R θ b₁ b₂ ε y-localDistanceModel R θ b₁ b₂ δ x := by
+  have hx₀ : 0 < x := lt_of_lt_of_le (mul_pos hc hδ) hx
+  have hch := circleChord_lower R Y x hR hangle hx₀.le (hxy.trans hyY)
+  have hch₀ : 0 < circleChord R x := lt_of_lt_of_le (mul_pos hγ hx₀) hch
+  exact local_length_lower_difference R Y x y
+    (harmonicEnergy θ b₁ b₂ δ) (harmonicEnergy θ b₁ b₂ ε)
+    (localDistanceModel R θ b₁ b₂ δ x) (localDistanceModel R θ b₁ b₂ ε y)
+    (Real.sqrt (1+(J/(c*Real.cos (Y/(2*R))))^2))
+    hR hangle hx₀.le hxy hyY hch₀ hγ.le
+    (harmonicEnergy_mono θ b₁ b₂ δ ε hθ hδ.le hδε hfeature)
+    (localDistanceModel_nonneg _ _ _ _ _ _) (localDistanceModel_nonneg _ _ _ _ _ _)
+    (Real.sqrt_pos.2 (by positivity))
+    (localDistanceModel_square _ _ _ _ _ _) (localDistanceModel_square _ _ _ _ _ _)
+    (localDistanceModel_cone R Y θ b₁ b₂ δ x J c hR hangle hγ hδ.le hc
+      hx (hxy.trans hyY) hJ hJbound)
+    (localDistanceModel_cone R Y θ b₁ b₂ ε y J c hR hangle hγ (hδ.le.trans hδε) hc
+      hy hyY hJ hJbound)
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanClusterCoordinates
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+open scoped BigOperators Matrix
+open Matrix
+
+
+
+
+
+
+
+
+
+
+
+/-- The intended coordinate count is exactly 9m-1 when the macro space has m-1 coordinates. -/
+theorem clusterCoordinate_card (m : ℕ) (hm : 0 < m) :
+    Fintype.card (ClusterCoordinate (Fin (m-1)) m)=9*m-1 := by
+  simp only [ClusterCoordinate,Fintype.card_sum,Fintype.card_prod,Fintype.card_fin]
+  omega
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanCrossCoordinates
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+open scoped BigOperators Matrix
+open Matrix
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- The absolute cross-error envelope follows from the square identity and a
+positive nominal lower bound. No adjacent or differential error bound is used. -/
+theorem cross_error_uniform_bound (D u α β B Tmin : ℝ) (hD : 0 ≤ D)
+    (hT : 0 < Tmin) (hu : Tmin ≤ u) (hB : |α*β| ≤ B)
+    (hsquare : D^2=u^2-2*α*β) : |D-u| ≤ 2*B/Tmin := by
+  have hden : 0 < D+u := by linarith
+  have heq : D-u=(-2*(α*β))/(D+u) := by
+    apply (eq_div_iff hden.ne').2
+    nlinarith
+  rw [heq,abs_div,abs_mul,abs_of_pos hden]
+  norm_num
+  have hbound := mul_le_mul_of_nonneg_left hB (show (0 : ℝ) ≤ 2 by norm_num)
+  have h₀ := div_le_div_of_nonneg_right hbound hden.le
+  have h₁ := div_le_div_of_nonneg_left (show 0 ≤ 2*B by nlinarith [abs_nonneg (α*β)]) hT
+    (show Tmin ≤ D+u by linarith)
+  simpa only [abs_mul] using h₀.trans h₁
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.PrimeRuler
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- Same-lag residues distinguish the cluster and the initial local index.
+The sharper `i + δ < k` endpoint condition is retained explicitly. -/
+theorem same_lag_residue_injective
+    (p m k δ A B i j : ℕ) (hp : p.Prime) (hδ : 0 < δ) (hδp : δ < p)
+    (hsize : 2*m*k < p) (hA : A < m) (hB : B < m)
+    (hi : i+δ < k) (hj : j+δ < k)
+    (heq : (δ*(2*i+δ+2*k*A)) % p = (δ*(2*j+δ+2*k*B)) % p) :
+    A=B ∧ i=j := by
+  have hcop : p.Coprime δ := hp.coprime_iff_not_dvd.mpr
+    (Nat.not_dvd_of_pos_of_lt hδ hδp)
+  have hmod : 2*i+δ+2*k*A ≡ 2*j+δ+2*k*B [MOD p] :=
+    Nat.ModEq.cancel_left_of_coprime hcop heq
+  have hleft : 2*i+δ+2*k*A < p := by
+    have hh := Nat.mul_le_mul_left (2*k) (show A+1 ≤ m by omega)
+    nlinarith
+  have hright : 2*j+δ+2*k*B < p := by
+    have hh := Nat.mul_le_mul_left (2*k) (show B+1 ≤ m by omega)
+    nlinarith
+  have hbracket := hmod.eq_of_lt_of_lt hleft hright
+  have hab : A=B := by
+    rcases lt_trichotomy A B with hab | hab | hab
+    · have hh := Nat.mul_le_mul_left k (show A+1 ≤ B by omega)
+      nlinarith
+    · exact hab
+    · have hh := Nat.mul_le_mul_left k (show B+1 ≤ A by omega)
+      nlinarith
+  exact ⟨hab, by subst B; omega⟩
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.PrimeRulerSeparation
+/-! Exact integer-ruler layer. Unlike a residue-only statement, these theorems
+refer to the actual differences of the explicit ruler positions. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+/-- Every actual ruler difference lies in its strict lag window. -/
+theorem primeRulerGap_window (p k A i δ : ℕ) (hp : 0 < p) :
+    (4 * (δ : ℤ) - 1) * p < primeRulerGap p k A i δ ∧
+      primeRulerGap p k A i δ < (4 * (δ : ℤ) + 1) * p := by
+  have h₀ : (0 : ℤ) ≤ ((i^2 + 2*k*A*i) % p : ℕ) := by positivity
+  have h₁ : (0 : ℤ) ≤ (((i+δ)^2 + 2*k*A*(i+δ)) % p : ℕ) := by positivity
+  have h₂ : (((i^2 + 2*k*A*i) % p : ℕ) : ℤ) < p := by
+    exact_mod_cast Nat.mod_lt _ hp
+  have h₃ : ((((i+δ)^2 + 2*k*A*(i+δ)) % p : ℕ) : ℤ) < p := by
+    exact_mod_cast Nat.mod_lt _ hp
+  dsimp [primeRulerGap, primeRuler]
+  push_cast at *
+  constructor <;> nlinarith
+
+
+
+/-- Different lag windows are strictly ordered, with a gap greater than 2p. -/
+theorem primeRulerGap_different_lag (p k A B i j δ ε : ℕ)
+    (hp : 0 < p) (hδε : δ < ε) :
+    2 * (p : ℤ) < primeRulerGap p k B j ε - primeRulerGap p k A i δ := by
+  have h₀ := (primeRulerGap_window p k A i δ hp).2
+  have h₁ := (primeRulerGap_window p k B j ε hp).1
+  have hδε' : (δ : ℤ) + 1 ≤ ε := by exact_mod_cast hδε
+  have hp' : (0 : ℤ) < p := by exact_mod_cast hp
+  nlinarith
+
+/-- The actual ruler difference has exactly the stated quadratic residue. -/
+theorem primeRulerGap_residue (p k A i δ : ℕ) :
+    primeRulerGap p k A i δ % (p : ℤ) =
+      ((δ * (2*i + δ + 2*k*A) : ℕ) : ℤ) % (p : ℤ) := by
+  have hpoly : (((i+δ)^2 + 2*k*A*(i+δ) : ℕ) : ℤ) -
+      ((i^2 + 2*k*A*i : ℕ) : ℤ) = ((δ*(2*i+δ+2*k*A) : ℕ) : ℤ) := by
+    push_cast
+    ring
+  calc
+    primeRulerGap p k A i δ % (p : ℤ) =
+        ((((i+δ)^2 + 2*k*A*(i+δ) : ℕ) : ℤ) -
+          ((i^2 + 2*k*A*i : ℕ) : ℤ)) % (p : ℤ) := by
+      simp [primeRulerGap, primeRuler, Int.add_emod, Int.sub_emod,
+        Int.mul_emod, Int.natCast_emod]
+    _ = _ := congrArg (fun z : ℤ => z % (p : ℤ)) hpoly
+
+/-- Equal same-lag *actual* gaps force the same cluster and starting index. -/
+theorem primeRulerGap_same_lag_injective (p m k δ A B i j : ℕ)
+    (hp : p.Prime) (hδ : 0 < δ) (hδp : δ < p) (hsize : 2*m*k < p)
+    (hA : A < m) (hB : B < m) (hi : i+δ < k) (hj : j+δ < k)
+    (heq : primeRulerGap p k A i δ = primeRulerGap p k B j δ) : A = B ∧ i = j := by
+  have hmod := congrArg (fun z : ℤ => z % (p : ℤ)) heq
+  rw [primeRulerGap_residue, primeRulerGap_residue] at hmod
+  have hnat : (δ*(2*i+δ+2*k*A)) % p = (δ*(2*j+δ+2*k*B)) % p := by
+    exact_mod_cast hmod
+  exact same_lag_residue_injective p m k δ A B i j hp hδ hδp hsize hA hB hi hj hnat
+
+/-- Exhaustive uniqueness of all positive actual ruler gaps, across all clusters.
+Different lags use disjoint windows; equal lags use prime cancellation. -/
+theorem primeRulerGap_injective (p m k δ ε A B i j : ℕ)
+    (hp : p.Prime) (hδ : 0 < δ) (hε : 0 < ε) (hδp : δ < p) (hεp : ε < p)
+    (hsize : 2*m*k < p) (hA : A < m) (hB : B < m)
+    (hi : i+δ < k) (hj : j+ε < k)
+    (heq : primeRulerGap p k A i δ = primeRulerGap p k B j ε) :
+    A = B ∧ i = j ∧ δ = ε := by
+  have hδε : δ = ε := by
+    rcases lt_trichotomy δ ε with hlt | he | hgt
+    · have h := primeRulerGap_different_lag p k A B i j δ ε hp.pos hlt
+      rw [heq] at h
+      have hp' : (0 : ℤ) < p := by exact_mod_cast hp.pos
+      omega
+    · exact he
+    · have h := primeRulerGap_different_lag p k B A j i ε δ hp.pos hgt
+      rw [heq] at h
+      have hp' : (0 : ℤ) < p := by exact_mod_cast hp.pos
+      omega
+  subst ε
+  obtain ⟨hAB,hij⟩ := primeRulerGap_same_lag_injective p m k δ A B i j
+    hp hδ hδp hsize hA hB hi hj heq
+  exact ⟨hAB,hij,rfl⟩
+
+/-- Useful coarse window: each positive-lag gap lies strictly between 3pδ and 5pδ. -/
+theorem primeRulerGap_linear_bounds (p k A i δ : ℕ) (hp : 0 < p) (hδ : 0 < δ) :
+    3 * (p : ℤ) * δ < primeRulerGap p k A i δ ∧
+      primeRulerGap p k A i δ < 5 * (p : ℤ) * δ := by
+  obtain ⟨h₀,h₁⟩ := primeRulerGap_window p k A i δ hp
+  have hδ' : (1 : ℤ) ≤ δ := by exact_mod_cast hδ
+  have hp' : (0 : ℤ) < p := by exact_mod_cast hp
+  constructor <;> nlinarith
+
+/-- The actual t=3 ruler has gaps separated by at least 3 as real numbers.
+This is across all macro clusters, not just within an individual ruler. -/
+theorem scaled_primeRulerGap_separated (p m k δ ε A B i j : ℕ)
+    (hp : p.Prime) (hδ : 0 < δ) (hε : 0 < ε) (hδp : δ < p) (hεp : ε < p)
+    (hsize : 2*m*k < p) (hA : A < m) (hB : B < m)
+    (hi : i+δ < k) (hj : j+ε < k) (hne : ¬ (A = B ∧ i = j ∧ δ = ε)) :
+    3 ≤ |3 * (primeRulerGap p k A i δ : ℝ) - 3 * (primeRulerGap p k B j ε : ℝ)| := by
+  have hg : primeRulerGap p k A i δ ≠ primeRulerGap p k B j ε := by
+    intro h
+    exact hne (primeRulerGap_injective p m k δ ε A B i j
+      hp hδ hε hδp hεp hsize hA hB hi hj h)
+  have habs : (0 : ℤ) < |primeRulerGap p k A i δ - primeRulerGap p k B j ε| :=
+    abs_pos.mpr (sub_ne_zero.mpr hg)
+  have habs' : (1 : ℤ) ≤ |primeRulerGap p k A i δ - primeRulerGap p k B j ε| := by omega
+  have hreal : (1 : ℝ) ≤ |(primeRulerGap p k A i δ : ℝ) -
+      (primeRulerGap p k B j ε : ℝ)| := by exact_mod_cast habs'
+  rw [← mul_sub, abs_mul]
+  norm_num
+  linarith
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.LocalRulerSeparation
+/-! All local ruler-distance models, across every cluster and lag, are separated.
+Only explicit scalar guards remain; no local-separation hypothesis is assumed. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+/-- One universal arc ceiling, exploiting the actual endpoint constraint i+δ<k. -/
+theorem rulerArc_upper (p k A i δ : ℕ) (hp : 0 < p) (hi : i+δ < k) :
+    rulerArc p k A i δ ≤ 12*(p : ℝ)*k := by
+  have h := (primeRulerGap_window p k A i δ hp).2
+  have hr : (primeRulerGap p k A i δ : ℝ) < (4*(δ : ℝ)+1)*p := by exact_mod_cast h
+  have hδ : (δ : ℝ)+1 ≤ k := by exact_mod_cast (show δ+1 ≤ k by omega)
+  have hp' : (0 : ℝ) < p := by exact_mod_cast hp
+  unfold rulerArc
+  nlinarith
+
+/-- The source's lower arc estimate 3tpδ for t=3. -/
+theorem rulerArc_lower (p k A i δ : ℕ) (hp : 0 < p) (hδ : 0 < δ) :
+    9*(p : ℝ)*δ ≤ rulerArc p k A i δ := by
+  have h := (primeRulerGap_linear_bounds p k A i δ hp hδ).1
+  have hr : 3*(p : ℝ)*δ < (primeRulerGap p k A i δ : ℝ) := by exact_mod_cast h
+  unfold rulerArc
+  linarith
+
+/-- Increasing arcs cannot come from decreasing lag bands. -/
+theorem rulerArc_order_forces_lag_order (p k A B i j δ ε : ℕ) (hp : 0 < p)
+    (h : rulerArc p k A i δ ≤ rulerArc p k B j ε) : δ ≤ ε := by
+  by_contra hnot
+  have hh := primeRulerGap_different_lag p k B A j i ε δ hp (by omega)
+  have hr : 2*(p : ℝ) < (primeRulerGap p k A i δ : ℝ)-(primeRulerGap p k B j ε : ℝ) := by
+    exact_mod_cast hh
+  have hp' : (0 : ℝ) < p := by exact_mod_cast hp
+  unfold rulerArc at h
+  linarith
+
+/-- Exhaustive local/local separation for the explicit ruler and two harmonics.
+Distinct triples represent distinct local unordered pairs. The proof handles
+same-lag and different-lag cases without assuming their distance separation. -/
+theorem local_ruler_model_separated (p m k A B i j δ ε : ℕ)
+    (hp : p.Prime) (hδ : 0 < δ) (hε : 0 < ε) (hδp : δ < p) (hεp : ε < p)
+    (hsize : 2*m*k < p) (hA : A < m) (hB : B < m)
+    (hi : i+δ < k) (hj : j+ε < k) (hne : ¬ (A=B ∧ i=j ∧ δ=ε))
+    (R Y θ b₁ b₂ J : ℝ) (hR : 0 < R) (hY : 12*(p : ℝ)*k ≤ Y)
+    (hangle : Y/(2*R) ≤ Real.pi) (hγ : 0 < Real.cos (Y/(2*R)))
+    (hθ : 0 ≤ θ) (hfeature : θ*k ≤ Real.pi/2) (hJ : 0 ≤ J)
+    (hJbound : θ^2*(b₁^2+4*b₂^2) ≤ J^2)
+    (hguard : 1 ≤ 3*(Real.cos (Y/(2*R))/
+      Real.sqrt (1+(J/(9*(p : ℝ)*Real.cos (Y/(2*R))))^2))) :
+    1 ≤ |localDistanceModel R θ b₁ b₂ δ (rulerArc p k A i δ)-
+      localDistanceModel R θ b₁ b₂ ε (rulerArc p k B j ε)| := by
+  have hp' : (0 : ℝ) < p := by exact_mod_cast hp.pos
+  have hSlope : 0 ≤ Real.cos (Y/(2*R))/
+      Real.sqrt (1+(J/(9*(p : ℝ)*Real.cos (Y/(2*R))))^2) := by positivity
+  have hsep := scaled_primeRulerGap_separated p m k δ ε A B i j
+    hp hδ hε hδp hεp hsize hA hB hi hj hne
+  change 3 ≤ |rulerArc p k A i δ-rulerArc p k B j ε| at hsep
+  have hord : ∀ (A B i j δ ε : ℕ), 0 < δ → 0 < ε → i+δ < k → j+ε < k →
+      rulerArc p k A i δ ≤ rulerArc p k B j ε →
+      3 ≤ rulerArc p k B j ε-rulerArc p k A i δ →
+      1 ≤ localDistanceModel R θ b₁ b₂ ε (rulerArc p k B j ε)-
+        localDistanceModel R θ b₁ b₂ δ (rulerArc p k A i δ) := by
+    intro A B i j δ ε hd he hi hj hxy hgap
+    have hδε := rulerArc_order_forces_lag_order p k A B i j δ ε hp.pos hxy
+    have he' : (ε : ℝ) ≤ k := by exact_mod_cast (show ε ≤ k by omega)
+    have hfeat : θ*(ε : ℝ) ≤ Real.pi/2 :=
+      (mul_le_mul_of_nonneg_left he' hθ).trans hfeature
+    have h := localDistanceModel_lower_gap R Y θ b₁ b₂ δ ε
+      (rulerArc p k A i δ) (rulerArc p k B j ε) J (9*(p : ℝ))
+      hR hangle hγ hθ (by exact_mod_cast hd) (by exact_mod_cast hδε) hfeat
+      (by positivity) (rulerArc_lower p k A i δ hp.pos hd)
+      (rulerArc_lower p k B j ε hp.pos he) hxy
+      ((rulerArc_upper p k B j ε hp.pos hj).trans hY) hJ hJbound
+    have hm := mul_le_mul_of_nonneg_left hgap hSlope
+    nlinarith
+  rcases le_total (rulerArc p k A i δ) (rulerArc p k B j ε) with hxy | hyx
+  · have hg : 3 ≤ rulerArc p k B j ε-rulerArc p k A i δ := by
+      rw [abs_of_nonpos (sub_nonpos.mpr hxy)] at hsep
+      linarith
+    have h := hord A B i j δ ε hδ hε hi hj hxy hg
+    have hab := le_abs_self (localDistanceModel R θ b₁ b₂ ε (rulerArc p k B j ε)-
+      localDistanceModel R θ b₁ b₂ δ (rulerArc p k A i δ))
+    rw [abs_sub_comm] at hab
+    exact h.trans hab
+  · have hg : 3 ≤ rulerArc p k A i δ-rulerArc p k B j ε := by
+      rw [abs_of_nonneg (sub_nonneg.mpr hyx)] at hsep
+      exact hsep
+    exact (hord B A j i ε δ hε hδ hj hi hyx hg).trans (le_abs_self _)
+
+/-- The minimum local distance is checked separately; pairwise gaps do not imply it. -/
+theorem local_ruler_model_ge_one (p k A i δ : ℕ) (hp : 0 < p) (hδ : 0 < δ)
+    (hi : i+δ < k) (R Y θ b₁ b₂ : ℝ) (hR : 0 < R) (hY : 12*(p : ℝ)*k ≤ Y)
+    (hangle : Y/(2*R) ≤ Real.pi) (hγ : 0 ≤ Real.cos (Y/(2*R)))
+    (hguard : 1 ≤ Real.cos (Y/(2*R))*(9*(p : ℝ))) :
+    1 ≤ localDistanceModel R θ b₁ b₂ δ (rulerArc p k A i δ) := by
+  have hp' : (0 : ℝ) < p := by exact_mod_cast hp
+  have hδ' : (1 : ℝ) ≤ δ := by exact_mod_cast hδ
+  have hl := rulerArc_lower p k A i δ hp hδ
+  have hd : 0 ≤ rulerArc p k A i δ := by nlinarith
+  have hC := circleChord_lower R Y (rulerArc p k A i δ) hR hangle hd
+    ((rulerArc_upper p k A i δ hp hi).trans hY)
+  have hmul := mul_le_mul_of_nonneg_left
+    (show 9*(p : ℝ) ≤ rulerArc p k A i δ by nlinarith) hγ
+  have hC₁ : 1 ≤ circleChord R (rulerArc p k A i δ) := by linarith
+  have hsq := localDistanceModel_square R θ b₁ b₂ δ (rulerArc p k A i δ)
+  have hpos := localDistanceModel_nonneg R θ b₁ b₂ δ (rulerArc p k A i δ)
+  have hQ := harmonicEnergy_nonneg θ b₁ b₂ δ
+  nlinarith
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SineDigits
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+theorem hasDerivAt_sineDigit (θ center x : ℝ) (hθ : θ ≠ 0) :
+    HasDerivAt (sineDigit θ center) (Real.cos (θ*(x-center))) x := by
+  have h := ((((hasDerivAt_id x).sub_const center).const_mul θ).sin).div_const θ
+  have he : (Real.cos (θ*(x-center))*(θ*1))/θ=Real.cos (θ*(x-center)) := by field_simp
+  convert h using 1 <;> first | rfl | exact he.symm
+
+/-- The normalized sine digit never exceeds its centered coordinate in magnitude. -/
+theorem sineDigit_abs_le (θ center x : ℝ) (hθ : 0 < θ) :
+    |sineDigit θ center x| ≤ |x-center| := by
+  unfold sineDigit
+  rw [abs_div,abs_of_pos hθ]
+  calc
+    |Real.sin (θ*(x-center))|/θ ≤ |θ*(x-center)|/θ :=
+      div_le_div_of_nonneg_right Real.abs_sin_le_abs hθ.le
+    _ = |x-center| := by rw [abs_mul,abs_of_pos hθ]; field_simp
+
+/-- Centered coordinate bounds apply to every digit in the full interval. -/
+theorem sineDigit_centered_bound (θ center x : ℝ) (hθ : 0 < θ)
+    (hx : 0 ≤ x) (hxc : x ≤ 2*center) : |sineDigit θ center x| ≤ center := by
+  apply (sineDigit_abs_le θ center x hθ).trans
+  exact abs_le.mpr ⟨by linarith,by linarith⟩
+
+/-- Uniform adjacent and nonadjacent sine digit lower slope on the centered interval. -/
+theorem sineDigit_lower_difference (θ center x y : ℝ) (hθ : 0 < θ)
+    (hx : 0 ≤ x) (hxy : x ≤ y) (hy : y ≤ 2*center) :
+    (1-(θ*center)^2/2)*(y-x) ≤ sineDigit θ center y-sineDigit θ center x := by
+  have hc : 0 ≤ center := by linarith
+  have hd (z : ℝ) := hasDerivAt_sineDigit θ center z hθ.ne'
+  apply (convex_Icc (0 : ℝ) (2*center)).mul_sub_le_image_sub_of_le_deriv
+    (fun z _ => (hd z).continuousAt.continuousWithinAt)
+    (fun z _ => (hd z).differentiableAt.differentiableWithinAt)
+    ?_ x ⟨hx,hxy.trans hy⟩ y ⟨hx.trans hxy,hy⟩ hxy
+  intro z hz
+  have hz' : z ∈ Set.Icc (0 : ℝ) (2*center) := interior_subset hz
+  have hb : |z-center| ≤ center := abs_le.mpr ⟨by linarith [hz'.1],by linarith [hz'.2]⟩
+  have harg : |θ*(z-center)| ≤ |θ*center| := by
+    rw [abs_mul,abs_mul,abs_of_pos hθ,abs_of_nonneg hc]
+    exact mul_le_mul_of_nonneg_left hb hθ.le
+  have hsq : (θ*(z-center))^2 ≤ (θ*center)^2 := sq_le_sq.mpr harg
+  rw [(hd z).deriv]
+  have hcos := Real.one_sub_sq_div_two_le_cos (x := θ*(z-center))
+  linarith
+
+/-- Source-shaped finite digit bound, valid for all k and every legal index. -/
+theorem finite_sineDigit_bound (θ : ℝ) (k i : ℕ) (hθ : 0 < θ) (hi : i < k) :
+    |sineDigit θ (((k : ℝ)-1)/2) i| ≤ ((k : ℝ)-1)/2 := by
+  apply sineDigit_centered_bound θ (((k : ℝ)-1)/2) i hθ (by positivity)
+  have h : (i : ℝ)+1 ≤ k := by exact_mod_cast hi
+  linarith
+
+/-- Uniform lower step from the source's θ²k²≤epsilon envelope. -/
+theorem finite_sineDigit_step (θ ε : ℝ) (k i : ℕ) (hθ : 0 < θ)
+    (hi : i+1 < k) (hscale : θ^2*(k : ℝ)^2 ≤ ε) :
+    1-ε/8 ≤ sineDigit θ (((k : ℝ)-1)/2) (i+1)-
+      sineDigit θ (((k : ℝ)-1)/2) i := by
+  have hk : (1 : ℝ) ≤ k := by exact_mod_cast (show 1 ≤ k by omega)
+  have hi' : (i : ℝ)+2 ≤ k := by exact_mod_cast hi
+  have h := sineDigit_lower_difference θ (((k : ℝ)-1)/2) i ((i : ℝ)+1)
+    hθ (by positivity) (by linarith) (by linarith)
+  have hb : θ^2*((k : ℝ)-1)^2 ≤ θ^2*(k : ℝ)^2 := by
+    have hsq : ((k : ℝ)-1)^2 ≤ (k : ℝ)^2 := by nlinarith
+    exact mul_le_mul_of_nonneg_left hsq (sq_nonneg θ)
+  norm_num at h
+  nlinarith
+
+/-- The fixed epsilon1/32 source gives r=255/256 uniformly. -/
+theorem finite_sineDigit_source_step (θ : ℝ) (k i : ℕ) (hθ : 0 < θ)
+    (hi : i+1 < k) (hscale : θ^2*(k : ℝ)^2 ≤ 1/32) :
+    (255 : ℝ)/256 ≤ sineDigit θ (((k : ℝ)-1)/2) (i+1)-
+      sineDigit θ (((k : ℝ)-1)/2) i := by
+  have h := finite_sineDigit_step θ (1/32) k i hθ hi hscale
+  norm_num at h ⊢
+  exact h
+
+/-- The source square-root scaling meets the required uniform envelope exactly. -/
+theorem source_theta_scale (k : ℕ) (hk : 0 < k) :
+    (Real.sqrt (1/32)/(k : ℝ))^2*(k : ℝ)^2=1/32 := by
+  have hk' : (k : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hk)
+  rw [div_pow,Real.sq_sqrt (by norm_num)]
+  field_simp
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossGuards
+/-! Universal source-parameter cross guards, not finite sampled certificates.
+The hypotheses are k≥2 and K≥72247875/4, with the literal source formulas. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+theorem source_perturbation_quadratic_bound (k : ℝ) (hk : 2 ≤ k) :
+    sourcePerturbationBound k ≤ (117/128 : ℝ)*k^2 := by
+  unfold sourcePerturbationBound
+  nlinarith [sq_nonneg k]
+
+theorem source_baseline_lower (K k : ℝ) (hK : 72247875/4 ≤ K) :
+    (52668703791/2048 : ℝ)*k^2 ≤ sourceBaseline K k := by
+  have h := mul_le_mul_of_nonneg_left hK (show 0 ≤ (9/8 : ℝ)^3*k^2 by positivity)
+  unfold sourceBaseline sourceMacroStep
+  nlinarith
+
+theorem source_Tmin_lower (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    (52668701919/2048 : ℝ)*k^2 ≤ sourceTmin K k := by
+  have h₀ := source_baseline_lower K k hK
+  have h₁ := source_perturbation_quadratic_bound k hk
+  unfold sourceTmin
+  linarith
+
+theorem source_Tmin_pos (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    0 < sourceTmin K k := by
+  have h := source_Tmin_lower K k hK hk
+  nlinarith [sq_nonneg (k-2)]
+
+/-- The pointwise error is at most k times one exact rational, uniformly in K,k. -/
+theorem source_error_linear_bound (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    sourceError K k ≤ (648/5852077991 : ℝ)*k := by
+  have hT := source_Tmin_lower K k hK hk
+  have hTpos := source_Tmin_pos K k hK hk
+  have hm := mul_le_mul_of_nonneg_left hT (show 0 ≤ (648/5852077991 : ℝ)*k by positivity)
+  unfold sourceError
+  apply (div_le_iff₀ hTpos).2
+  nlinarith
+
+/-- Every direct polarization fine guard, in denominator-cleared form. -/
+theorem source_direct_fine_guard (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    sourceBaseline K k+sourcePerturbationBound k+sourceError K k ≤
+      ((9/8 : ℝ)*(255/256))*(sourceBaseline K k-(9/8)*((k-1)/2)) := by
+  have hν := source_baseline_lower K k hK
+  have hA := source_perturbation_quadratic_bound k hk
+  have hE := source_error_linear_bound K k hK hk
+  have hk₂ : 2*k ≤ k^2 := by nlinarith
+  nlinarith
+
+theorem source_direct_carry_guard (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    1 ≤ (9/8 : ℝ)*(((9/8)*k)*(255/256)-2*((k-1)/2))-2*sourceError K k := by
+  have hE := source_error_linear_bound K k hK hk
+  nlinarith
+
+theorem source_direct_macro_guard (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    1 ≤ sourceMacroStep k-2*sourcePerturbationBound k-2*sourceError K k := by
+  have hE := source_error_linear_bound K k hK hk
+  unfold sourceMacroStep sourcePerturbationBound
+  nlinarith [sq_nonneg k]
+
+theorem source_baseline_exceeds_fine_bound (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    (9/8 : ℝ)*((k-1)/2) ≤ sourceBaseline K k := by
+  have hν := source_baseline_lower K k hK
+  nlinarith [sq_nonneg (k-2)]
+
+
+
+theorem sourceOffset_lower (m : ℕ) (hm : 34000 ≤ m) :
+    (72247875/4 : ℝ) ≤ sourceOffset m := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have h := Nat.le_ceil ((m : ℝ)*((m : ℝ)-1)/64)
+  change (72247875/4 : ℝ) ≤ (⌈(m : ℝ)*((m : ℝ)-1)/64⌉₊ : ℝ)
+  nlinarith [sq_nonneg ((m : ℝ)-34000)]
+
+/-- The nominal lower bound remains positive after the actual pointwise error. -/
+theorem source_error_lt_Tmin (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    sourceError K k < sourceTmin K k := by
+  have ht := source_Tmin_lower K k hK hk
+  have he := source_error_linear_bound K k hK hk
+  nlinarith [sq_nonneg (k-2)]
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossSpectrum
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+theorem sourceDigit_bound (k i : ℕ) (hk : 2 ≤ k) (hi : i < k) :
+    |sourceDigit k i| ≤ ((k : ℝ)-1)/2 := by
+  apply finite_sineDigit_bound
+  · have hk' : (0 : ℝ) < k := by exact_mod_cast (show 0 < k by omega)
+    positivity
+  · exact hi
+
+theorem sourceDigit_step (k i : ℕ) (hk : 2 ≤ k) (hi : i+1 < k) :
+    (255 : ℝ)/256 ≤ sourceDigit k (i+1)-sourceDigit k i := by
+  have hk' : (0 : ℝ) < k := by exact_mod_cast (show 0 < k by omega)
+  have h := finite_sineDigit_source_step (Real.sqrt (1/32)/(k : ℝ)) k i
+    (by positivity) hi (source_theta_scale k (by omega)).le
+  simpa only [sourceDigit,Nat.cast_add,Nat.cast_one] using h
+
+theorem source_digit_sum_bound (k i j : ℕ) (hk : 2 ≤ k) (hi : i < k) (hj : j < k) :
+    |sourceAlpha k i+sourceBeta k j| ≤ sourcePerturbationBound k := by
+  obtain ⟨hli,hui⟩ := abs_le.mp (sourceDigit_bound k i hk hi)
+  obtain ⟨hlj,huj⟩ := abs_le.mp (sourceDigit_bound k j hk hj)
+  have hk' : (0 : ℝ) ≤ k := by positivity
+  have hi₀ := mul_le_mul_of_nonneg_left hli hk'
+  have hi₁ := mul_le_mul_of_nonneg_left hui hk'
+  unfold sourceAlpha sourceBeta sourcePerturbationBound
+  apply abs_le.mpr
+  constructor <;> nlinarith
+
+theorem source_digit_product_bound (k i j : ℕ) (hk : 2 ≤ k) (hi : i < k) (hj : j < k) :
+    |sourceAlpha k i*sourceBeta k j| ≤ (9/8 : ℝ)^3*(k : ℝ)^3 := by
+  have hfi := sourceDigit_bound k i hk hi
+  have hfj := sourceDigit_bound k j hk hj
+  have hk' : (0 : ℝ) ≤ k := by positivity
+  have hi' : |sourceDigit k i| ≤ (k : ℝ) := by linarith
+  have hj' : |sourceDigit k j| ≤ (k : ℝ) := by linarith
+  have hp := mul_le_mul hi' hj' (abs_nonneg _) hk'
+  have hm := mul_le_mul_of_nonneg_left hp (show 0 ≤ (9/8 : ℝ)^3*(k : ℝ) by positivity)
+  have he : |sourceAlpha k i*sourceBeta k j|=
+      (9/8 : ℝ)^3*(k : ℝ)*(|sourceDigit k i| * |sourceDigit k j|) := by
+    unfold sourceAlpha sourceBeta
+    rw [abs_mul,abs_mul,abs_mul,abs_mul,abs_mul]
+    simp only [abs_of_nonneg hk']
+    norm_num
+    ring
+  rw [he]
+  nlinarith
+
+/-- Pointwise errors for the literal source digits, without assuming an error bound. -/
+theorem source_cross_error (D K : ℝ) (k a i j : ℕ) (hK : 72247875/4 ≤ K)
+    (hk : 2 ≤ k) (hi : i < k) (hj : j < k) (hD : 0 ≤ D)
+    (hsq : D^2=(sourceCrossBaseline K k a+sourceAlpha k i+sourceBeta k j)^2-
+      2*sourceAlpha k i*sourceBeta k j) :
+    |D-(sourceCrossBaseline K k a+sourceAlpha k i+sourceBeta k j)| ≤ sourceError K k := by
+  have hk' : (2 : ℝ) ≤ k := by exact_mod_cast hk
+  have hbase : sourceBaseline K k ≤ sourceCrossBaseline K k a := by
+    have h : 0 ≤ sourceMacroStep k*(a : ℝ) := by unfold sourceMacroStep; positivity
+    unfold sourceCrossBaseline
+    linarith
+  have hpert := (abs_le.mp (source_digit_sum_bound k i j hk hi hj)).1
+  have hu : sourceTmin K k ≤ sourceCrossBaseline K k a+sourceAlpha k i+sourceBeta k j := by
+    unfold sourceTmin
+    linarith
+  simpa only [sourceError,mul_assoc] using cross_error_uniform_bound D _ (sourceAlpha k i) (sourceBeta k j)
+    ((9/8 : ℝ)^3*(k : ℝ)^3) (sourceTmin K k) hD (source_Tmin_pos K k hK hk') hu
+    (source_digit_product_bound k i j hk hi hj) hsq
+
+/-- Complete source-specific cross-spectrum separation. The only metric inputs
+are nonnegativity and the corrected exact squared-distance formula. All sine,
+pointwise-error, fine, carry and macro guards are proved, uniformly in k,K. -/
+theorem source_cross_spectrum_separated (D : ℕ → ℕ → ℕ → ℝ) (M k : ℕ) (K : ℝ)
+    (hk : 2 ≤ k) (hK : 72247875/4 ≤ K)
+    (hD : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k → 0 ≤ D a i j)
+    (hsq : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k →
+      (D a i j)^2=(sourceCrossBaseline K k a+sourceAlpha k i+sourceBeta k j)^2-
+        2*sourceAlpha k i*sourceBeta k j) :
+    ∀ a i j b u v, a < M → i < k → j < k → b < M → u < k → v < k →
+      (a,i,j) ≠ (b,u,v) → 1 ≤ |D a i j-D b u v| := by
+  have hk' : (2 : ℝ) ≤ k := by exact_mod_cast hk
+  have hν (a : ℕ) : sourceBaseline K k ≤ sourceCrossBaseline K k a := by
+    have h : 0 ≤ sourceMacroStep k*(a : ℝ) := by unfold sourceMacroStep; positivity
+    unfold sourceCrossBaseline
+    linarith
+  have herr : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k →
+      |D a i j-(sourceCrossBaseline K k a+sourceAlpha k i+sourceBeta k j)| ≤ sourceError K k := by
+    intro a ha i hi j hj
+    exact source_cross_error (D a i j) K k a i j hK hk hi hj (hD a ha i hi j hj)
+      (hsq a ha i hi j hj)
+  have hpos : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k → 0 < D a i j := by
+    intro a ha i hi j hj
+    have he := (abs_le.mp (herr a ha i hi j hj)).1
+    have hu := (abs_le.mp (source_digit_sum_bound k i j hk hi hj)).1
+    have hb := hν a
+    have ht := source_error_lt_Tmin K k hK hk'
+    unfold sourceTmin at ht
+    linarith
+  have hbase : ∀ a, a+1 < M → sourceMacroStep k ≤
+      sourceCrossBaseline K k (a+1)-sourceCrossBaseline K k a := by
+    intro a _
+    simp only [sourceCrossBaseline,Nat.cast_add,Nat.cast_one]
+    linarith
+  exact direct_cross_spectrum_separated D (sourceCrossBaseline K k) (sourceDigit k) M k (by omega)
+    (9/8) ((9/8)*(k : ℝ)) (255/256) (((k : ℝ)-1)/2)
+    (sourceError K k) (sourceMacroStep k) (sourceBaseline K k)
+    (by norm_num) (by positivity) (fun a _ => hν a)
+    (source_baseline_exceeds_fine_bound K k hK hk')
+    (fun i hi => sourceDigit_bound k i hk hi) (fun i hi => sourceDigit_step k i hk hi)
+    hbase hpos hsq herr (by norm_num)
+    (by simpa only [sourcePerturbationBound] using source_direct_fine_guard K k hK hk')
+    (source_direct_carry_guard K k hK hk')
+    (by simpa only [sourcePerturbationBound] using source_direct_macro_guard K k hK hk')
+
+/-- The source's actual ceiling choice now discharges the macro-size premise. -/
+theorem source_offset_cross_spectrum_separated (D : ℕ → ℕ → ℕ → ℝ) (M m k : ℕ)
+    (hm : 34000 ≤ m) (hk : 2 ≤ k)
+    (hD : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k → 0 ≤ D a i j)
+    (hsq : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k →
+      (D a i j)^2=(sourceCrossBaseline (sourceOffset m) k a+sourceAlpha k i+sourceBeta k j)^2-
+        2*sourceAlpha k i*sourceBeta k j) :
+    ∀ a i j b u v, a < M → i < k → j < k → b < M → u < k → v < k →
+      (a,i,j) ≠ (b,u,v) → 1 ≤ |D a i j-D b u v| := by
+  exact source_cross_spectrum_separated D M k (sourceOffset m) hk (sourceOffset_lower m hm) hD hsq
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceLocalGuards
+/-! Coarse rational guards sufficient for all source local distances.
+The budget600 deliberately leaves slack above the source's J² envelope. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- The literal radius makes the universal ruler half-angle at most one quarter. -/
+theorem source_local_angle_bound (m k R : ℝ) (hm : 0 < m) (hk : 0 < k) (hR : 0 < R)
+    (hRsq : R^2=17500*m^2*k^4) : (48*m*k^2)/(2*R) ≤ 1/4 := by
+  have ht : 0 < m*k^2 := mul_pos hm (sq_pos_of_pos hk)
+  have he : R^2=17500*(m*k^2)^2 := by nlinarith only [hRsq]
+  have hl : 96*(m*k^2) ≤ R := by nlinarith
+  apply (div_le_iff₀ (show 0 < 2*R by positivity)).2
+  nlinarith
+
+/-- A conservative 9/10 lower cosine bound follows uniformly, with no sample grid. -/
+theorem source_local_cosine_lower (m k R : ℝ) (hm : 0 < m) (hk : 0 < k) (hR : 0 < R)
+    (hRsq : R^2=17500*m^2*k^4) :
+    (9/10 : ℝ) ≤ Real.cos ((48*m*k^2)/(2*R)) := by
+  have h₀ : 0 ≤ (48*m*k^2)/(2*R) := by positivity
+  have h₁ := source_local_angle_bound m k R hm hk hR hRsq
+  have hcos := Real.one_sub_sq_div_two_le_cos (x := (48*m*k^2)/(2*R))
+  have hs : ((48*m*k^2)/(2*R))^2 ≤ (1/4 : ℝ)^2 := by nlinarith
+  nlinarith
+
+/-- One abstract local-slope guard, with a deliberately slack universal budget. -/
+theorem local_slope_guard_of_coarse_budget (u p γ J : ℝ)
+    (hu : 0 < u) (hp : 2*u ≤ p) (hγ : 9/10 ≤ γ) (hJ : J^2 ≤ 600*u^2) :
+    1 ≤ 3*(γ/Real.sqrt (1+(J/(9*p*γ))^2)) := by
+  have hp₀ : 0 < p := by linarith
+  have hγ₀ : 0 < γ := by linarith
+  have hd : 0 < 9*p*γ := by positivity
+  have hg := mul_le_mul_of_nonneg_left hγ (show 0 ≤ 9*p by positivity)
+  have hden : 15*u ≤ 9*p*γ := by nlinarith
+  have hs := (sq_le_sq₀ (show 0 ≤ 15*u by positivity) hd.le).2 hden
+  have hq : (J/(9*p*γ))^2 ≤ 3 := by
+    rw [div_pow]
+    apply (div_le_iff₀ (sq_pos_of_pos hd)).2
+    nlinarith
+  have hsqrt : Real.sqrt (1+(J/(9*p*γ))^2) ≤ 2 := by
+    have h := Real.sqrt_le_sqrt (show 1+(J/(9*p*γ))^2 ≤ 4 by linarith)
+    norm_num at h
+    exact h
+  have hsqrtpos : 0 < Real.sqrt (1+(J/(9*p*γ))^2) := Real.sqrt_pos.2 (by positivity)
+  rw [← mul_div_assoc]
+  apply (le_div_iff₀ hsqrtpos).2
+  nlinarith
+
+/-- Uniform source local slope certificate in the original m,k,p,R,J variables. -/
+theorem source_local_slope_guard (m k p R J : ℝ)
+    (hm : 0 < m) (hk : 0 < k) (hp : 2*m*k ≤ p) (hR : 0 < R)
+    (hRsq : R^2=17500*m^2*k^4) (hJ : J^2 ≤ 600*m^2*k^2) :
+    1 ≤ 3*(Real.cos ((48*m*k^2)/(2*R))/
+      Real.sqrt (1+(J/(9*p*Real.cos ((48*m*k^2)/(2*R))))^2)) := by
+  apply local_slope_guard_of_coarse_budget (m*k) p _ J (mul_pos hm hk)
+    (by nlinarith) (source_local_cosine_lower m k R hm hk hR hRsq)
+  nlinarith only [hJ]
+
+/-- The first positive local distance clears zero by a separate uniform estimate. -/
+theorem source_local_zero_guard (m k p R : ℝ) (hm : 1 ≤ m) (hk : 2 ≤ k)
+    (hp : 2*m*k ≤ p) (hR : 0 < R) (hRsq : R^2=17500*m^2*k^4) :
+    1 ≤ Real.cos ((48*m*k^2)/(2*R))*(9*p) := by
+  have hm₀ : 0 < m := by linarith
+  have hk₀ : 0 < k := by linarith
+  have hcos := source_local_cosine_lower m k R hm₀ hk₀ hR hRsq
+  have hmk : 2 ≤ m*k := by nlinarith [mul_nonneg (sub_nonneg.mpr hm) (sub_nonneg.mpr hk)]
+  have hp₀ : 0 < p := by nlinarith
+  have h := mul_le_mul_of_nonneg_right hcos (show 0 ≤ 9*p by positivity)
+  nlinarith
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceLocalSpectrum
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+theorem sourceRadius_square (m k : ℕ) :
+    (sourceRadius m k)^2=17500*(m : ℝ)^2*(k : ℝ)^4 := by
+  unfold sourceRadius
+  rw [mul_pow,mul_pow,Real.sq_sqrt (by norm_num)]
+  ring
+
+theorem sourceRadius_pos (m k : ℕ) (hm : 0 < m) (hk : 0 < k) : 0 < sourceRadius m k := by
+  have hm' : (0 : ℝ) < m := by exact_mod_cast hm
+  have hk' : (0 : ℝ) < k := by exact_mod_cast hk
+  unfold sourceRadius
+  positivity
+
+theorem sourceTheta_pos (k : ℕ) (hk : 0 < k) : 0 < sourceTheta k := by
+  have hk' : (0 : ℝ) < k := by exact_mod_cast hk
+  unfold sourceTheta
+  positivity
+
+theorem sourceTheta_feature_angle (k : ℕ) (hk : 0 < k) : sourceTheta k*(k : ℝ) ≤ Real.pi/2 := by
+  have hk' : (k : ℝ) ≠ 0 := by exact_mod_cast Nat.ne_of_gt hk
+  have he : sourceTheta k*(k : ℝ)=Real.sqrt (1/32) := by unfold sourceTheta; field_simp
+  rw [he]
+  have hs := Real.sq_sqrt (show (0 : ℝ) ≤ 1/32 by norm_num)
+  have hn := Real.sqrt_nonneg (1/32 : ℝ)
+  have hp := Real.two_le_pi
+  nlinarith
+
+/-- All source local distances are separated, uniformly in m,k, once the
+whole-operator harmonic budget is supplied. Radius, sine, arc and slope guards
+are discharged internally, rather than exposed as conclusion-sized premises. -/
+theorem source_local_spectrum_separated (p m k A B i j δ ε : ℕ)
+    (hm : 34000 ≤ m) (hk : 2 ≤ k) (hp : p.Prime)
+    (hsize : 2*m*k < p) (hupper : p < 4*m*k)
+    (hA : A < m) (hB : B < m) (hδ : 0 < δ) (hε : 0 < ε)
+    (hi : i+δ < k) (hj : j+ε < k) (hne : ¬(A=B ∧ i=j ∧ δ=ε))
+    (b₁ b₂ : ℝ)
+    (hbudget : (sourceTheta k)^2*(b₁^2+4*b₂^2) ≤ 600*(m : ℝ)^2*(k : ℝ)^2) :
+    1 ≤ |sourceLocalDistance p m k b₁ b₂ A i δ-sourceLocalDistance p m k b₁ b₂ B j ε| := by
+  let R := sourceRadius m k
+  let Y : ℝ := 48*(m : ℝ)*(k : ℝ)^2
+  let J := Real.sqrt ((sourceTheta k)^2*(b₁^2+4*b₂^2))
+  have hm₀ : (0 : ℝ) < m := by exact_mod_cast (show 0 < m by omega)
+  have hk₀ : (0 : ℝ) < k := by exact_mod_cast (show 0 < k by omega)
+  have hR : 0 < R := sourceRadius_pos m k (by omega) (by omega)
+  have hRsq : R^2=17500*(m : ℝ)^2*(k : ℝ)^4 := sourceRadius_square m k
+  have hpLower : 2*(m : ℝ)*(k : ℝ) ≤ p := by exact_mod_cast hsize.le
+  have hpUpper : (p : ℝ) ≤ 4*(m : ℝ)*(k : ℝ) := by exact_mod_cast hupper.le
+  have hY : 12*(p : ℝ)*k ≤ Y := by
+    have h := mul_le_mul_of_nonneg_right hpUpper (show 0 ≤ 12*(k : ℝ) by positivity)
+    dsimp [Y]
+    nlinarith
+  have hangle : Y/(2*R) ≤ Real.pi := by
+    have h := source_local_angle_bound m k R hm₀ hk₀ hR hRsq
+    dsimp [Y]
+    linarith [Real.two_le_pi]
+  have hγ : 0 < Real.cos (Y/(2*R)) := by
+    have h := source_local_cosine_lower m k R hm₀ hk₀ hR hRsq
+    dsimp [Y]
+    linarith
+  have hJsq : J^2=(sourceTheta k)^2*(b₁^2+4*b₂^2) := Real.sq_sqrt (by positivity)
+  have hJbudget : J^2 ≤ 600*(m : ℝ)^2*(k : ℝ)^2 := hJsq ▸ hbudget
+  have hkp : k < p := by
+    have hh : k ≤ 2*m*k := by
+      have hm₁ : 1 ≤ 2*m := by omega
+      simpa using Nat.mul_le_mul_right k hm₁
+    exact lt_of_le_of_lt hh hsize
+  exact local_ruler_model_separated p m k A B i j δ ε hp hδ hε
+    (lt_trans (by omega) hkp) (lt_trans (by omega) hkp) hsize hA hB hi hj hne
+    R Y (sourceTheta k) b₁ b₂ J hR hY hangle hγ
+    (sourceTheta_pos k (by omega)).le (sourceTheta_feature_angle k (by omega))
+    (Real.sqrt_nonneg _) hJsq.ge
+    (source_local_slope_guard m k p R J hm₀ hk₀ hpLower hR hRsq hJbudget)
+
+/-- Zero is handled independently for the source's actual radius and prime bounds. -/
+theorem source_local_distance_ge_one (p m k A i δ : ℕ)
+    (hm : 34000 ≤ m) (hk : 2 ≤ k) (hp : 0 < p)
+    (hsize : 2*m*k < p) (hupper : p < 4*m*k) (hδ : 0 < δ) (hi : i+δ < k)
+    (b₁ b₂ : ℝ) : 1 ≤ sourceLocalDistance p m k b₁ b₂ A i δ := by
+  have hm₀ : (0 : ℝ) < m := by exact_mod_cast (show 0 < m by omega)
+  have hk₀ : (0 : ℝ) < k := by exact_mod_cast (show 0 < k by omega)
+  have hR := sourceRadius_pos m k (by omega) (by omega)
+  have hRsq := sourceRadius_square m k
+  have hpLower : 2*(m : ℝ)*(k : ℝ) ≤ p := by exact_mod_cast hsize.le
+  have hpUpper : (p : ℝ) ≤ 4*(m : ℝ)*(k : ℝ) := by exact_mod_cast hupper.le
+  have hY : 12*(p : ℝ)*k ≤ 48*(m : ℝ)*(k : ℝ)^2 := by
+    have h := mul_le_mul_of_nonneg_right hpUpper (show 0 ≤ 12*(k : ℝ) by positivity)
+    nlinarith
+  have hangle := source_local_angle_bound m k (sourceRadius m k) hm₀ hk₀ hR hRsq
+  have hγ := source_local_cosine_lower m k (sourceRadius m k) hm₀ hk₀ hR hRsq
+  exact local_ruler_model_ge_one p k A i δ hp hδ hi (sourceRadius m k)
+    (48*(m : ℝ)*(k : ℝ)^2) (sourceTheta k) b₁ b₂ hR hY
+    (by linarith [Real.two_le_pi]) (by linarith)
+    (source_local_zero_guard m k p (sourceRadius m k)
+      (by exact_mod_cast (show 1 ≤ m by omega)) (by exact_mod_cast hk) hpLower hR hRsq)
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceMixedBands
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- A radius budget for the two harmonic features bounds every local length,
+without a restriction on the arc or the lag. -/
+theorem localDistanceModel_le_three_radius (R θ b₁ b₂ δ d : ℝ)
+    (hR : 0 ≤ R) (hbudget : b₁ ^ 2 + b₂ ^ 2 ≤ R ^ 2) :
+    localDistanceModel R θ b₁ b₂ δ d ≤ 3 * R := by
+  have hc₀ := Real.sin_sq_le_one (d / (2 * R))
+  have hc := mul_le_mul_of_nonneg_left hc₀ (show 0 ≤ 4 * R ^ 2 by positivity)
+  have hc' : (circleChord R d) ^ 2 ≤ 4 * R ^ 2 := by
+    unfold circleChord
+    nlinarith only [hc]
+  have he₀ := Real.sin_sq_le_one (θ * δ / 2)
+  have he₁ := Real.sin_sq_le_one (θ * δ)
+  have he₀' := mul_le_mul_of_nonneg_left he₀ (show 0 ≤ 4 * b₁ ^ 2 by positivity)
+  have he₁' := mul_le_mul_of_nonneg_left he₁ (show 0 ≤ 4 * b₂ ^ 2 by positivity)
+  have he : harmonicEnergy θ b₁ b₂ δ ≤ 4 * (b₁ ^ 2 + b₂ ^ 2) := by
+    unfold harmonicEnergy
+    nlinarith only [he₀', he₁']
+  have hs := localDistanceModel_square R θ b₁ b₂ δ d
+  have hpos := localDistanceModel_nonneg R θ b₁ b₂ δ d
+  nlinarith [sq_nonneg R]
+
+theorem sourceOffset_ge_fivehundred_m (m : ℕ) (hm : 34000 ≤ m) :
+    (500 : ℝ) * m ≤ sourceOffset m := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hm₀ : (0 : ℝ) ≤ m := by positivity
+  have hceil := Nat.le_ceil ((m : ℝ) * ((m : ℝ) - 1) / 64)
+  change (m : ℝ) * ((m : ℝ) - 1) / 64 ≤ (sourceOffset m : ℝ) at hceil
+  have hmul := mul_nonneg hm₀ (show (0 : ℝ) ≤ m - 34000 by linarith)
+  nlinarith
+
+theorem sourceRadius_le_onehundredthirtythree (m k : ℕ) :
+    sourceRadius m k ≤ 133 * (m : ℝ) * (k : ℝ) ^ 2 := by
+  have hR : 0 ≤ sourceRadius m k := by unfold sourceRadius; positivity
+  have hsq := sourceRadius_square m k
+  let t : ℝ := (m : ℝ) * (k : ℝ) ^ 2
+  have ht : 0 ≤ t := by dsimp [t]; positivity
+  have hsq' : (sourceRadius m k) ^ 2 = 17500 * t ^ 2 := by
+    dsimp [t]
+    nlinarith only [hsq]
+  calc
+    sourceRadius m k ≤ 133 * t := by nlinarith [sq_nonneg t]
+    _ = 133 * (m : ℝ) * (k : ℝ) ^ 2 := by dsimp [t]; ring
+
+theorem source_mixed_scalar_budget (m k : ℕ) (hm : 34000 ≤ m) (hk : 2 ≤ k) :
+    3 * sourceRadius m k + 1 ≤
+      sourceTmin (sourceOffset m) k - sourceError (sourceOffset m) k := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hk' : (2 : ℝ) ≤ k := by exact_mod_cast hk
+  have hK := sourceOffset_ge_fivehundred_m m hm
+  have hKfixed := sourceOffset_lower m hm
+  have hmul := mul_le_mul_of_nonneg_left hK (sq_nonneg (k : ℝ))
+  have hbase : 700 * (m : ℝ) * (k : ℝ) ^ 2 ≤
+      sourceBaseline (sourceOffset m) k := by
+    unfold sourceBaseline sourceMacroStep
+    nlinarith [hmul]
+  have hpert := source_perturbation_quadratic_bound (k : ℝ) hk'
+  have herr := source_error_linear_bound (sourceOffset m) k hKfixed hk'
+  have hmK := mul_le_mul_of_nonneg_right hm' (sq_nonneg (k : ℝ))
+  have hk₂ : (k : ℝ) ≤ (k : ℝ) ^ 2 := by nlinarith
+  have hT : 600 * (m : ℝ) * (k : ℝ) ^ 2 ≤
+      sourceTmin (sourceOffset m) k - sourceError (sourceOffset m) k := by
+    unfold sourceTmin
+    nlinarith
+  have hR := sourceRadius_le_onehundredthirtythree m k
+  have hmk : 1 ≤ (m : ℝ) * (k : ℝ) ^ 2 := by nlinarith [hmK]
+  nlinarith
+
+/-- The actual source cross distance lies above every local distance once the
+local harmonic reserves fit inside the common radius budget. -/
+theorem source_local_cross_gap (D b₁ b₂ : ℝ) (p m k A l δ a i j : ℕ)
+    (hm : 34000 ≤ m) (hk : 2 ≤ k) (hi : i < k) (hj : j < k)
+    (hD : 0 ≤ D)
+    (hsq : D ^ 2 =
+      (sourceCrossBaseline (sourceOffset m) k a + sourceAlpha k i + sourceBeta k j) ^ 2 -
+        2 * sourceAlpha k i * sourceBeta k j)
+    (hbudget : b₁ ^ 2 + b₂ ^ 2 ≤ (sourceRadius m k) ^ 2) :
+    1 ≤ D - sourceLocalDistance p m k b₁ b₂ A l δ := by
+  have hK := sourceOffset_lower m hm
+  have herr := source_cross_error D (sourceOffset m) k a i j hK hk hi hj hD hsq
+  have hpert := source_digit_sum_bound k i j hk hi hj
+  have hbase : sourceBaseline (sourceOffset m) k ≤
+      sourceCrossBaseline (sourceOffset m) k a := by
+    have hnonneg : 0 ≤ sourceMacroStep k * (a : ℝ) := by
+      unfold sourceMacroStep
+      positivity
+    unfold sourceCrossBaseline
+    linarith
+  have hcross : sourceTmin (sourceOffset m) k - sourceError (sourceOffset m) k ≤ D := by
+    have he := (abs_le.mp herr).1
+    have hp := (abs_le.mp hpert).1
+    unfold sourceTmin at *
+    linarith
+  have hR : 0 ≤ sourceRadius m k := by unfold sourceRadius; positivity
+  have hlocal : sourceLocalDistance p m k b₁ b₂ A l δ ≤ 3 * sourceRadius m k := by
+    unfold sourceLocalDistance
+    exact localDistanceModel_le_three_radius _ _ _ _ _ _ hR hbudget
+  linarith [source_mixed_scalar_budget m k hm hk]
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceReserveBudgets
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+theorem sourceOffset_plus_m_upper (m : ℕ) (hm : 34000 ≤ m) :
+    (sourceOffset m : ℝ)+(m : ℝ) ≤ (m : ℝ)^2/63 := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hnonneg : 0 ≤ (m : ℝ)*((m : ℝ)-1)/64 := by
+    apply div_nonneg (mul_nonneg (by positivity) (by linarith)) (by norm_num)
+  have hceil := Nat.ceil_lt_add_one hnonneg
+  change (sourceOffset m : ℝ) < (m : ℝ)*((m : ℝ)-1)/64+1 at hceil
+  have hmsq : (34000 : ℝ)*m ≤ (m : ℝ)^2 := by nlinarith
+  nlinarith
+
+theorem sourceReserve0Sq_bound (m k : ℕ) (hm : 34000 ≤ m) :
+    sourceReserve0Sq m k ≤ (972/25 : ℝ)*(m : ℝ)^2*(k : ℝ)^4 := by
+  have hK := sourceOffset_lower m hm
+  have hKpos : (0 : ℝ) < sourceOffset m := by linarith
+  have hKsq : (100 : ℝ) ≤ (sourceOffset m : ℝ)^2 := by nlinarith
+  have hmulp := mul_le_mul_of_nonneg_left hKsq
+    (show 0 ≤ (972/25 : ℝ)*(m : ℝ)^2*(k : ℝ)^4 by positivity)
+  unfold sourceReserve0Sq
+  apply (div_le_iff₀ (sq_pos_of_pos hKpos)).2
+  nlinarith
+
+theorem sourceReserve1Sq_bound (m k : ℕ) (hm : 34000 ≤ m) :
+    sourceReserve1Sq m k ≤ (137781/8 : ℝ)*(m : ℝ)^2*(k : ℝ)^4 := by
+  have h := mul_le_mul_of_nonneg_left (sourceOffset_plus_m_upper m hm)
+    (show 0 ≤ (21168*(9/8 : ℝ)^4*32)*(k : ℝ)^4 by positivity)
+  unfold sourceReserve1Sq
+  nlinarith
+
+/-- The full T² reserve fits strictly inside the chosen radius square. -/
+theorem source_total_reserve_bound (m k : ℕ) (hm : 34000 ≤ m) :
+    2*sourceReserve0Sq m k+sourceReserve1Sq m k ≤ (sourceRadius m k)^2 := by
+  have h₀ := sourceReserve0Sq_bound m k hm
+  have h₁ := sourceReserve1Sq_bound m k hm
+  rw [sourceRadius_square]
+  nlinarith [mul_nonneg (sq_nonneg (m : ℝ)) (show 0 ≤ (k : ℝ)^4 by positivity)]
+
+/-- The actual source harmonic reserves satisfy the complete local slope budget. -/
+theorem source_harmonic_reserve_bound (m k : ℕ) (hm : 34000 ≤ m) (hk : 2 ≤ k) :
+    (sourceTheta k)^2*(sourceReserve1Sq m k+4*sourceReserve0Sq m k) ≤
+      600*(m : ℝ)^2*(k : ℝ)^2 := by
+  have h₀ := mul_le_mul_of_nonneg_left (sourceReserve0Sq_bound m k hm) (sq_nonneg (sourceTheta k))
+  have h₁ := mul_le_mul_of_nonneg_left (sourceReserve1Sq_bound m k hm) (sq_nonneg (sourceTheta k))
+  have hs : (sourceTheta k)^2*(k : ℝ)^2=1/32 := source_theta_scale k (by omega)
+  have hmul := congrArg (fun x : ℝ => x*(m : ℝ)^2*(k : ℝ)^2) hs
+  have hn : 0 ≤ (m : ℝ)^2*(k : ℝ)^2 := by positivity
+  nlinarith
+
+
+
+
+
+
+
+
+theorem sourceReserve0_square (m k : ℕ) : (sourceReserve0 m k)^2=sourceReserve0Sq m k := by
+  apply Real.sq_sqrt
+  unfold sourceReserve0Sq
+  positivity
+
+theorem sourceReserve1_square (m k : ℕ) : (sourceReserve1 m k)^2=sourceReserve1Sq m k := by
+  apply Real.sq_sqrt
+  unfold sourceReserve1Sq
+  positivity
+
+/-- All local spectrum scalar hypotheses are now discharged for the literal source reserves. -/
+theorem concrete_source_local_spectrum_separated (p m k A B i j δ ε : ℕ)
+    (hm : 34000 ≤ m) (hk : 2 ≤ k) (hp : p.Prime)
+    (hsize : 2*m*k < p) (hupper : p < 4*m*k)
+    (hA : A < m) (hB : B < m) (hδ : 0 < δ) (hε : 0 < ε)
+    (hi : i+δ < k) (hj : j+ε < k) (hne : ¬(A=B ∧ i=j ∧ δ=ε)) :
+    1 ≤ |sourceLocalDistance p m k (sourceReserve1 m k) (sourceReserve0 m k) A i δ-
+      sourceLocalDistance p m k (sourceReserve1 m k) (sourceReserve0 m k) B j ε| := by
+  apply source_local_spectrum_separated p m k A B i j δ ε hm hk hp hsize hupper
+    hA hB hδ hε hi hj hne
+  rw [sourceReserve1_square,sourceReserve0_square]
+  exact source_harmonic_reserve_bound m k hm hk
+
+/-- The source reserves also discharge the local/cross radius reserve. -/
+theorem concrete_source_local_cross_gap (D : ℝ) (p m k A l δ a i j : ℕ)
+    (hm : 34000 ≤ m) (hk : 2 ≤ k) (hi : i < k) (hj : j < k) (hD : 0 ≤ D)
+    (hsq : D^2=(sourceCrossBaseline (sourceOffset m) k a+sourceAlpha k i+sourceBeta k j)^2-
+      2*sourceAlpha k i*sourceBeta k j) :
+    1 ≤ D-sourceLocalDistance p m k (sourceReserve1 m k) (sourceReserve0 m k) A l δ := by
+  apply source_local_cross_gap D (sourceReserve1 m k) (sourceReserve0 m k)
+    p m k A l δ a i j hm hk hi hj hD hsq
+  rw [sourceReserve1_square,sourceReserve0_square]
+  have h := source_total_reserve_bound m k hm
+  have h₀ : 0 ≤ sourceReserve0Sq m k := by unfold sourceReserve0Sq; positivity
+  linarith
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualCrossMetric
+/-! Connecting the source's actual colex macro realization and three-slot
+operator to the cross-cluster squared-distance identity. -/
+
+open scoped BigOperators Matrix
+open Matrix
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+theorem sourcePairCode_lt_choose {m : ℕ} (A J : Fin (m+1))
+    (hAJ : A.val < J.val) :
+    sourcePairCode A J < Nat.choose (m+1) 2 := by
+  have hstep : Nat.choose (J.val+1) 2 =
+      Nat.choose J.val 2 + J.val := by
+    rw [Nat.choose_succ_succ]
+    simp [Nat.choose_one_right, add_comm]
+  have hchoose : Nat.choose (J.val+1) 2 ≤ Nat.choose (m+1) 2 :=
+    Nat.choose_le_choose 2 (by omega)
+  dsimp [sourcePairCode]
+  omega
+
+theorem sourcePairCode_ordered_injective {m : ℕ}
+    (A J C D : Fin (m+1))
+    (hAJ : A.val < J.val) (hCD : C.val < D.val)
+    (heq : sourcePairCode A J = sourcePairCode C D) :
+    A = C ∧ J = D := by
+  have hJA : sourcePairCode A J < Nat.choose (J.val+1) 2 := by
+    have hstep : Nat.choose (J.val+1) 2 =
+        Nat.choose J.val 2 + J.val := by
+      rw [Nat.choose_succ_succ]
+      simp [Nat.choose_one_right, add_comm]
+    dsimp [sourcePairCode]
+    omega
+  have hDC : sourcePairCode C D < Nat.choose (D.val+1) 2 := by
+    have hstep : Nat.choose (D.val+1) 2 =
+        Nat.choose D.val 2 + D.val := by
+      rw [Nat.choose_succ_succ]
+      simp [Nat.choose_one_right, add_comm]
+    dsimp [sourcePairCode]
+    omega
+  have hJ : J.val = D.val := by
+    rcases lt_trichotomy J.val D.val with h | h | h
+    · have hchoose : Nat.choose (J.val+1) 2 ≤ Nat.choose D.val 2 :=
+        Nat.choose_le_choose 2 (by omega)
+      dsimp [sourcePairCode] at heq hJA
+      omega
+    · exact h
+    · have hchoose : Nat.choose (D.val+1) 2 ≤ Nat.choose J.val 2 :=
+        Nat.choose_le_choose 2 (by omega)
+      dsimp [sourcePairCode] at heq hDC
+      omega
+  have hA : A.val = C.val := by
+    dsimp [sourcePairCode] at heq
+    rw [hJ] at heq
+    omega
+  exact ⟨Fin.ext hA, Fin.ext hJ⟩
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualDiameter
+/-! A diameter bound for the literal point family produced by the source
+operator. The theorem uses its local and cross metric identities; it assumes
+no diameter or separation property of the points. -/
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+/-- The source operator supplies one literal finite point family with both
+exact edge metrics and the global diameter cap. -/
+theorem source_actual_ruler_configuration_metrics_diameter {n k : ℕ}
+    (hm : 34000 ≤ n+2) (hk : 2 ≤ k) (prime : ℕ) :
+    ∃ P : Fin (n+2) × Fin k →
+        EuclideanSpace ℝ (ClusterCoordinate (Fin (n+1)) (n+2)),
+      (∀ A : Fin (n+2), ∀ i j : Fin k, i.val < j.val →
+        dist (P (A,j)) (P (A,i)) =
+          sourceLocalDistance prime (n+2) k
+            (sourceReserve1 (n+2) k) (sourceReserve0 (n+2) k)
+            A.val i.val (j.val-i.val)) ∧
+      (∀ A J : Fin (n+2), A.val < J.val →
+        ∀ i j : Fin k,
+          dist (P (A,i)) (P (J,j))^2 =
+            (sourceCrossBaseline (sourceOffset (n+2) : ℝ) k
+                (sourcePairCode A J) +
+              sourceAlpha k i.val + sourceBeta k j.val)^2 -
+              2*sourceAlpha k i.val*sourceBeta k j.val) ∧
+      (∀ x y : Fin (n+2) × Fin k,
+        dist (P x) (P y) ≤
+          sourceMacroStep (k : ℝ) *
+            ((sourceOffset (n+2) : ℝ) +
+              (Nat.choose (n+2) 2 : ℝ)) +
+          sourcePerturbationBound (k : ℝ) +
+          sourceError (sourceOffset (n+2) : ℝ) (k : ℝ)) := by
+  obtain ⟨P, hlocal, hcross⟩ :=
+    source_actual_ruler_configuration_metrics hm hk prime
+  exact ⟨P, hlocal, hcross,
+    fun x y => source_diameter_of_metrics hm hk prime P hlocal hcross x y⟩
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualSpectrum
+/-! Reindex the actual cross edges by the source's contiguous colex code so
+the already proved complete cross-spectrum theorem applies to their distances. -/
+
+open scoped BigOperators Matrix
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+theorem sourcePairDecode_spec {m : ℕ}
+    (a : Fin (Nat.choose (m+1) 2)) :
+    (sourcePairDecode a).1.val < (sourcePairDecode a).2.val ∧
+      sourcePairCode (sourcePairDecode a).1 (sourcePairDecode a).2 = a.val :=
+  Classical.choose_spec (sourcePairCode_exists_pair a)
+
+theorem sourcePairDecode_code {m : ℕ}
+    (A J : Fin (m+1)) (hAJ : A.val < J.val) :
+    sourcePairDecode ⟨sourcePairCode A J,
+      sourcePairCode_lt_choose A J hAJ⟩ = (A,J) := by
+  let a : Fin (Nat.choose (m+1) 2) :=
+    ⟨sourcePairCode A J, sourcePairCode_lt_choose A J hAJ⟩
+  have hspec := sourcePairDecode_spec a
+  obtain ⟨hA, hJ⟩ := sourcePairCode_ordered_injective
+    (sourcePairDecode a).1 (sourcePairDecode a).2 A J
+    hspec.1 hAJ (by simpa [a] using hspec.2)
+  exact Prod.ext hA hJ
+
+
+
+theorem sourceRealizedCrossDistance_eq {m k : ℕ}
+    (P : Fin (m+1) × Fin k → EuclideanSpace ℝ
+      (ClusterCoordinate (Fin m) (m+1)))
+    (a i j : ℕ) (ha : a < Nat.choose (m+1) 2)
+    (hi : i < k) (hj : j < k) :
+    sourceRealizedCrossDistance P a i j =
+      dist (P ((sourcePairDecode ⟨a,ha⟩).1, ⟨i,hi⟩))
+        (P ((sourcePairDecode ⟨a,ha⟩).2, ⟨j,hj⟩)) := by
+  simp [sourceRealizedCrossDistance, ha, hi, hj]
+
+theorem sourceRealizedCrossDistance_pair {m k : ℕ}
+    (P : Fin (m+1) × Fin k → EuclideanSpace ℝ
+      (ClusterCoordinate (Fin m) (m+1)))
+    (A J : Fin (m+1)) (hAJ : A.val < J.val) (i j : Fin k) :
+    sourceRealizedCrossDistance P (sourcePairCode A J) i.val j.val =
+      dist (P (A,i)) (P (J,j)) := by
+  rw [sourceRealizedCrossDistance_eq P _ _ _
+    (sourcePairCode_lt_choose A J hAJ) i.isLt j.isLt]
+  rw [sourcePairDecode_code A J hAJ]
+
+theorem sourceRealizedCrossDistance_square {m k : ℕ}
+    (P : Fin (m+1) × Fin k → EuclideanSpace ℝ
+      (ClusterCoordinate (Fin m) (m+1)))
+    (hcross : ∀ A J : Fin (m+1), A.val < J.val →
+      ∀ i j : Fin k,
+        dist (P (A,i)) (P (J,j))^2 =
+          (sourceCrossBaseline (sourceOffset (m+1) : ℝ) k
+              (sourcePairCode A J) +
+            sourceAlpha k i.val + sourceBeta k j.val)^2 -
+            2*sourceAlpha k i.val*sourceBeta k j.val)
+    (a i j : ℕ) (ha : a < Nat.choose (m+1) 2)
+    (hi : i < k) (hj : j < k) :
+    (sourceRealizedCrossDistance P a i j)^2 =
+      (sourceCrossBaseline (sourceOffset (m+1) : ℝ) k a +
+        sourceAlpha k i + sourceBeta k j)^2 -
+        2*sourceAlpha k i*sourceBeta k j := by
+  rw [sourceRealizedCrossDistance_eq P a i j ha hi hj]
+  let d := sourcePairDecode ⟨a,ha⟩
+  have hspec := sourcePairDecode_spec ⟨a,ha⟩
+  have h := hcross d.1 d.2 hspec.1 ⟨i,hi⟩ ⟨j,hj⟩
+  simpa only [d, hspec.2] using h
+
+/-- The already proved complete source cross spectrum now applies to the
+literal point family, with no abstract distance-function hypothesis. -/
+theorem source_realized_cross_pairs_separated {m k : ℕ}
+    (hm : 34000 ≤ m+1) (hk : 2 ≤ k)
+    (P : Fin (m+1) × Fin k → EuclideanSpace ℝ
+      (ClusterCoordinate (Fin m) (m+1)))
+    (hcross : ∀ A J : Fin (m+1), A.val < J.val →
+      ∀ i j : Fin k,
+        dist (P (A,i)) (P (J,j))^2 =
+          (sourceCrossBaseline (sourceOffset (m+1) : ℝ) k
+              (sourcePairCode A J) +
+            sourceAlpha k i.val + sourceBeta k j.val)^2 -
+            2*sourceAlpha k i.val*sourceBeta k j.val)
+    (A J C D : Fin (m+1)) (hAJ : A.val < J.val)
+    (hCD : C.val < D.val) (i j u v : Fin k)
+    (hneq : ¬(A=C ∧ J=D ∧ i=u ∧ j=v)) :
+    1 ≤ |dist (P (A,i)) (P (J,j)) -
+      dist (P (C,u)) (P (D,v))| := by
+  let M := Nat.choose (m+1) 2
+  let R := sourceRealizedCrossDistance P
+  have hnonneg : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k →
+      0 ≤ R a i j := by
+    intro a ha i hi j hj
+    change 0 ≤ sourceRealizedCrossDistance P a i j
+    rw [sourceRealizedCrossDistance_eq P a i j ha hi hj]
+    exact dist_nonneg
+  have hsq : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k →
+      (R a i j)^2 =
+        (sourceCrossBaseline (sourceOffset (m+1) : ℝ) k a +
+          sourceAlpha k i + sourceBeta k j)^2 -
+          2*sourceAlpha k i*sourceBeta k j := by
+    intro a ha i hi j hj
+    exact sourceRealizedCrossDistance_square P hcross a i j ha hi hj
+  have hdistinct :
+      (sourcePairCode A J,i.val,j.val) ≠
+        (sourcePairCode C D,u.val,v.val) := by
+    intro heq
+    have hc : sourcePairCode A J = sourcePairCode C D :=
+      congrArg Prod.fst heq
+    obtain ⟨hA,hJ⟩ := sourcePairCode_ordered_injective A J C D hAJ hCD hc
+    have hi : i.val = u.val := congrArg (fun t : ℕ × ℕ × ℕ => t.2.1) heq
+    have hj : j.val = v.val := congrArg (fun t : ℕ × ℕ × ℕ => t.2.2) heq
+    exact hneq ⟨hA,hJ,Fin.ext hi,Fin.ext hj⟩
+  have hsep := source_offset_cross_spectrum_separated R M (m+1) k
+    hm hk hnonneg hsq
+    (sourcePairCode A J) i.val j.val
+    (sourcePairCode C D) u.val v.val
+    (sourcePairCode_lt_choose A J hAJ) i.isLt j.isLt
+    (sourcePairCode_lt_choose C D hCD) u.isLt v.isLt hdistinct
+  simpa only [R, sourceRealizedCrossDistance_pair P A J hAJ i j,
+    sourceRealizedCrossDistance_pair P C D hCD u v] using hsep
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourcePrime
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- Bertrand gives the strict two-sided source ruler-prime interval.
+The upper endpoint is excluded because it is a composite multiple of two. -/
+theorem source_ruler_prime_exists (m k : ℕ) (hm : 0 < m) (hk : 0 < k) :
+    ∃ p : ℕ, p.Prime ∧ 2*m*k < p ∧ p < 4*m*k := by
+  have hn : 2*m*k ≠ 0 := by positivity
+  obtain ⟨p,hp,hlo,hhi⟩ := Nat.exists_prime_lt_and_le_two_mul (2*m*k) hn
+  have hhi' : p ≤ 4*m*k := by nlinarith
+  have hne : p ≠ 4*m*k := by
+    intro heq
+    have hdiv : 2 ∣ p := ⟨2*m*k,by nlinarith⟩
+    have htwo : 2=p := (Nat.prime_dvd_prime_iff_eq Nat.prime_two hp).1 hdiv
+    have hmk : 0 < m*k := Nat.mul_pos hm hk
+    nlinarith
+  exact ⟨p,hp,hlo,lt_of_le_of_ne hhi' hne⟩
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualSeparation
+/-! Assemble the literal local and cross metric identities into unordered
+edge separation for the source construction. -/
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem source_separatedConfiguration_of_metrics {m k : ℕ}
+    (hm : 34000 ≤ m+1) (hk : 2 ≤ k)
+    (prime : ℕ) (hp : prime.Prime)
+    (hsize : 2*(m+1)*k < prime) (hupper : prime < 4*(m+1)*k)
+    (P : Fin (m+1) × Fin k → EuclideanSpace ℝ
+      (ClusterCoordinate (Fin m) (m+1)))
+    (hlocal : ∀ A : Fin (m+1), ∀ i j : Fin k, i.val < j.val →
+      dist (P (A,j)) (P (A,i)) =
+        sourceLocalDistance prime (m+1) k
+          (sourceReserve1 (m+1) k) (sourceReserve0 (m+1) k)
+          A.val i.val (j.val-i.val))
+    (hcross : ∀ A J : Fin (m+1), A.val < J.val →
+      ∀ i j : Fin k,
+        dist (P (A,i)) (P (J,j))^2 =
+          (sourceCrossBaseline (sourceOffset (m+1) : ℝ) k
+              (sourcePairCode A J) +
+            sourceAlpha k i.val + sourceBeta k j.val)^2 -
+            2*sourceAlpha k i.val*sourceBeta k j.val) :
+    SeparatedConfiguration P := by
+  apply separatedConfiguration_of_cluster_gaps P
+  · intro A i j B u v hij huv hne
+    have hne' : ¬(A.val=B.val ∧ i.val=u.val ∧
+        j.val-i.val=v.val-u.val) := by
+      rintro ⟨hA, hi, hδ⟩
+      apply hne
+      have hB : A=B := Fin.ext hA
+      have hu : i=u := Fin.ext hi
+      have hv : j=v := Fin.ext (by omega)
+      simp [hB, hu, hv]
+    have hsep := concrete_source_local_spectrum_separated prime (m+1) k
+      A.val B.val i.val u.val (j.val-i.val) (v.val-u.val)
+      hm hk hp hsize hupper A.isLt B.isLt (by omega) (by omega)
+      (by omega) (by omega) hne'
+    rw [← hlocal A i j hij, ← hlocal B u v huv] at hsep
+    simpa only [dist_comm] using hsep
+  · intro A B i j C D u v hAB hCD hne
+    have hne' : ¬(A=C ∧ B=D ∧ i=u ∧ j=v) := by
+      rintro ⟨rfl,rfl,rfl,rfl⟩
+      exact hne rfl
+    exact source_realized_cross_pairs_separated hm hk P hcross
+      A B C D hAB hCD i j u v hne'
+  · intro A i j B C u v hij hBC
+    have hsq := hcross B C hBC u v
+    have hgap := concrete_source_local_cross_gap
+      (dist (P (B,u)) (P (C,v))) prime (m+1) k
+      A.val i.val (j.val-i.val) (sourcePairCode B C) u.val v.val
+      hm hk u.isLt v.isLt dist_nonneg hsq
+    rw [← hlocal A i j hij] at hgap
+    simpa only [dist_comm] using hgap
+
+/-- The literal source metric has no zero-length non-diagonal edge.  This is
+independent of pairwise separation of distances attached to different edges. -/
+theorem source_minimum_distance_of_metrics {m k : ℕ}
+    (hm : 34000 ≤ m+1) (hk : 2 ≤ k)
+    (prime : ℕ) (hp : prime.Prime)
+    (hsize : 2*(m+1)*k < prime) (hupper : prime < 4*(m+1)*k)
+    (P : Fin (m+1) × Fin k → EuclideanSpace ℝ
+      (ClusterCoordinate (Fin m) (m+1)))
+    (hlocal : ∀ A : Fin (m+1), ∀ i j : Fin k, i.val < j.val →
+      dist (P (A,j)) (P (A,i)) =
+        sourceLocalDistance prime (m+1) k
+          (sourceReserve1 (m+1) k) (sourceReserve0 (m+1) k)
+          A.val i.val (j.val-i.val))
+    (hcross : ∀ A J : Fin (m+1), A.val < J.val →
+      ∀ i j : Fin k,
+        dist (P (A,i)) (P (J,j))^2 =
+          (sourceCrossBaseline (sourceOffset (m+1) : ℝ) k
+              (sourcePairCode A J) +
+            sourceAlpha k i.val + sourceBeta k j.val)^2 -
+            2*sourceAlpha k i.val*sourceBeta k j.val) :
+    ∀ x y, x ≠ y → 1 ≤ dist (P x) (P y) := by
+  apply cluster_minimum_distance P
+  · intro A i j hij
+    have hmin := source_local_distance_ge_one prime (m+1) k
+      A.val i.val (j.val-i.val) hm hk hp.pos hsize hupper
+      (by omega) (by omega)
+      (sourceReserve1 (m+1) k) (sourceReserve0 (m+1) k)
+    rw [← hlocal A i j hij] at hmin
+    simpa only [dist_comm] using hmin
+  · intro A B i j hAB
+    have hsq := hcross A B hAB i j
+    have hgap := concrete_source_local_cross_gap
+      (dist (P (A,i)) (P (B,j))) prime (m+1) k
+      A.val 0 1 (sourcePairCode A B) i.val j.val
+      hm hk i.isLt j.isLt dist_nonneg hsq
+    let z : Fin k := ⟨0, by omega⟩
+    let o : Fin k := ⟨1, by omega⟩
+    have hz : z.val = 0 := rfl
+    have ho : o.val = 1 := rfl
+    have h01 : z.val < o.val := by omega
+    have hlocal01 := hlocal A z o h01
+    rw [hz, ho, Nat.sub_zero] at hlocal01
+    rw [← hlocal01] at hgap
+    have hnonneg : 0 ≤ dist (P (A,o)) (P (A,z)) := dist_nonneg
+    linarith
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceFinalScalar
+/-! Scalar diameter estimates for the literal fixed-dimensional source construction. -/
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- The full source diameter cap is below `0.735 (mk)^2`, uniformly in the
+number of macro clusters and the cluster size. -/
+theorem source_diameter_cap_lt (m k : ℕ) (hm : 34000 ≤ m) (hk : 2 ≤ k) :
+    sourceMacroStep (k : ℝ) *
+        ((sourceOffset m : ℝ) + (m.choose 2 : ℝ)) +
+      sourcePerturbationBound (k : ℝ) +
+      sourceError (sourceOffset m : ℝ) (k : ℝ) <
+        (147 / 200 : ℝ) * ((m : ℝ) * (k : ℝ)) ^ 2 := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hk' : (2 : ℝ) ≤ k := by exact_mod_cast hk
+  have hK : (sourceOffset m : ℝ) ≤ (m : ℝ) ^ 2 / 63 := by
+    have h := sourceOffset_plus_m_upper m hm
+    linarith
+  have hM : (m.choose 2 : ℝ) ≤ (m : ℝ) ^ 2 / 2 := by
+    rw [Nat.cast_choose_two]
+    nlinarith
+  have hS : 0 ≤ sourceMacroStep (k : ℝ) := by
+    unfold sourceMacroStep
+    positivity
+  have hmain := mul_le_mul_of_nonneg_left (add_le_add hK hM) hS
+  have hA := source_perturbation_quadratic_bound (k : ℝ) hk'
+  have hE := source_error_linear_bound (sourceOffset m : ℝ) (k : ℝ)
+    (sourceOffset_lower m hm) hk'
+  have hksq : (k : ℝ) ≤ (k : ℝ) ^ 2 := by nlinarith
+  have hAE : sourcePerturbationBound (k : ℝ) +
+      sourceError (sourceOffset m : ℝ) (k : ℝ) ≤ (k : ℝ) ^ 2 := by
+    nlinarith
+  have hmsq : (34000 : ℝ) ^ 2 ≤ (m : ℝ) ^ 2 := by nlinarith
+  have hmk := mul_le_mul_of_nonneg_right hmsq (sq_nonneg (k : ℝ))
+  unfold sourceMacroStep at hmain
+  unfold sourceMacroStep
+  nlinarith
+
+/-- Rounding from the source size `mk` to any requested `n` leaves enough
+room below the target coefficient `37/50`. -/
+theorem source_rounded_diameter_lt (n m k : ℕ) (hn : 68000 ≤ n)
+    (hm : 34000 ≤ m) (hk : 2 ≤ k)
+    (hsurplus : m * k < n + k)
+    (hkbound : 34000 * k ≤ n) :
+    sourceMacroStep (k : ℝ) *
+        ((sourceOffset m : ℝ) + (m.choose 2 : ℝ)) +
+      sourcePerturbationBound (k : ℝ) +
+      sourceError (sourceOffset m : ℝ) (k : ℝ) <
+        (37 / 50 : ℝ) * (n : ℝ) ^ 2 := by
+  have hcap := source_diameter_cap_lt m k hm hk
+  have hn' : (68000 : ℝ) ≤ n := by exact_mod_cast hn
+  have hsize' : (m : ℝ) * (k : ℝ) < (n : ℝ) + (k : ℝ) := by
+    exact_mod_cast hsurplus
+  have hkbound' : (34000 : ℝ) * (k : ℝ) ≤ n := by
+    exact_mod_cast hkbound
+  have hratio : (m : ℝ) * (k : ℝ) < (34001 / 34000 : ℝ) * n := by
+    nlinarith
+  have hnonneg : 0 ≤ (m : ℝ) * (k : ℝ) := by positivity
+  have hrnonneg : 0 ≤ (34001 / 34000 : ℝ) * n := by positivity
+  have hsquare : ((m : ℝ) * (k : ℝ)) ^ 2 <
+      ((34001 / 34000 : ℝ) * n) ^ 2 := by nlinarith
+  have htarget : (147 / 200 : ℝ) *
+      ((34001 / 34000 : ℝ) * n) ^ 2 < (37 / 50 : ℝ) * (n : ℝ) ^ 2 := by
+    nlinarith [sq_pos_of_pos (show (0 : ℝ) < n by linarith)]
+  nlinarith
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceAllNEmbedding
+/-! Distance-preserving deletion and coordinate padding for the all-size step. -/
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+open Erdos488.Geometry.SeparatedDistances
+
+/-- The source's coordinate count fits in the claimed fixed dimension. -/
+theorem source_cluster_coordinate_card_le_fixed {m : ℕ}
+    (hm : 34000 ≤ m) (hmup : m ≤ 51000) :
+    Fintype.card (ClusterCoordinate (Fin (m-1)) m) ≤ 458999 := by
+  rw [clusterCoordinate_card m (by omega)]
+  omega
+
+/-- A family restricted along an injection retains its unit minimum. -/
+theorem source_minimum_restrict {ι κ E : Type*} [PseudoMetricSpace E]
+    (P : κ → E) (f : ι → κ) (hf : Function.Injective f)
+    (hmin : ∀ a b, a ≠ b → 1 ≤ dist (P a) (P b)) :
+    ∀ a b, a ≠ b → 1 ≤ dist (P (f a)) (P (f b)) := by
+  intro a b hab
+  exact hmin _ _ (hf.ne hab)
+
+
+
+theorem sourceEdgeMap_injective {ι κ : Type*} (f : ι → κ)
+    (hf : Function.Injective f) : Function.Injective (sourceEdgeMap f hf) := by
+  intro e₁ e₂ h
+  apply Subtype.ext
+  exact (Sym2.map.injective hf) (congrArg Subtype.val h)
+
+private theorem source_edgeDistance_map {ι κ E : Type*} [PseudoMetricSpace E]
+    (P : κ → E) (f : ι → κ) (e : Sym2 ι) :
+    edgeDistance (P ∘ f) e = edgeDistance P (Sym2.map f e) := by
+  induction e using Sym2.inductionOn with
+  | hf a b => rfl
+
+/-- Restricting a family along an injection preserves edge separation. -/
+theorem source_separated_restrict {ι κ E : Type*} [PseudoMetricSpace E]
+    (P : κ → E) (f : ι → κ) (hf : Function.Injective f)
+    (hsep : SeparatedConfiguration P) : SeparatedConfiguration (P ∘ f) := by
+  intro e₁ e₂ hne
+  have hne' : sourceEdgeMap f hf e₁ ≠ sourceEdgeMap f hf e₂ :=
+    (sourceEdgeMap_injective f hf).ne hne
+  convert hsep (sourceEdgeMap f hf e₁) (sourceEdgeMap f hf e₂) hne' using 1 <;>
+    simp only [sourceEdgeMap, source_edgeDistance_map]
+
+/-- Restriction cannot increase any pairwise distance bound. -/
+theorem source_diameter_restrict {ι κ E : Type*} [PseudoMetricSpace E]
+    (P : κ → E) (f : ι → κ) (D : ℝ)
+    (hdiam : ∀ a b, dist (P a) (P b) ≤ D) :
+    ∀ a b, dist (P (f a)) (P (f b)) ≤ D := by
+  intro a b
+  exact hdiam _ _
+
+
+
+theorem sourceSumPad_dist {ι κ : Type*} [Fintype ι] [Fintype κ]
+    (x y : EuclideanSpace ℝ ι) :
+    dist (sourceSumPad (κ := κ) x) (sourceSumPad (κ := κ) y) = dist x y := by
+  have hsq : dist (sourceSumPad (κ := κ) x) (sourceSumPad (κ := κ) y)^2 =
+      dist x y ^ 2 := by
+    rw [EuclideanSpace.dist_sq_eq, EuclideanSpace.dist_sq_eq]
+    simp [sourceSumPad, Fintype.sum_sum_type]
+  nlinarith [show 0 ≤ dist (sourceSumPad (κ := κ) x) (sourceSumPad (κ := κ) y) from dist_nonneg,
+    show 0 ≤ dist x y from dist_nonneg]
+
+
+
+theorem sourcePadCoordinates_dist {ι : Type*} [Fintype ι] {D : ℕ}
+    (hcard : Fintype.card ι ≤ D) (x y : EuclideanSpace ℝ ι) :
+    dist (sourcePadCoordinates hcard x) (sourcePadCoordinates hcard y) = dist x y := by
+  simp [sourcePadCoordinates, sourceSumPad_dist]
+
+
+
+theorem sourceDeletionEmbedding_injective {n m k : ℕ} (hsize : n ≤ m*k) :
+    Function.Injective (sourceDeletionEmbedding hsize) := by
+  exact (Fintype.equivFinOfCardEq (α := Fin m × Fin k) (by simp)).symm.injective.comp
+    (Fin.castLE_injective hsize)
+
+/-- Isometric coordinate padding preserves minimum, unordered-edge gaps and diameter. -/
+theorem source_pad_properties {ι κ : Type*} [Fintype κ] {D : ℕ}
+    (hcard : Fintype.card κ ≤ D) (P : ι → EuclideanSpace ℝ κ)
+    (hmin : ∀ a b, a ≠ b → 1 ≤ dist (P a) (P b))
+    (hsep : SeparatedConfiguration P) (B : ℝ)
+    (hdiam : ∀ a b, dist (P a) (P b) ≤ B) :
+    (∀ a b, a ≠ b → 1 ≤ dist (sourcePadCoordinates hcard (P a))
+      (sourcePadCoordinates hcard (P b))) ∧
+    SeparatedConfiguration (sourcePadCoordinates hcard ∘ P) ∧
+    (∀ a b, dist (sourcePadCoordinates hcard (P a))
+      (sourcePadCoordinates hcard (P b)) ≤ B) := by
+  constructor
+  · intro a b hab
+    rw [sourcePadCoordinates_dist]
+    exact hmin a b hab
+  constructor
+  · intro e₁ e₂ hne
+    induction e₁ using Subtype.rec with
+    | _ s hs =>
+      induction e₂ using Subtype.rec with
+      | _ t ht =>
+        induction s using Sym2.inductionOn with
+        | hf a b =>
+          induction t using Sym2.inductionOn with
+          | hf c d =>
+            simpa only [edgeDistance, Sym2.lift_mk, Function.comp_apply,
+              sourcePadCoordinates_dist] using hsep ⟨s(a,b),hs⟩ ⟨s(c,d),ht⟩ hne
+  · intro a b
+    rw [sourcePadCoordinates_dist]
+    exact hdiam a b
+
+/-- The finite source's three metric properties pass to exactly `n` points
+in the same fixed ambient space. The finite source facts are explicit hypotheses. -/
+theorem source_delete_pad_fixed_dimension {n m k : ℕ}
+    (hn : 68000 ≤ n) (hm : 34000 ≤ m) (hmup : m ≤ 51000)
+    (hk : 2 ≤ k) (hsize : n ≤ m*k) (hsurplus : m*k < n+k)
+    (hkbound : 34000*k ≤ n)
+    (P : Fin m × Fin k → EuclideanSpace ℝ
+      (ClusterCoordinate (Fin (m-1)) m))
+    (hmin : ∀ a b, a ≠ b → 1 ≤ dist (P a) (P b))
+    (hsep : SeparatedConfiguration P)
+    (hdiam : ∀ a b, dist (P a) (P b) ≤
+      sourceMacroStep (k : ℝ) *
+          ((sourceOffset m : ℝ) + (m.choose 2 : ℝ)) +
+        sourcePerturbationBound (k : ℝ) +
+        sourceError (sourceOffset m : ℝ) (k : ℝ)) :
+    ∃ Q : Fin n → EuclideanSpace ℝ (Fin 458999),
+      (∀ a b, a ≠ b → 1 ≤ dist (Q a) (Q b)) ∧
+      SeparatedConfiguration Q ∧
+      (∀ a b, dist (Q a) (Q b) < (37/50 : ℝ)*(n:ℝ)^2) := by
+  let f := sourceDeletionEmbedding hsize
+  have hf : Function.Injective f := sourceDeletionEmbedding_injective hsize
+  let hc := source_cluster_coordinate_card_le_fixed hm hmup
+  let B := sourceMacroStep (k : ℝ) *
+          ((sourceOffset m : ℝ) + (m.choose 2 : ℝ)) +
+        sourcePerturbationBound (k : ℝ) +
+        sourceError (sourceOffset m : ℝ) (k : ℝ)
+  have hmin' := source_minimum_restrict P f hf hmin
+  have hsep' := source_separated_restrict P f hf hsep
+  have hdiam' := source_diameter_restrict P f B hdiam
+  obtain ⟨hminQ, hsepQ, hdiamQ⟩ :=
+    source_pad_properties hc (P ∘ f) hmin' hsep' B hdiam'
+  refine ⟨sourcePadCoordinates hc ∘ P ∘ f, ?_, ?_, ?_⟩
+  · simpa only [Function.comp_apply] using hminQ
+  · simpa only [Function.comp_assoc] using hsepQ
+  · intro a b
+    have hbound := source_rounded_diameter_lt n m k hn hm hk hsurplus hkbound
+    exact lt_of_le_of_lt (by simpa only [Function.comp_apply] using hdiamQ a b) hbound
+
+/-- Honest all-`n` interface: a finite source at each rectangular parameter
+supplies the three geometric facts, and this theorem performs the rounding,
+deletion and zero-coordinate embedding. -/
+theorem source_all_n_fixed_dimension_of_finite_sources
+    (hsource : ∀ m k : ℕ, 34000 ≤ m → m ≤ 51000 → 2 ≤ k →
+      ∃ P : Fin m × Fin k → EuclideanSpace ℝ
+          (ClusterCoordinate (Fin (m-1)) m),
+        (∀ a b, a ≠ b → 1 ≤ dist (P a) (P b)) ∧
+        SeparatedConfiguration P ∧
+        (∀ a b, dist (P a) (P b) ≤
+          sourceMacroStep (k : ℝ) *
+              ((sourceOffset m : ℝ) + (m.choose 2 : ℝ)) +
+            sourcePerturbationBound (k : ℝ) +
+            sourceError (sourceOffset m : ℝ) (k : ℝ))) :
+    ∀ n : ℕ, 68000 ≤ n →
+      ∃ Q : Fin n → EuclideanSpace ℝ (Fin 458999),
+        (∀ a b, a ≠ b → 1 ≤ dist (Q a) (Q b)) ∧
+        SeparatedConfiguration Q ∧
+        (∀ a b, dist (Q a) (Q b) < (37/50 : ℝ)*(n:ℝ)^2) := by
+  intro n hn
+  obtain ⟨k, m, hk, hm, hmup, hsize, hsurplus, hkbound⟩ :=
+    every_large_n_cluster_parameters n hn
+  obtain ⟨P, hmin, hsep, hdiam⟩ := hsource m k hm hmup hk
+  exact source_delete_pad_fixed_dimension hn hm hmup hk hsize hsurplus hkbound
+    P hmin hsep hdiam
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceFixedDimension670
+/-! The unconditional fixed-dimensional Euclidean construction for the
+written Erdős #670 candidate. -/
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+open Erdos488.Geometry.SeparatedDistances
+
+private theorem finite_range_diam_lt_of_pairwise_lt {ι E : Type*}
+    [Fintype ι] [Nonempty ι] [PseudoMetricSpace E]
+    (P : ι → E) (C : ℝ) (h : ∀ a b, dist (P a) (P b) < C) :
+    Metric.diam (Set.range P) < C := by
+  let s : Finset (ι × ι) := Finset.univ
+  have hs : s.Nonempty := Finset.univ_nonempty
+  let B := s.sup' hs (fun ab => dist (P ab.1) (P ab.2))
+  have hB (a b : ι) : dist (P a) (P b) ≤ B := by
+    exact Finset.le_sup' (s := s) (f := fun ab => dist (P ab.1) (P ab.2))
+      (Finset.mem_univ (a,b))
+  have hBpos : 0 ≤ B := by
+    let a : ι := Classical.choice inferInstance
+    exact (dist_nonneg : 0 ≤ dist (P a) (P a)).trans (hB a a)
+  have hBlt : B < C := by
+    apply (Finset.sup'_lt_iff (s := s) hs).2
+    intro ab hab
+    exact h ab.1 ab.2
+  have hdiam : Metric.diam (Set.range P) ≤ B := by
+    apply Metric.diam_le_of_forall_dist_le hBpos
+    intro x hx y hy
+    obtain ⟨a,rfl⟩ := hx
+    obtain ⟨b,rfl⟩ := hy
+    exact hB a b
+  exact hdiam.trans_lt hBlt
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-! The unconditional fixed-dimensional Euclidean construction for the
+written Erdős #670 candidate. -/
+
+open Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+open Erdos488.Geometry.SeparatedDistances
+
+theorem solution (n : ℕ) (hn : 68000 ≤ n) :
+    ∃ P : Fin n → EuclideanSpace ℝ (Fin 458999),
+      Function.Injective P ∧
+      (∀ a b, a ≠ b → 1 ≤ dist (P a) (P b)) ∧
+      SeparatedConfiguration P ∧
+      (∀ a b, dist (P a) (P b) < (37 / 50 : ℝ) * (n : ℝ) ^ 2) ∧
+      Metric.diam (Set.range P) < (37 / 50 : ℝ) * (n : ℝ) ^ 2 := by
+  have hsource : ∀ m k : ℕ, 34000 ≤ m → m ≤ 51000 → 2 ≤ k →
+      ∃ P : Fin m × Fin k → EuclideanSpace ℝ
+          (ClusterCoordinate (Fin (m-1)) m),
+        (∀ a b, a ≠ b → 1 ≤ dist (P a) (P b)) ∧
+        SeparatedConfiguration P ∧
+        (∀ a b, dist (P a) (P b) ≤
+          sourceMacroStep (k : ℝ) *
+              ((sourceOffset m : ℝ) + (m.choose 2 : ℝ)) +
+            sourcePerturbationBound (k : ℝ) +
+            sourceError (sourceOffset m : ℝ) (k : ℝ)) := by
+    intro m k hm hmup hk
+    obtain ⟨q, rfl⟩ : ∃ q : ℕ, m = q + 2 := ⟨m - 2, by omega⟩
+    obtain ⟨prime, hp, hsize, hupper⟩ :=
+      source_ruler_prime_exists (q+2) k (by omega) (by omega)
+    obtain ⟨P, hlocal, hcross, hdiam⟩ :=
+      source_actual_ruler_configuration_metrics_diameter
+        (n := q) hm hk prime
+    have hsep : SeparatedConfiguration P :=
+      source_separatedConfiguration_of_metrics (m := q+1)
+        hm hk prime hp (by simpa only [Nat.add_assoc] using hsize)
+        (by simpa only [Nat.add_assoc] using hupper) P hlocal hcross
+    have hmin : ∀ a b, a ≠ b → 1 ≤ dist (P a) (P b) :=
+      source_minimum_distance_of_metrics (m := q+1)
+        hm hk prime hp (by simpa only [Nat.add_assoc] using hsize)
+        (by simpa only [Nat.add_assoc] using hupper) P hlocal hcross
+    exact ⟨P, hmin, hsep, hdiam⟩
+  obtain ⟨P, hmin, hsep, hdiam⟩ :=
+    source_all_n_fixed_dimension_of_finite_sources hsource n hn
+  have hinj : Function.Injective P :=
+    injective_of_unit_minimum_distance P hmin
+  haveI : Nonempty (Fin n) := ⟨⟨0, by omega⟩⟩
+  exact ⟨P, hinj, hmin, hsep, hdiam,
+    finite_range_diam_lt_of_pairwise_lt P _ hdiam⟩

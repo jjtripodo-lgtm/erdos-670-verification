@@ -1,0 +1,687 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.GramRealization
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+
+
+/-- Symmetric squared-distance data produce a symmetric increment Gram matrix. -/
+theorem incrementGram_isHermitian {n : ℕ} (D : SqDistanceData (Fin (n + 1)))
+    (hD : D.IsHermitian) : (incrementGram D).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro i j
+  simp only [incrementGram, starRingEnd_apply, star_trivial]
+  have h11 := hD.apply i.succ j.succ
+  have h10 := hD.apply i.succ j.castSucc
+  have h01 := hD.apply i.castSucc j.succ
+  have h00 := hD.apply i.castSucc j.castSucc
+  simp only [star_trivial] at h11 h10 h01 h00
+  rw [← h11, ← h10, ← h01, ← h00]
+  ring
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.Labels
+namespace Erdos488.Geometry.SeparatedDistances
+
+
+
+
+
+
+
+/-- The final edge in colex column `j` has label `choose (j+1) 2`. -/
+theorem colexLabel_last (j : ℕ) (hj : 1 ≤ j) :
+    colexLabel (j - 1) j = Nat.choose (j + 1) 2 := by
+  rw [colexLabel, Nat.choose_succ_succ]
+  simp only [Nat.choose_one_right, Nat.succ_eq_add_one]
+  norm_num
+  omega
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.ColexPositivity
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+
+
+
+
+/-- The prescribed distance from a vertex to itself vanishes. -/
+@[simp] theorem colexDistance_self {m : ℕ} (K : ℝ) (i : Fin (m + 1)) :
+    colexDistance K i i = 0 := by
+  simp [colexDistance]
+
+/-- Pure-colex prescribed distances are symmetric. -/
+theorem colexDistance_symm {m : ℕ} (K : ℝ) (i j : Fin (m + 1)) :
+    colexDistance K i j = colexDistance K j i := by
+  by_cases hij : i.val < j.val
+  · simp [colexDistance, hij, Nat.not_lt.mpr hij.le]
+  · by_cases hji : j.val < i.val
+    · simp [colexDistance, hji, Nat.not_lt.mpr hji.le]
+    · have h : i = j := Fin.ext (Nat.le_antisymm (Nat.not_lt.mp hji) (Nat.not_lt.mp hij))
+      subst j
+      simp
+
+/-- Squared pure-colex distance data are Hermitian. -/
+theorem colexSqData_isHermitian {m : ℕ} (K : ℝ) :
+    (colexSqData (m := m) K).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro i j
+  simp only [colexSqData, star_trivial]
+  rw [colexDistance_symm]
+
+
+
+
+
+
+
+
+
+
+
+/-- The `Fin`-indexed adjacent distance agrees with its one-based form. -/
+@[simp] theorem colexA_eq_colexANat {m : ℕ} (K : ℝ) (i : Fin m) :
+    colexA K i = colexANat K (i.val + 1) := by
+  rfl
+
+
+
+
+
+
+
+/-- Exact first-coordinate coefficient identity in the colex path decomposition. -/
+theorem colexANat_sq_eq_pathCoeff_add_potential_one (K : ℝ) :
+    colexANat K 1 ^ 2 = colexPathCoeff K 1 + colexPotential K 1 := by
+  norm_num [colexANat, colexPathCoeff, colexPotential, Nat.choose]
+  ring
+
+/-- Exact internal-coordinate coefficient identity in the colex path decomposition. -/
+theorem colexANat_sq_eq_pathCoeff_add_potential_add_pathCoeff
+    {K : ℝ} {j : ℕ} (hj : 2 ≤ j) :
+    colexANat K j ^ 2 =
+      colexPathCoeff K (j - 1) + colexPotential K j + colexPathCoeff K j := by
+  rcases eq_or_lt_of_le hj with rfl | hj3
+  · norm_num [colexANat, colexPathCoeff, colexPotential, Nat.choose]
+    ring
+  · have hj1 : j ≠ 1 := by omega
+    have hj2 : j ≠ 2 := by omega
+    simp [colexANat, colexPathCoeff, colexPotential, hj1, hj2]
+    push_cast [Nat.cast_choose_two]
+    rw [Nat.cast_sub (by omega : 1 ≤ j), Nat.cast_sub (by omega : 2 ≤ j)]
+    field_simp
+    ring
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Upper adjacent entry of the sparse path-energy matrix. -/
+theorem colexPathEnergyMatrix_adjacent {m : ℕ} (K : ℝ) (a b : Fin m)
+    (hab : a.val + 1 = b.val) :
+    colexPathEnergyMatrix K a b = -colexPathCoeff K (a.val + 1) := by
+  have ha : a.val < m - 1 := by omega
+  let i : Fin (m - 1) := ⟨a.val, ha⟩
+  unfold colexPathEnergyMatrix
+  rw [Matrix.sum_apply, Finset.sum_eq_single i]
+  · have hne : a ≠ b := by intro h; subst b; simp at hab
+    simp [colexPathEdgeMatrix, i, Matrix.single_apply, hab, hne, Ne.symm hne]
+  · intro k hk hki
+    have hv : k.val ≠ a.val := by
+      intro h
+      apply hki
+      exact Fin.ext h
+    have hkA : (⟨k.val, by omega⟩ : Fin m) ≠ a := by
+      intro h
+      exact hv (Fin.ext_iff.mp h)
+    have hkB : (⟨k.val + 1, by omega⟩ : Fin m) ≠ b := by
+      intro h
+      have hval := Fin.ext_iff.mp h
+      change k.val + 1 = b.val at hval
+      apply hv
+      omega
+    have hne : a ≠ b := by intro h; subst b; simp at hab
+    have hrev : ¬((⟨k.val + 1, by omega⟩ : Fin m) = a ∧
+        (⟨k.val, by omega⟩ : Fin m) = b) := by
+      rintro ⟨h1, h2⟩
+      have hv1 := Fin.ext_iff.mp h1
+      have hv2 := Fin.ext_iff.mp h2
+      change k.val + 1 = a.val at hv1
+      change k.val = b.val at hv2
+      omega
+    simp [colexPathEdgeMatrix, Matrix.single_apply, hkA, hkB, hne, Ne.symm hne, hrev]
+  · simp
+
+/-- The sparse path-energy matrix is symmetric. -/
+theorem colexPathEnergyMatrix_isHermitian {m : ℕ} (K : ℝ) :
+    (colexPathEnergyMatrix (m := m) K).IsHermitian := by
+  unfold colexPathEnergyMatrix
+  rw [Matrix.IsHermitian]
+  rw [Matrix.conjTranspose_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  simp [colexPathEdgeMatrix, Matrix.conjTranspose_single]
+  abel
+
+/-- Lower adjacent entry of the sparse path-energy matrix. -/
+theorem colexPathEnergyMatrix_adjacent_rev {m : ℕ} (K : ℝ) (a b : Fin m)
+    (hba : b.val + 1 = a.val) :
+    colexPathEnergyMatrix K a b = -colexPathCoeff K (b.val + 1) := by
+  have hsym := (colexPathEnergyMatrix_isHermitian (m := m) K).apply a b
+  simp only [star_trivial] at hsym
+  rw [← hsym, colexPathEnergyMatrix_adjacent K b a hba]
+
+/-- Distant entries of the sparse path-energy matrix vanish. -/
+theorem colexPathEnergyMatrix_distant_zero {m : ℕ} (K : ℝ) (a b : Fin m)
+    (hneq : a ≠ b)
+    (hadj : ¬(a.val + 1 = b.val ∨ b.val + 1 = a.val)) :
+    colexPathEnergyMatrix K a b = 0 := by
+  unfold colexPathEnergyMatrix
+  rw [Matrix.sum_apply]
+  apply Finset.sum_eq_zero
+  intro i hi
+  have ha0 : (⟨i.val, by omega⟩ : Fin m) ≠ a ∨
+      (⟨i.val, by omega⟩ : Fin m) ≠ b := by
+    by_contra h
+    push_neg at h
+    exact hneq (h.1.symm.trans h.2)
+  have hb0 : (⟨i.val + 1, by omega⟩ : Fin m) ≠ a ∨
+      (⟨i.val + 1, by omega⟩ : Fin m) ≠ b := by
+    by_contra h
+    push_neg at h
+    exact hneq (h.1.symm.trans h.2)
+  have hab0 : ¬((⟨i.val, by omega⟩ : Fin m) = a ∧
+      (⟨i.val + 1, by omega⟩ : Fin m) = b) := by
+    rintro ⟨h1, h2⟩
+    apply hadj
+    left
+    have hv1 := Fin.ext_iff.mp h1
+    have hv2 := Fin.ext_iff.mp h2
+    change i.val = a.val at hv1
+    change i.val + 1 = b.val at hv2
+    omega
+  have hba0 : ¬((⟨i.val + 1, by omega⟩ : Fin m) = a ∧
+      (⟨i.val, by omega⟩ : Fin m) = b) := by
+    rintro ⟨h1, h2⟩
+    apply hadj
+    right
+    have hv1 := Fin.ext_iff.mp h1
+    have hv2 := Fin.ext_iff.mp h2
+    change i.val + 1 = a.val at hv1
+    change i.val = b.val at hv2
+    omega
+  have ha0' : ¬((⟨i.val, by omega⟩ : Fin m) = a ∧
+      (⟨i.val, by omega⟩ : Fin m) = b) := by tauto
+  have hb0' : ¬((⟨i.val + 1, by omega⟩ : Fin m) = a ∧
+      (⟨i.val + 1, by omega⟩ : Fin m) = b) := by tauto
+  simp [colexPathEdgeMatrix, Matrix.single_apply, ha0', hb0', hab0, hba0]
+
+/-- Diagonal entry contributed by one path edge. -/
+theorem colexPathEdgeMatrix_diag {m : ℕ} (K : ℝ) (i : Fin (m - 1)) (a : Fin m) :
+    colexPathEdgeMatrix K i a a =
+      if a.val = i.val ∨ a.val = i.val + 1 then colexPathCoeff K (i.val + 1) else 0 := by
+  let u : Fin m := ⟨i.val, by omega⟩
+  let v : Fin m := ⟨i.val + 1, by omega⟩
+  have huv : u ≠ v := by intro h; have := Fin.ext_iff.mp h; simp [u, v] at this
+  have hu : u = a ↔ i.val = a.val := by simp [u, Fin.ext_iff]
+  have hv : v = a ↔ i.val + 1 = a.val := by simp [v, Fin.ext_iff]
+  have huvA : ¬(u = a ∧ v = a) := by
+    rintro ⟨h1, h2⟩
+    exact huv (h1.trans h2.symm)
+  change (Matrix.single u u (colexPathCoeff K (i.val + 1)) +
+      Matrix.single v v (colexPathCoeff K (i.val + 1)) -
+      Matrix.single u v (colexPathCoeff K (i.val + 1)) -
+      Matrix.single v u (colexPathCoeff K (i.val + 1))) a a = _
+  simp [Matrix.single_apply, huvA, hu, hv]
+  aesop
+
+/-- First diagonal entry of the path-energy matrix. -/
+theorem colexPathEnergyMatrix_diag_zero {m : ℕ} (hm : 2 ≤ m) (K : ℝ) :
+    colexPathEnergyMatrix K (⟨0, by omega⟩ : Fin m) ⟨0, by omega⟩ =
+      colexPathCoeff K 1 := by
+  unfold colexPathEnergyMatrix
+  rw [Matrix.sum_apply]
+  let i : Fin (m - 1) := ⟨0, by omega⟩
+  rw [Finset.sum_eq_single i]
+  · rw [colexPathEdgeMatrix_diag]
+    simp [i]
+  · intro k hk hki
+    rw [colexPathEdgeMatrix_diag]
+    have hkpos : 0 < k.val := by
+      by_contra h
+      apply hki
+      apply Fin.ext
+      simp [i]
+      omega
+    have hkne : 0 ≠ k.val := Ne.symm (Nat.ne_of_gt hkpos)
+    simp [hkne]
+  · simp
+
+/-- Internal diagonal entry of the path-energy matrix. -/
+theorem colexPathEnergyMatrix_diag_internal {m : ℕ} (K : ℝ) (a : Fin m)
+    (ha0 : 0 < a.val) (halast : a.val + 1 < m) :
+    colexPathEnergyMatrix K a a =
+      colexPathCoeff K a.val + colexPathCoeff K (a.val + 1) := by
+  unfold colexPathEnergyMatrix
+  rw [Matrix.sum_apply]
+  let il : Fin (m - 1) := ⟨a.val - 1, by omega⟩
+  let ir : Fin (m - 1) := ⟨a.val, by omega⟩
+  have hsub : a.val - 1 + 1 = a.val := Nat.sub_add_cancel (by omega)
+  rw [← Finset.sum_erase_add _ _ (Finset.mem_univ il)]
+  rw [Finset.sum_eq_single ir]
+  · rw [colexPathEdgeMatrix_diag, colexPathEdgeMatrix_diag]
+    simp [il, ir, hsub]
+    ring
+  · intro k hk hkir
+    have hkil : k ≠ il := by simpa using hk
+    rw [colexPathEdgeMatrix_diag]
+    split_ifs with h
+    · exfalso
+      rcases h with h | h
+      · apply hkir; apply Fin.ext; simpa [ir] using h.symm
+      · apply hkil; apply Fin.ext; simp [il]; omega
+    · rfl
+  · intro hnot
+    exfalso
+    apply hnot
+    simp only [Finset.mem_erase, Finset.mem_univ, and_true]
+    intro hir
+    have hv := Fin.ext_iff.mp hir
+    simp [ir, il] at hv
+    omega
+
+/-- Final diagonal entry of the path-energy matrix. -/
+theorem colexPathEnergyMatrix_diag_last {m : ℕ} (hm : 2 ≤ m) (K : ℝ) :
+    colexPathEnergyMatrix K
+      ⟨m - 1, Nat.sub_lt (by omega) (by norm_num)⟩
+      ⟨m - 1, Nat.sub_lt (by omega) (by norm_num)⟩ =
+      colexPathCoeff K (m - 1) := by
+  unfold colexPathEnergyMatrix
+  rw [Matrix.sum_apply]
+  have hi : m - 2 < m - 1 := by omega
+  have hsub : m - 2 + 1 = m - 1 := by omega
+  let i : Fin (m - 1) := ⟨m - 2, hi⟩
+  rw [Finset.sum_eq_single i]
+  · rw [colexPathEdgeMatrix_diag]
+    simp [i, hsub]
+  · intro k hk hki
+    rw [colexPathEdgeMatrix_diag]
+    split_ifs with h
+    · exfalso
+      apply hki
+      apply Fin.ext
+      rcases h with h | h <;> simp at h <;> simp [i] <;> omega
+    · rfl
+  · simp
+
+/-- Entries of the diagonal potential matrix. -/
+theorem colexPotentialMatrix_apply {m : ℕ} (K : ℝ) (a b : Fin m) :
+    colexPotentialMatrix K a b =
+      if a = b then colexPotential K (a.val + 1) else 0 := by
+  unfold colexPotentialMatrix
+  rw [Matrix.sum_apply]
+  by_cases hab : a = b
+  · subst b
+    rw [Finset.sum_eq_single a]
+    · simp
+    · intro k hk hka
+      simp [Matrix.single_apply, hka]
+    · simp
+  · rw [if_neg hab]
+    apply Finset.sum_eq_zero
+    intro i hi
+    rw [Matrix.single_apply]
+    split_ifs with h
+    · exact False.elim (hab (h.1.symm.trans h.2))
+    · rfl
+
+/-- In increasing order, the prescribed distance is offset plus its colex label. -/
+theorem colexDistance_of_lt {m : ℕ} {K : ℝ} {i j : Fin (m + 1)} (h : i.val < j.val) :
+    colexDistance K i j = K + colexLabel i.val j.val := by
+  simp [colexDistance, h]
+
+/-- The distance across one increment is `colexA`. -/
+theorem colexDistance_increment {m : ℕ} (K : ℝ) (i : Fin m) :
+    colexDistance K i.castSucc i.succ = colexA K i := by
+  have hlt : i.castSucc.val < i.succ.val := by simp
+  rw [colexDistance_of_lt hlt]
+  have hlabel : colexLabel i.castSucc.val i.succ.val = Nat.choose (i.val + 2) 2 := by
+    simpa using colexLabel_last (i.val + 1) (by omega)
+  rw [hlabel]
+  rfl
+
+/-- The diagonal increment-Gram entry is the square of the adjacent distance. -/
+theorem colexIncrementGram_diag {m : ℕ} (K : ℝ) (i : Fin m) :
+    incrementGram (colexSqData (m := m) K) i i = colexA K i ^ 2 := by
+  have hlt : i.castSucc.val < i.succ.val := by simp
+  have hd := colexDistance_increment K i
+  have hdr : colexDistance K i.succ i.castSucc = colexA K i := by
+    rw [colexDistance_symm, hd]
+  simp only [incrementGram, colexSqData, colexDistance_self, hd, hdr, colexA]
+  ring
+
+/-- The upper adjacent increment-Gram entry has the exact path coefficient. -/
+theorem colexIncrementGram_adjacent {m : ℕ} (K : ℝ) (i j : Fin m)
+    (hij : i.val + 1 = j.val) :
+    incrementGram (colexSqData (m := m) K) i j =
+      -(colexA K i) ^ 2 / 2 - colexA K j + 1 / 2 := by
+  have hsame : i.succ = j.castSucc := Fin.ext hij
+  have hd11 : colexDistance K i.succ j.succ = colexA K j := by
+    rw [hsame]
+    exact colexDistance_increment K j
+  have hd00 : colexDistance K i.castSucc j.castSucc = colexA K i := by
+    rw [← hsame]
+    exact colexDistance_increment K i
+  have hlt02 : i.castSucc.val < j.succ.val := by simp only [Fin.val_castSucc, Fin.val_succ]; omega
+  have hchoose : Nat.choose (j.val + 2) 2 = Nat.choose (j.val + 1) 2 + (j.val + 1) := by
+    rw [Nat.choose_succ_succ]
+    simp only [Nat.choose_one_right, Nat.succ_eq_add_one]
+    norm_num
+    omega
+  have hlabel02 :
+      colexLabel i.castSucc.val j.succ.val + 1 = Nat.choose (j.val + 2) 2 := by
+    simp only [colexLabel, Fin.val_castSucc, Fin.val_succ]
+    rw [hchoose]
+    omega
+  have hd01 : colexDistance K i.castSucc j.succ = colexA K j - 1 := by
+    rw [colexDistance_of_lt hlt02]
+    simp only [colexA]
+    have hlabel02R :
+        (colexLabel i.castSucc.val j.succ.val : ℝ) + 1 =
+          (Nat.choose (j.val + 2) 2 : ℝ) := by exact_mod_cast hlabel02
+    norm_num [Nat.add_comm] at hlabel02R ⊢
+    linarith
+  have hdj := colexDistance_increment K j
+  simp only [incrementGram, colexSqData, hd00, hd01, hsame, hdj,
+    colexDistance_self]
+  ring
+
+
+
+
+
+
+
+
+
+/-- The tridiagonal truncation remains Hermitian. -/
+theorem colexTridiagonal_isHermitian {m : ℕ} (K : ℝ) :
+    (colexTridiagonal (m := m) K).IsHermitian := by
+  have hB := incrementGram_isHermitian (colexSqData (m := m) K)
+    (colexSqData_isHermitian K)
+  apply Matrix.IsHermitian.ext
+  intro i j
+  have hij := hB.apply i j
+  simp only [star_trivial] at hij ⊢
+  by_cases hEq : i = j
+  · subst j
+    simp [colexTridiagonal]
+  · have hEq' : j ≠ i := Ne.symm hEq
+    by_cases hAdj : i.val + 1 = j.val ∨ j.val + 1 = i.val
+    · have hAdj' : j.val + 1 = i.val ∨ i.val + 1 = j.val := hAdj.symm
+      simp [colexTridiagonal, hEq, hEq', hAdj, hAdj', hij]
+    · have hAdj' : ¬(j.val + 1 = i.val ∨ i.val + 1 = j.val) := by tauto
+      simp [colexTridiagonal, hEq, hEq', hAdj, hAdj']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances
+
+open Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+theorem solution {m : ℕ} (hm : 2 ≤ m) (K : ℝ) :
+    colexTridiagonal K = colexPathEnergyMatrix K + colexPotentialMatrix K +
+      colexEndpointMatrix (lt_of_lt_of_le Nat.zero_lt_two hm) K := by
+  ext a b
+  by_cases hab : a = b
+  · subst b
+    have hT : colexTridiagonal K a a = colexANat K (a.val + 1) ^ 2 := by
+      simp [colexTridiagonal, colexIncrementGram_diag, colexA_eq_colexANat]
+    rw [hT, Matrix.add_apply, Matrix.add_apply, colexPotentialMatrix_apply]
+    simp only [if_pos]
+    by_cases ha0 : a.val = 0
+    · have ha : a = ⟨0, by omega⟩ := Fin.ext ha0
+      rw [ha]
+      rw [colexPathEnergyMatrix_diag_zero hm]
+      have hm1 : m - 1 ≠ 0 := by omega
+      simp [colexEndpointMatrix, Matrix.single_apply, hm1]
+      rw [colexANat_sq_eq_pathCoeff_add_potential_one]
+    · by_cases halast : a.val = m - 1
+      · have hmpos : 0 < m := lt_of_lt_of_le Nat.zero_lt_two hm
+        have ha : a = ⟨m - 1, Nat.sub_lt hmpos (by norm_num)⟩ := Fin.ext halast
+        rw [ha]
+        rw [colexPathEnergyMatrix_diag_last hm]
+        simp [colexEndpointMatrix, Matrix.single_apply]
+        have hcoeff := colexANat_sq_eq_pathCoeff_add_potential_add_pathCoeff
+          (K := K) (j := m) hm
+        simpa [Nat.sub_add_cancel (by omega : 1 ≤ m)] using hcoeff
+      · have ha0' : 0 < a.val := Nat.pos_of_ne_zero ha0
+        have halast' : a.val + 1 < m := by omega
+        rw [colexPathEnergyMatrix_diag_internal K a ha0' halast']
+        have hlastFin : (⟨m - 1, Nat.sub_lt (lt_of_lt_of_le Nat.zero_lt_two hm)
+            (by norm_num)⟩ : Fin m) ≠ a := by
+          intro h
+          apply halast
+          exact (Fin.ext_iff.mp h).symm
+        simp [colexEndpointMatrix, Matrix.single_apply, hlastFin]
+        have hcoeff := colexANat_sq_eq_pathCoeff_add_potential_add_pathCoeff
+          (K := K) (j := a.val + 1) (by omega)
+        simpa [Nat.add_sub_cancel, add_assoc, add_left_comm, add_comm] using hcoeff
+  · have hpot : colexPotentialMatrix K a b = 0 := by
+      rw [colexPotentialMatrix_apply]
+      simp [hab]
+    have hend : colexEndpointMatrix (lt_of_lt_of_le Nat.zero_lt_two hm) K a b = 0 := by
+      unfold colexEndpointMatrix
+      rw [Matrix.single_apply]
+      split_ifs with h
+      · exact False.elim (hab (h.1.symm.trans h.2))
+      · rfl
+    rw [Matrix.add_apply, Matrix.add_apply, hpot, hend, add_zero]
+    by_cases hadj : a.val + 1 = b.val
+    · rw [colexPathEnergyMatrix_adjacent K a b hadj]
+      have hT : colexTridiagonal K a b =
+          -(colexPathCoeff K (a.val + 1)) := by
+        simp [colexTridiagonal, hab, hadj, colexIncrementGram_adjacent,
+          colexPathCoeff, colexA_eq_colexANat]
+        ring
+      simpa using hT
+    · by_cases hrev : b.val + 1 = a.val
+      · rw [colexPathEnergyMatrix_adjacent_rev K a b hrev]
+        have hsym := (colexTridiagonal_isHermitian K).apply a b
+        simp only [star_trivial] at hsym
+        rw [← hsym]
+        simp [colexTridiagonal, Ne.symm hab, hrev, colexIncrementGram_adjacent,
+          colexPathCoeff, colexA_eq_colexANat]
+        ring
+      · rw [colexPathEnergyMatrix_distant_zero K a b hab (by tauto)]
+        simp [colexTridiagonal, hab, hadj, hrev]

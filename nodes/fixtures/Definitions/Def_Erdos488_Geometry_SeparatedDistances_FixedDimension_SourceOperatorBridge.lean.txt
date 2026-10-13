@@ -1,0 +1,176 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Real.Sqrt
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets
+
+/-! The source's actual three-group coefficient operator. This module starts
+with the rational anchored potential and a whole-family matrix estimate. -/
+
+open scoped BigOperators Matrix
+open Matrix
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- The rational vertex potential for the constant and second harmonic. -/
+noncomputable def sourceQuadraticPotential {m : ℕ} (k : ℕ)
+    (A B : Fin m) : ℝ :=
+  if B.val < A.val then 64 / 9
+  else if A.val < B.val then 9 * (k : ℝ) ^ 2 else 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Fine column `a` belongs to macro anchor `a+1`; anchor zero has no fine
+column. -/
+def sourceFineShift {n : ℕ} {E : Type*} [Zero E]
+    (F : Fin n → E) : Fin (n+1) → E := Fin.cases 0 F
+
+/-- Coarse column `a` belongs to macro anchor `a`; the final anchor has no
+coarse column. -/
+def sourceCoarseShift {n : ℕ} {E : Type*} [Zero E]
+    (G : Fin n → E) : Fin (n+1) → E := Fin.snoc G 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- The actual first-harmonic macro coefficient at each anchor. -/
+noncomputable def sourceSineCoefficient {n : ℕ} (k : ℕ)
+    (F G : Fin n → EuclideanSpace ℝ (Fin n))
+    (A : Fin (n+1)) : EuclideanSpace ℝ (Fin n) :=
+  ((9/8 : ℝ) / sourceTheta k) •
+    (sourceFineShift F A + ((9/8 : ℝ) * (k : ℝ)) • sourceCoarseShift G A)
+
+/-- The directed scalar attached to an anchor and a distinct target. -/
+noncomputable def sourceDirectedScale {n : ℕ} (k : ℕ)
+    (A J : Fin n) : ℝ :=
+  if A.val < J.val then (9/8 : ℝ) * (k : ℝ) else 1
+
+
+
+
+
+
+
+/-- One coefficient family placed in one of the five source feature slots. -/
+noncomputable def sourceSlotMatrix {ι κ : Type*}
+    (B : κ → EuclideanSpace ℝ ι) (slot : Fin 5) :
+    Matrix ι (κ × Fin 5) ℝ :=
+  fun i q => if q.2 = slot then B q.1 i else 0
+
+
+
+
+
+
+
+
+
+
+
+/-- The literal three-active-slot coefficient operator of the source
+construction. Slots two and three are zero. -/
+noncomputable def sourceActiveMatrix {n : ℕ} (k : ℕ)
+    (B : Fin (n+1) → EuclideanSpace ℝ (Fin n))
+    (F G : Fin n → EuclideanSpace ℝ (Fin n)) :
+    Matrix (Fin n) (Fin (n+1) × Fin 5) ℝ :=
+  sourceSlotMatrix B 0 + sourceSlotMatrix (sourceSineCoefficient k F G) 1 +
+    sourceSlotMatrix (fun a => -B a) 4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

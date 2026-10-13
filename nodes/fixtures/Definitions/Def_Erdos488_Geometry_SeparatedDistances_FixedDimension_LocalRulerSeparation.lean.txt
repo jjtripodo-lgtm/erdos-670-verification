@@ -1,0 +1,26 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+
+/-! All local ruler-distance models, across every cluster and lag, are separated.
+Only explicit scalar guards remain; no local-separation hypothesis is assumed. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+noncomputable def rulerArc (p k A i δ : ℕ) : ℝ := 3*(primeRulerGap p k A i δ : ℝ)
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

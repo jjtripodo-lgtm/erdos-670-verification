@@ -1,0 +1,50 @@
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.PosDef
+
+/-!
+Definitions for the unrestricted-dimensional separated Euclidean distance problem.
+
+The development uses an explicit construction surface first.  `Separated` records
+unit separation between distances belonging to distinct unordered pairs; the
+increment Gram construction is developed in later modules.
+-/
+
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+
+/-- The colexicographic edge label, indexed by the smaller and larger endpoints. -/
+def colexLabel (i j : ℕ) : ℕ := Nat.choose j 2 + i + 1
+
+
+
+/-- Squared-distance data on a finite vertex type. -/
+abbrev SqDistanceData (ι : Type*) := Matrix ι ι ℝ
+
+/-- Finite-difference increment Gram matrix based at consecutive vertices. -/
+noncomputable def incrementGram {n : ℕ} (D : SqDistanceData (Fin (n + 1))) : Matrix (Fin n) (Fin n) ℝ :=
+  fun i j =>
+    -(1 / 2 : ℝ) *
+      (D i.succ j.succ - D i.succ j.castSucc - D i.castSucc j.succ + D i.castSucc j.castSucc)
+
+
+
+/-- An unordered pair of distinct vertices. -/
+abbrev Edge (ι : Type*) := {e : Sym2 ι // ¬e.IsDiag}
+
+/-- Distance attached to an unordered pair. -/
+noncomputable def edgeDistance {ι E : Type*} [PseudoMetricSpace E]
+    (p : ι → E) : Sym2 ι → ℝ :=
+  Sym2.lift ⟨fun i j => dist (p i) (p j), fun i j => dist_comm _ _⟩
+
+/-- Publication-facing unit-separation condition on the unordered edge set. -/
+def SeparatedConfiguration {ι E : Type*} [PseudoMetricSpace E]
+    (p : ι → E) : Prop :=
+  ∀ e f : Edge ι, e ≠ f →
+    1 ≤ |edgeDistance p e.1 - edgeDistance p f.1|
+
+
+
+end Erdos488.Geometry.SeparatedDistances

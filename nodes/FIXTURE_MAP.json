@@ -1,0 +1,522 @@
+{
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity.lean.txt",
+    "sha256": "4d2bec989066961471f47b00206fecbae51a44512cc736a96c76f45c89cd48a3",
+    "bytes": 4627
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_Defs.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_Defs.lean.txt",
+    "sha256": "4aaba97090458168a1be9d46b077fc301326fd7296441ca1397d8db68b2c3dd2",
+    "bytes": 1753
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization.lean.txt",
+    "sha256": "66ce1dc00ac8a46d6949123a024ece447cb720529253724419f73829578ee671",
+    "bytes": 1133
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates.lean.txt",
+    "sha256": "445b0a397679dbaaba855f6ed0659166ee5a0f35a9cc24c9eec390c40ce7d277",
+    "bytes": 1709
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy.lean.txt",
+    "sha256": "8b61121bb22384bd8160bca3d5a71f32fc843716cafbda6753ca813b8aad63e1",
+    "bytes": 1466
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening.lean.txt",
+    "sha256": "49064f18dda0f0feab59c812b5540a94ca4889bdbd1a4ab7835c2edc5f8f8572",
+    "bytes": 450
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation.lean.txt",
+    "sha256": "8be32b39aaab5322cf60cb63c521f0f732b881ec74b0425cf8416b079e4ea966",
+    "bytes": 1714
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel.lean.txt",
+    "sha256": "2f1bd49d97db78422afbb7c7222686c7dd731af18fd3af03eba63a2da879784f",
+    "bytes": 805
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge.lean.txt",
+    "sha256": "452b48957d4c2be7494b7f2c9d781f4aee89a635db2c31586e12eb2c09c70965",
+    "bytes": 1496
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence.lean.txt",
+    "sha256": "4b111a582a62f4e96eaf7b3cea78ed98185d0f72eb8f285a937f302a41426946",
+    "bytes": 2025
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation.lean.txt",
+    "sha256": "eed0182ab9efc9f4e7c0a26a7f3e8dcef0b8ad76c92cc0e9b475699733d8327d",
+    "bytes": 867
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation.lean.txt",
+    "sha256": "aaea21ce6f35340bcf935f946d577ec5ed63a2ed79ea9f74a2894b0862f0e136",
+    "bytes": 744
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits.lean.txt",
+    "sha256": "f80b166d644c7e678edaaa312c400abcbacf691fb4e3c6cb09eac556a54ca541",
+    "bytes": 449
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric.lean.txt",
+    "sha256": "eae1d8925983801fabaa4c61dbe01ed0daa8d04775fd6009952ecd7a25453d13",
+    "bytes": 4069
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum.lean.txt",
+    "sha256": "3496f7dad9ce010564801d342028cd437caab643765c8552b82531e50259e72f",
+    "bytes": 4279
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding.lean.txt",
+    "sha256": "4122ce6c154f5398672502428ba299b17453ffc86c0ac369963f1ae3a64b818e",
+    "bytes": 3285
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards.lean.txt",
+    "sha256": "59e0970bef375c7e176474709032eeb5199a905662bc43a3598e96a17563c6e0",
+    "bytes": 1220
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum.lean.txt",
+    "sha256": "00e792d0db95db027695aee64e144a773dc530ccd98836c5fecec1e43f9a106c",
+    "bytes": 1495
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum.lean.txt",
+    "sha256": "7078e2b511aa08a69298986b2209f56c30f1473ea8c1ec84d60eb81ccd4bbd2f",
+    "bytes": 1799
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge.lean.txt",
+    "sha256": "43d56c8918a03423d603943ea562b56307b35635c16204c99f4ee0d38d182aca",
+    "bytes": 4912
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds.lean.txt",
+    "sha256": "a674768979e5a1c8fb89f9e259b1bd37a87665a8c4fec13a9fda173f67985b25",
+    "bytes": 3193
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix.lean.txt",
+    "sha256": "7f2f4c2fb87d9a6aeb1584ce619dc1535f6d242e4c1d480737019fd3868e7488",
+    "bytes": 3915
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets.lean.txt",
+    "sha256": "c94b237e36d8587b0dd96488367f5ea20de1db639628d4c25984057055a9bd3a",
+    "bytes": 2140
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds.lean.txt",
+    "sha256": "0b9b8905159334cc33d7842f0f7c185c532825f7e0a4a87fa921488074fa3f67",
+    "bytes": 1753
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord.lean.txt",
+    "sha256": "9db1b1f592357e22386e819c8ce4f3bd56e12714f1467e0fb4c4357c3bb1746e",
+    "bytes": 500
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures.lean.txt",
+    "sha256": "be9fde438044c42a4d0886e68797268dff79fa26c807fe106e8a56750b0b8c5b",
+    "bytes": 1027
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_Labels.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_Labels.lean.txt",
+    "sha256": "776cd6139e27609bf50a832f185a83d76d1d2635c59aeb13a3a95e6077a9452a",
+    "bytes": 1740
+  },
+  "Definitions/Def_Erdos488_Geometry_SeparatedDistances_PrefixSums.lean": {
+    "fixture": "Definitions/Def_Erdos488_Geometry_SeparatedDistances_PrefixSums.lean.txt",
+    "sha256": "06639736961142492840f9342e1ebaa8bdc621aa7e7e889e939d07d6c20860d1",
+    "bytes": 1739
+  },
+  "GENERATION_RECEIPT.json": {
+    "fixture": "GENERATION_RECEIPT.json",
+    "sha256": "d74cebe1e49c43cc9616066893a79d1452cf6147afebc0b412b842b30d2594dd",
+    "bytes": 166477
+  },
+  "LICENSE": {
+    "fixture": "LICENSE",
+    "sha256": "3587ec3f5eb141a9ec2a9470a10a8cae9bc904db51d2d7d4877bd5ff9751208e",
+    "bytes": 1068
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.formal_statement.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.formal_statement.lean.txt",
+    "sha256": "c22a8ffddb40172247e78dc9935c923653c1dcbee9e804078afe28560242e3a6",
+    "bytes": 1099
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.preamble.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.preamble.lean.txt",
+    "sha256": "05d940290ce9bb6526537be179a1d66c425f2227a4ed0573756746056a20a5e5",
+    "bytes": 2847
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.solution.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.solution.lean.txt",
+    "sha256": "a3d68ddfb86a2041c7602dca630cf292d48b2a2984b1ca950940e2101c764883",
+    "bytes": 15242
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.formal_statement.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.formal_statement.lean.txt",
+    "sha256": "cdd908d5a57f52d7bfc320eed57f97cc0c4eb287227830f4a99ad906bed8e0fe",
+    "bytes": 444
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.preamble.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.preamble.lean.txt",
+    "sha256": "cf1362e8f2cb12f1a6a6a9033aabe4843a6e842919cc268e9745d09200fde844",
+    "bytes": 3838
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.solution.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.solution.lean.txt",
+    "sha256": "7ace6789984c572cb3de104e7bad5f45cc0486e743e18715d78587dd95d85964",
+    "bytes": 97661
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.formal_statement.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.formal_statement.lean.txt",
+    "sha256": "d6fb1ab324a1dd484bebd357f3e2ce786c35cd6b9dc1bf19f104ce8c02a58607",
+    "bytes": 649
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.preamble.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.preamble.lean.txt",
+    "sha256": "b6babea1e5273c9a639d5529d17351b9ddd42a24cd0077a061bcb840e9127d4d",
+    "bytes": 3534
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.solution.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.solution.lean.txt",
+    "sha256": "f9c484a029794c14fbed88f0574704edf88192aa79ee92fa796c09cd0ec2eb9a",
+    "bytes": 14297
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.formal_statement.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.formal_statement.lean.txt",
+    "sha256": "e5f42c1be9427489aac66ca6e5686d46c796447e95ec7d54b53f808615fa642f",
+    "bytes": 855
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.preamble.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.preamble.lean.txt",
+    "sha256": "08222428464d7f735d3f6acf8ea92b4663af7f1e1b4256da58a598638eb5861f",
+    "bytes": 4013
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.solution.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.solution.lean.txt",
+    "sha256": "ed28a6139766ea2676a7bb5121cd5d8d79687b253b4895404a2d9c03cfda1275",
+    "bytes": 126308
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.formal_statement.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.formal_statement.lean.txt",
+    "sha256": "eb84ca481199023f356b3d5d725a7d4676c1b34e96a8cb5a36416991fe56c3a5",
+    "bytes": 1675
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.preamble.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.preamble.lean.txt",
+    "sha256": "cddd0949368aad6755d031b2101d80ff198af1bde5a5e4924607a84cde51f36f",
+    "bytes": 3515
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.solution.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.solution.lean.txt",
+    "sha256": "fb7f89e3afa1fd2e342ed6fbb79db3be9eb7a13738af1b60ca6a321a2eaec00a",
+    "bytes": 36875
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.formal_statement.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.formal_statement.lean.txt",
+    "sha256": "c472d1bad9e0012c4894fffa9c4f27add5a612f938c6ddf3f2f0448883f4e156",
+    "bytes": 1076
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.preamble.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.preamble.lean.txt",
+    "sha256": "38dde132976541cd3f62c60cd594eb058d43dce996a736260a27ce66d2a6a237",
+    "bytes": 3539
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.solution.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.solution.lean.txt",
+    "sha256": "e617b00094fa320d45421b2735a6cc988dfbf4e0e2023bbacf0d7f6e55c119f5",
+    "bytes": 24127
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.formal_statement.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.formal_statement.lean.txt",
+    "sha256": "7bffd8c43d6f2e429c482da9ec75424b4e0adb6ea74b8761c204e6ff4ecd180c",
+    "bytes": 278
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.preamble.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.preamble.lean.txt",
+    "sha256": "4e78f9306b13678c380e476a84a4564c5aaf0ff4a9c5ce0b0dee871a5e236999",
+    "bytes": 3111
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.solution.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.solution.lean.txt",
+    "sha256": "369bcd3a759dcecfc610553ef955270a27db9d8c8fefdfef9834f2234651afff",
+    "bytes": 21465
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.formal_statement.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.formal_statement.lean.txt",
+    "sha256": "b5f0e6b1130d8be5eb564de49e311cc4481dc094b1971af058874e0d41704672",
+    "bytes": 256
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.preamble.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.preamble.lean.txt",
+    "sha256": "4e78f9306b13678c380e476a84a4564c5aaf0ff4a9c5ce0b0dee871a5e236999",
+    "bytes": 3111
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.solution.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.solution.lean.txt",
+    "sha256": "20f4c0c3661de0e49c38f7b9f090d1a91eb508922e32b1c07be24b09e0fbbd93",
+    "bytes": 12672
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.formal_statement.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.formal_statement.lean.txt",
+    "sha256": "a3164eea2b277f4bbf711218e01401e9812ccc99224b6a569f154b5372f963ab",
+    "bytes": 218
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.preamble.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.preamble.lean.txt",
+    "sha256": "bd45ec63051817170a9336a14245e7821e2f8b89ea028c2716424fd9ea85227b",
+    "bytes": 3212
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.solution.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.solution.lean.txt",
+    "sha256": "133c20d8ec682e7a7520f6bd543afb5094f46e0c0626534bea2af02529ee6cd5",
+    "bytes": 12989
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.formal_statement.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.formal_statement.lean.txt",
+    "sha256": "03b63040b4fcc5f76df4dbad8f6ccce1f9e0e7992a93dc2bb67137ba3f343cd3",
+    "bytes": 462
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.preamble.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.preamble.lean.txt",
+    "sha256": "874d361072fb230dc46ea399ca1eedc3963667534c61b04c710de64f1e35dad0",
+    "bytes": 3403
+  },
+  "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.solution.lean.txt": {
+    "fixture": "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.solution.lean.txt",
+    "sha256": "c44152aa0158bba7c55b46d258d8fbda569d4d6f5746f18d49989de76c08f870",
+    "bytes": 12448
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated_solution.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated_solution.lean.txt",
+    "sha256": "5ec8a9ea0a35278b3fd3444826bd215706ac7d853b28be44083ada8e02b9821d",
+    "bytes": 739
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated_statement.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated_statement.lean.txt",
+    "sha256": "c286be954b8c178c08a8cdcbb210b32aef5ca02f8a444a550abacfeaa5904224",
+    "bytes": 814
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670_solution.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670_solution.lean.txt",
+    "sha256": "1beed99167310a375e1b465024a071dd99b48f62c112ebcd9f08b75273b3145d",
+    "bytes": 727
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670_statement.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670_statement.lean.txt",
+    "sha256": "9f7dcbc8fe8d587d146f5ec6d2cca29bdf2c6403adae57fcfd57c59392e33f26",
+    "bytes": 796
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget_solution.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget_solution.lean.txt",
+    "sha256": "414af73f5cbf8914ef1639652592d74edf584e2c849438576602403e5e1f2800",
+    "bytes": 747
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget_statement.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget_statement.lean.txt",
+    "sha256": "87d668fd61d9d1e4a37ff7e77ecfed33c4f32bce2673959dca9dc7e7408326f7",
+    "bytes": 826
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics_solution.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics_solution.lean.txt",
+    "sha256": "1d711d051636437f65a1a366c76f3a4730f92e99ff43bc329d64be0790dcdf55",
+    "bytes": 759
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics_statement.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics_statement.lean.txt",
+    "sha256": "4b754b4e41ca6d92a70ba2b025ac191851001e63ec80969bd7ecf9f284fe0e54",
+    "bytes": 844
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square_solution.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square_solution.lean.txt",
+    "sha256": "dd111acbaa753b287be918369488ba839d5520c827b3b4a89fdb4ff97b097314",
+    "bytes": 755
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square_statement.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square_statement.lean.txt",
+    "sha256": "cdfd544a3f3f4c7fe7e8d928775f8b4b5de4408d30c28571298bc6ec6eac1a3b",
+    "bytes": 838
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics_solution.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics_solution.lean.txt",
+    "sha256": "f427c7c1762fab79d9b363493d0564213ee5b4d37527dee5605b5adbfa59b38b",
+    "bytes": 729
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics_statement.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics_statement.lean.txt",
+    "sha256": "b7a2ef96dffa227ca66f26f357f743882e32e02259de8839adf91e8f7e5e899e",
+    "bytes": 799
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint_solution.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint_solution.lean.txt",
+    "sha256": "641292b74197268839fd5743cec90f9817c8b4da3ea12e8c4db727fb630c6655",
+    "bytes": 733
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint_statement.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint_statement.lean.txt",
+    "sha256": "83edd302288866edcc1bad93654405d546200c950fc6d0e102e4cbf145a607c2",
+    "bytes": 805
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product_solution.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product_solution.lean.txt",
+    "sha256": "543257fe2321d21d08732bb34a26535534acb36794f4cce1b14446bfa8bb1ed7",
+    "bytes": 727
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product_statement.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product_statement.lean.txt",
+    "sha256": "3379f15c52278c8c6983ccb15940e4d5af02f2a9cd1579c9e21c057f21404666",
+    "bytes": 796
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q_solution.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q_solution.lean.txt",
+    "sha256": "1ee42cc9cae4da89e9869aadd4302b4ecbd48ea18712cb1673a0b6a99009e497",
+    "bytes": 691
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q_statement.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q_statement.lean.txt",
+    "sha256": "9200b6f4d38616c5234d28eae48dc89a5a2092751dcbb1e2d35b7f00e90e6396",
+    "bytes": 742
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path_solution.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path_solution.lean.txt",
+    "sha256": "8bba47f30675c283811764590b67b0056899e1bdc5e46f9d14713f54ef2d6df1",
+    "bytes": 731
+  },
+  "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path_statement.lean.txt": {
+    "fixture": "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path_statement.lean.txt",
+    "sha256": "f8db950da4e58321080dd71428265804a0fcd786b2f7da990749bb533c9e9e62",
+    "bytes": 802
+  },
+  "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.lean": {
+    "fixture": "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.lean.txt",
+    "sha256": "a3d68ddfb86a2041c7602dca630cf292d48b2a2984b1ca950940e2101c764883",
+    "bytes": 15242
+  },
+  "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.lean": {
+    "fixture": "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.lean.txt",
+    "sha256": "7ace6789984c572cb3de104e7bad5f45cc0486e743e18715d78587dd95d85964",
+    "bytes": 97661
+  },
+  "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.lean": {
+    "fixture": "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.lean.txt",
+    "sha256": "f9c484a029794c14fbed88f0574704edf88192aa79ee92fa796c09cd0ec2eb9a",
+    "bytes": 14297
+  },
+  "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.lean": {
+    "fixture": "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.lean.txt",
+    "sha256": "ed28a6139766ea2676a7bb5121cd5d8d79687b253b4895404a2d9c03cfda1275",
+    "bytes": 126308
+  },
+  "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.lean": {
+    "fixture": "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.lean.txt",
+    "sha256": "fb7f89e3afa1fd2e342ed6fbb79db3be9eb7a13738af1b60ca6a321a2eaec00a",
+    "bytes": 36875
+  },
+  "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.lean": {
+    "fixture": "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.lean.txt",
+    "sha256": "e617b00094fa320d45421b2735a6cc988dfbf4e0e2023bbacf0d7f6e55c119f5",
+    "bytes": 24127
+  },
+  "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.lean": {
+    "fixture": "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.lean.txt",
+    "sha256": "369bcd3a759dcecfc610553ef955270a27db9d8c8fefdfef9834f2234651afff",
+    "bytes": 21465
+  },
+  "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.lean": {
+    "fixture": "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.lean.txt",
+    "sha256": "20f4c0c3661de0e49c38f7b9f090d1a91eb508922e32b1c07be24b09e0fbbd93",
+    "bytes": 12672
+  },
+  "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.lean": {
+    "fixture": "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.lean.txt",
+    "sha256": "133c20d8ec682e7a7520f6bd543afb5094f46e0c0626534bea2af02529ee6cd5",
+    "bytes": 12989
+  },
+  "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.lean": {
+    "fixture": "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.lean.txt",
+    "sha256": "c44152aa0158bba7c55b46d258d8fbda569d4d6f5746f18d49989de76c08f870",
+    "bytes": 12448
+  },
+  "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.lean": {
+    "fixture": "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.lean.txt",
+    "sha256": "666df65ad5150ccae863cec97fa8e2d8d58c30f239e3b46aea5057cef0f1c49d",
+    "bytes": 3946
+  },
+  "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.lean": {
+    "fixture": "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.lean.txt",
+    "sha256": "2e17a513525e86e81e9e2002ad9738e8d44edd3e47d7157c7e1fd8cf2014b9d8",
+    "bytes": 4282
+  },
+  "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.lean": {
+    "fixture": "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.lean.txt",
+    "sha256": "4261e78bde1b343ac8dc80dd63ac95ba7577c1b082109494289ab8876bfdf48a",
+    "bytes": 4183
+  },
+  "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.lean": {
+    "fixture": "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.lean.txt",
+    "sha256": "67dfa66f75642f3b3dfcfb5a4f323af88bd1c78f77bd1bfa97b2326a7f33751b",
+    "bytes": 4868
+  },
+  "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.lean": {
+    "fixture": "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.lean.txt",
+    "sha256": "ae05715922c2efe1b444fe9ced5978401443849fb1cdf7e99a829b5a77ec0709",
+    "bytes": 5190
+  },
+  "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.lean": {
+    "fixture": "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.lean.txt",
+    "sha256": "f2359a59a5b692c7e2eec29e56bba2cf53d949d6b578226bb89b78f7e7180268",
+    "bytes": 4615
+  },
+  "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.lean": {
+    "fixture": "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.lean.txt",
+    "sha256": "749725a5090871a14c5cbdde2806ae2f135b4837b3a5cc4e0e59c258084e972c",
+    "bytes": 3389
+  },
+  "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.lean": {
+    "fixture": "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.lean.txt",
+    "sha256": "ac42460987cfa77d2e6ee7dde97cd95a10d08907b055f1d1f0c0625a10a5c026",
+    "bytes": 3367
+  },
+  "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.lean": {
+    "fixture": "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.lean.txt",
+    "sha256": "42c38c5aff1c04416312efb5c2474541df0a2e1ca67da2be65d2faf7a9987ad3",
+    "bytes": 3430
+  },
+  "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.lean": {
+    "fixture": "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.lean.txt",
+    "sha256": "0b219b889b6f9eca2cdf01b33f4b4897f8f6dd8fa00ff2b8ba367cf2af686b54",
+    "bytes": 3865
+  },
+  "lake-manifest.json": {
+    "fixture": "lake-manifest.json",
+    "sha256": "3064fd8b6877cb16c53c3b65cb61902d25cfd603f261d90ab4a9dfde571f03f1",
+    "bytes": 3573
+  },
+  "lakefile.toml": {
+    "fixture": "lakefile.toml",
+    "sha256": "d39b47edda750887eff763565161f1bea164dc49c3b1538c4cde003e6047c431",
+    "bytes": 4781
+  },
+  "lean-toolchain": {
+    "fixture": "lean-toolchain",
+    "sha256": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
+    "bytes": 25
+  },
+  "original_node_types.json": {
+    "fixture": "original_node_types.json",
+    "sha256": "f6737081e16c706443c247bbbac880f3b17824ed28d3b91b7daaf16259563524",
+    "bytes": 145135
+  }
+}

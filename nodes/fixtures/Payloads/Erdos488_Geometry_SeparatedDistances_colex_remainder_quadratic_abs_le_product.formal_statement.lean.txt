@@ -1,0 +1,4 @@
+theorem Erdos488.Geometry.SeparatedDistances.colex_remainder_quadratic_abs_le_product {m : ℕ} (K : ℝ)
+    (x : Fin m → ℝ) :
+    |star x ⬝ᵥ (colexRemainder K *ᵥ x)| ≤
+      2 * (∑ i, |x i|) * (∑ i, (i.val + 1 : ℝ) * |x i|) := by sorry

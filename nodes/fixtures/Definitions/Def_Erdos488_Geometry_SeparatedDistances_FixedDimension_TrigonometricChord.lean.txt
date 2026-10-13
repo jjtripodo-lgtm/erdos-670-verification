@@ -1,0 +1,29 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Tactic
+
+/-! Actual trigonometric circle identities and uniform chord lower slope.
+These provide analytic inputs, not an assumed final Euclidean configuration. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+noncomputable def circleChord (R d : ℝ) : ℝ := 2*R*Real.sin (d/(2*R))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

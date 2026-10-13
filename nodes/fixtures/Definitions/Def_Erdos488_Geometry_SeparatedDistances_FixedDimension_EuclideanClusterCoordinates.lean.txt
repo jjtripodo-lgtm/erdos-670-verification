@@ -1,0 +1,39 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+open scoped BigOperators Matrix
+open Matrix
+
+abbrev ClusterCoordinate (ι : Type*) (m : ℕ) :=
+  ι ⊕ ((Fin m × Fin 2) ⊕ (Fin m ⊕ (Fin m × Fin 5)))
+
+noncomputable def privateCircle {m : ℕ} (A : Fin m) (R y : ℝ) : Fin m × Fin 2 → ℝ :=
+  fun q => if q.1=A then ![R*Real.cos (y/R),R*Real.sin (y/R)] q.2 else 0
+
+/-- Literal finite Euclidean coordinates; macro, private plane, axis, residual. -/
+noncomputable def clusterPoint {ι : Type*} [Fintype ι] {m : ℕ}
+    (centers : Fin m → ι → ℝ) (M : Matrix ι (Fin m × Fin 5) ℝ)
+    (V : Matrix (Fin m × Fin 5) (Fin m × Fin 5) ℝ) (S R axis : ℝ)
+    (A : Fin m) (z y : ℝ) : EuclideanSpace ℝ (ClusterCoordinate ι m) :=
+  WithLp.toLp 2 (Sum.elim (fun q => S*centers A q+(M *ᵥ clusteredFeature A z) q)
+    (Sum.elim (privateCircle A R y)
+      (Sum.elim (fun B => if B=A then axis else 0) (V *ᵥ clusteredFeature A z))))
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

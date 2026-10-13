@@ -1,0 +1,423 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding
+import Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.ColexBase
+namespace Erdos488.Geometry.SeparatedDistances
+
+
+
+
+
+/-- Interior colex potential bound at index three. -/
+theorem colex_potential_three {K : ℝ} (hK : 3 ≤ K) :
+    K - 3 / 2 ≥ (3 * K + 27) / 24 := by
+  linarith
+
+/-- Interior colex potential bound for every real index at least four. -/
+theorem colex_potential_ge_four {K i : ℝ} (hK : 10 ≤ K) (hi : 4 ≤ i) :
+    (i - 2) * K + i / 2 * (i ^ 2 - 2 * i - 4) ≥
+      (K * i + i ^ 3) / 24 := by
+  nlinarith [sq_nonneg (i - 2)]
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.ColexPositivity
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Quadratic form of a sparse single-entry matrix. -/
+theorem dotProduct_single_mulVec {m : ℕ} (x : Fin m → ℝ) (i j : Fin m) (c : ℝ) :
+    star x ⬝ᵥ (Matrix.single i j c *ᵥ x) = x i * c * x j := by
+  rw [Matrix.single_mulVec]
+  simp only [dotProduct, star_trivial]
+  rw [Finset.sum_eq_single i]
+  · simp
+    ring
+  · intro b hb hbi
+    simp [hbi]
+  · simp
+
+/-- Each sparse adjacent-edge matrix contributes its weighted path square. -/
+theorem colexPathEdgeMatrix_quadratic {m : ℕ} (K : ℝ) (x : Fin m → ℝ)
+    (i : Fin (m - 1)) :
+    star x ⬝ᵥ (colexPathEdgeMatrix K i *ᵥ x) =
+      colexPathCoeff K (i.val + 1) *
+        (x ⟨i.val, by omega⟩ - x ⟨i.val + 1, by omega⟩) ^ 2 := by
+  simp only [colexPathEdgeMatrix, Matrix.add_mulVec, Matrix.sub_mulVec,
+    dotProduct_add, dotProduct_sub]
+  rw [dotProduct_single_mulVec, dotProduct_single_mulVec,
+    dotProduct_single_mulVec, dotProduct_single_mulVec]
+  ring
+
+/-- Quadratic form of the entire sparse path-energy matrix. -/
+theorem colexPathEnergyMatrix_quadratic {m : ℕ} (K : ℝ) (x : Fin m → ℝ) :
+    star x ⬝ᵥ (colexPathEnergyMatrix K *ᵥ x) =
+      ∑ i : Fin (m - 1), colexPathCoeff K (i.val + 1) *
+        (x ⟨i.val, by omega⟩ - x ⟨i.val + 1, by omega⟩) ^ 2 := by
+  simp only [colexPathEnergyMatrix, Matrix.sum_mulVec, dotProduct_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  exact colexPathEdgeMatrix_quadratic K x i
+
+/-- Quadratic form of the diagonal potential matrix. -/
+theorem colexPotentialMatrix_quadratic {m : ℕ} (K : ℝ) (x : Fin m → ℝ) :
+    star x ⬝ᵥ (colexPotentialMatrix K *ᵥ x) =
+      ∑ i : Fin m, colexPotential K (i.val + 1) * x i ^ 2 := by
+  simp only [colexPotentialMatrix, Matrix.sum_mulVec, dotProduct_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  rw [dotProduct_single_mulVec]
+  ring
+
+/-- Quadratic form of the endpoint correction. -/
+theorem colexEndpointMatrix_quadratic {m : ℕ} (hm : 0 < m) (K : ℝ)
+    (x : Fin m → ℝ) :
+    star x ⬝ᵥ (colexEndpointMatrix hm K *ᵥ x) =
+      colexPathCoeff K m * x ⟨m - 1, Nat.sub_lt hm (by norm_num)⟩ ^ 2 := by
+  unfold colexEndpointMatrix
+  rw [dotProduct_single_mulVec]
+  ring
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Exact finite path-energy identity for the colex tridiagonal quadratic form. -/
+theorem colex_tridiagonal_quadratic_eq {m : ℕ} (hm : 2 ≤ m) (K : ℝ)
+    (x : Fin m → ℝ) :
+    star x ⬝ᵥ (colexTridiagonal K *ᵥ x) =
+      (∑ i : Fin (m - 1), colexPathCoeff K (i.val + 1) *
+        (x ⟨i.val, by omega⟩ - x ⟨i.val + 1, by omega⟩) ^ 2) +
+      (∑ i : Fin m, colexPotential K (i.val + 1) * x i ^ 2) +
+      colexPathCoeff K m *
+        x ⟨m - 1, Nat.sub_lt (by omega) (by norm_num)⟩ ^ 2 := by
+  rw [colexTridiagonal_eq_path_potential_endpoint hm]
+  simp only [Matrix.add_mulVec, dotProduct_add]
+  rw [colexPathEnergyMatrix_quadratic, colexPotentialMatrix_quadratic,
+    colexEndpointMatrix_quadratic]
+
+
+
+
+
+/-- Every pure-colex comparison weight is positive once `K ≥ 10`. -/
+theorem colexWeight_pos {K : ℝ} (hK : 10 ≤ K) (j : ℕ) (hj : 1 ≤ j) :
+    0 < colexWeight K j := by
+  unfold colexWeight
+  split_ifs with h
+  · have hKpos : 0 < K := by linarith
+    positivity
+  · have hjR : (0 : ℝ) < j := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hj)
+    have hKpos : 0 < K := by linarith
+    positivity
+
+
+
+
+
+/-- Every potential from the third coordinate onward dominates its comparison weight. -/
+theorem colexPotential_ge_weight {K : ℝ} (hK : 10 ≤ K) {j : ℕ} (hj : 3 ≤ j) :
+    colexWeight K j ≤ colexPotential K j := by
+  rcases eq_or_lt_of_le hj with rfl | hj4
+  · have h := colex_potential_three (K := K) (by linarith)
+    norm_num [colexWeight, colexPotential] at h ⊢
+    linarith
+  · have h := colex_potential_ge_four (K := K) (i := (j : ℝ)) hK
+      (by exact_mod_cast hj4)
+    simp [colexWeight, colexPotential, show ¬j ≤ 2 by omega,
+      show j ≠ 1 by omega, show j ≠ 2 by omega]
+    push_cast
+    rw [Nat.cast_sub (by omega : 2 ≤ j)]
+    nlinarith
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserve
+/-! Stronger-offset colex remainder control for the fixed-dimensional candidate.
+The predecessor theorem's exact source is blob
+8d62b42bc6da2281fbc54ba4659b7a9265964b76 in john-lean-math. -/
+
+namespace Erdos488.Geometry.SeparatedDistances
+open scoped BigOperators
+open Matrix
+
+
+
+
+
+
+
+
+/-- Every path coefficient retains a quarter of its prescribed adjacent length. -/
+lemma colexPathCoeff_ge_quarter {K : ℝ} (hK : 10 ≤ K) (j : ℕ) :
+    colexANat K j ^ 2 / 4 ≤ colexPathCoeff K j := by
+  have hc : (0 : ℝ) ≤ Nat.choose (j+1+1) 2 := by positivity
+  unfold colexPathCoeff colexANat
+  nlinarith [sq_nonneg (K + (Nat.choose (j+1) 2 : ℝ))]
+
+lemma colex_first_two_weighted_path {K : ℝ} (hK : 10 ≤ K) (a b : ℝ) :
+    colexANat K 1 ^ 2 / 4 * (a^2 + (a-b)^2) ≤
+      colexPathCoeff K 1 * (a-b)^2 +
+      colexPotential K 1 * a^2 + colexPotential K 2 * b^2 := by
+  have hv : colexANat K 1 ^ 2 / 4 + 8 ≤ colexPotential K 1 := by
+    norm_num [colexANat, colexPotential, Nat.choose]
+    nlinarith [sq_nonneg (K-10)]
+  have hc : colexANat K 1 ^ 2 / 4 + 8 ≤ colexPathCoeff K 1 := by
+    norm_num [colexANat, colexPathCoeff, Nat.choose]
+    nlinarith [sq_nonneg (K-10)]
+  have hv' := mul_le_mul_of_nonneg_right hv (sq_nonneg a)
+  have hc' := mul_le_mul_of_nonneg_right hc (sq_nonneg (a-b))
+  norm_num [colexPotential] at *
+  nlinarith [sq_nonneg (2*a-b)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances
+
+/-! Stronger-offset colex remainder control for the fixed-dimensional candidate.
+The predecessor theorem's exact source is blob
+8d62b42bc6da2281fbc54ba4659b7a9265964b76 in john-lean-math. -/
+
+open Erdos488.Geometry.SeparatedDistances
+open scoped BigOperators
+open Matrix
+
+theorem solution {m : ℕ} (hm : 2 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K) (x : Fin m → ℝ) :
+    colexANat K 1 ^ 2 / 4 * x ⟨0, by omega⟩ ^ 2 +
+      (∑ i : Fin (m-1), colexANat K (i.val+1) ^ 2 / 4 *
+        (x ⟨i.val, by omega⟩ - x ⟨i.val+1, by omega⟩)^2) +
+      colexANat K m ^ 2 / 4 * x ⟨m-1, by omega⟩^2 ≤
+      star x ⬝ᵥ (colexTridiagonal K *ᵥ x) := by
+  let z0 : Fin m := ⟨0, by omega⟩
+  let z1 : Fin m := ⟨1, by omega⟩
+  let e0 : Fin (m-1) := ⟨0, by omega⟩
+  have hfirst := colex_first_two_weighted_path hK (x z0) (x z1)
+  have htail :
+      (∑ i ∈ (Finset.univ.erase e0), colexANat K (i.val+1)^2 / 4 *
+        (x ⟨i.val, by omega⟩ - x ⟨i.val+1, by omega⟩)^2) ≤
+      ∑ i ∈ (Finset.univ.erase e0), colexPathCoeff K (i.val+1) *
+        (x ⟨i.val, by omega⟩ - x ⟨i.val+1, by omega⟩)^2 := by
+    apply Finset.sum_le_sum
+    intro i hi
+    exact mul_le_mul_of_nonneg_right (colexPathCoeff_ge_quarter hK _) (sq_nonneg _)
+  have hpotTail : 0 ≤ ∑ i ∈ (Finset.univ.erase z0).erase z1,
+      colexPotential K (i.val+1) * x i ^ 2 := by
+    apply Finset.sum_nonneg
+    intro i hi
+    have hi1 := Finset.mem_erase.mp hi
+    have hi0 := Finset.mem_erase.mp hi1.2
+    have hne1 : i ≠ z1 := hi1.1
+    have hne0 : i ≠ z0 := hi0.1
+    have hj : 3 ≤ i.val+1 := by
+      simp [z0, z1, Fin.ext_iff] at hne0 hne1
+      omega
+    have hp := colexPotential_ge_weight hK hj
+    have hw := colexWeight_pos hK (i.val+1) (by omega)
+    exact mul_nonneg (by linarith) (sq_nonneg _)
+  have hend := mul_le_mul_of_nonneg_right (colexPathCoeff_ge_quarter hK m)
+    (sq_nonneg (x ⟨m-1, by omega⟩))
+  rw [colex_tridiagonal_quadratic_eq hm]
+  have hpath := Finset.sum_erase_add (Finset.univ : Finset (Fin (m-1)))
+    (fun i => colexPathCoeff K (i.val+1) *
+      (x ⟨i.val, by omega⟩ - x ⟨i.val+1, by omega⟩)^2) (Finset.mem_univ e0)
+  have hweight := Finset.sum_erase_add (Finset.univ : Finset (Fin (m-1)))
+    (fun i => colexANat K (i.val+1)^2 / 4 *
+      (x ⟨i.val, by omega⟩ - x ⟨i.val+1, by omega⟩)^2) (Finset.mem_univ e0)
+  have hp0 := Finset.sum_erase_add (Finset.univ : Finset (Fin m))
+    (fun i => colexPotential K (i.val+1) * x i ^ 2) (Finset.mem_univ z0)
+  have hp1 := Finset.sum_erase_add ((Finset.univ : Finset (Fin m)).erase z0)
+    (fun i => colexPotential K (i.val+1) * x i ^ 2) (a := z1) (by
+      apply Finset.mem_erase.mpr
+      exact ⟨by simp [z0, z1, Fin.ext_iff], Finset.mem_univ _⟩)
+  rw [← hpath, ← hweight, ← hp0, ← hp1]
+  dsimp [e0, z0, z1] at hfirst htail hpotTail hend ⊢
+  nlinarith

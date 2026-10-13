@@ -1,0 +1,421 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.GramRealization
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+
+
+/-- Symmetric squared-distance data produce a symmetric increment Gram matrix. -/
+theorem incrementGram_isHermitian {n : ℕ} (D : SqDistanceData (Fin (n + 1)))
+    (hD : D.IsHermitian) : (incrementGram D).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro i j
+  simp only [incrementGram, starRingEnd_apply, star_trivial]
+  have h11 := hD.apply i.succ j.succ
+  have h10 := hD.apply i.succ j.castSucc
+  have h01 := hD.apply i.castSucc j.succ
+  have h00 := hD.apply i.castSucc j.castSucc
+  simp only [star_trivial] at h11 h10 h01 h00
+  rw [← h11, ← h10, ← h01, ← h00]
+  ring
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.ColexPositivity
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+
+
+
+
+/-- The prescribed distance from a vertex to itself vanishes. -/
+@[simp] theorem colexDistance_self {m : ℕ} (K : ℝ) (i : Fin (m + 1)) :
+    colexDistance K i i = 0 := by
+  simp [colexDistance]
+
+/-- Pure-colex prescribed distances are symmetric. -/
+theorem colexDistance_symm {m : ℕ} (K : ℝ) (i j : Fin (m + 1)) :
+    colexDistance K i j = colexDistance K j i := by
+  by_cases hij : i.val < j.val
+  · simp [colexDistance, hij, Nat.not_lt.mpr hij.le]
+  · by_cases hji : j.val < i.val
+    · simp [colexDistance, hji, Nat.not_lt.mpr hji.le]
+    · have h : i = j := Fin.ext (Nat.le_antisymm (Nat.not_lt.mp hji) (Nat.not_lt.mp hij))
+      subst j
+      simp
+
+/-- Squared pure-colex distance data are Hermitian. -/
+theorem colexSqData_isHermitian {m : ℕ} (K : ℝ) :
+    (colexSqData (m := m) K).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro i j
+  simp only [colexSqData, star_trivial]
+  rw [colexDistance_symm]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- In increasing order, the prescribed distance is offset plus its colex label. -/
+theorem colexDistance_of_lt {m : ℕ} {K : ℝ} {i j : Fin (m + 1)} (h : i.val < j.val) :
+    colexDistance K i j = K + colexLabel i.val j.val := by
+  simp [colexDistance, h]
+
+
+
+
+
+
+
+/-- A distant upper-triangular increment-Gram entry is minus the zero-based larger index. -/
+theorem colexIncrementGram_distant {m : ℕ} (K : ℝ) (i j : Fin m)
+    (hij : i.val + 1 < j.val) :
+    incrementGram (colexSqData (m := m) K) i j = -(j.val : ℝ) := by
+  have h11 : i.succ.val < j.succ.val := by simp only [Fin.val_succ]; omega
+  have h10 : i.succ.val < j.castSucc.val := by
+    simp only [Fin.val_succ, Fin.val_castSucc]
+    exact hij
+  have h01 : i.castSucc.val < j.succ.val := by simp only [Fin.val_castSucc, Fin.val_succ]; omega
+  have h00 : i.castSucc.val < j.castSucc.val := by
+    simp only [Fin.val_castSucc]
+    omega
+  have hchoose : Nat.choose (j.val + 1) 2 = Nat.choose j.val 2 + j.val := by
+    rw [Nat.choose_succ_succ]
+    simp only [Nat.choose_one_right, Nat.succ_eq_add_one]
+    norm_num
+    omega
+  simp only [incrementGram, colexSqData]
+  rw [colexDistance_of_lt h11, colexDistance_of_lt h10,
+    colexDistance_of_lt h01, colexDistance_of_lt h00]
+  simp only [colexLabel, Fin.val_succ, Fin.val_castSucc]
+  rw [hchoose]
+  push_cast
+  ring
+
+/-- The distant lower-triangular formula follows by symmetry. -/
+theorem colexIncrementGram_distant_rev {m : ℕ} (K : ℝ) (i j : Fin m)
+    (hji : j.val + 1 < i.val) :
+    incrementGram (colexSqData (m := m) K) i j = -(i.val : ℝ) := by
+  have hherm := incrementGram_isHermitian (colexSqData (m := m) K)
+    (colexSqData_isHermitian K)
+  have h := hherm.apply i j
+  simp only [star_trivial] at h
+  rw [← h, colexIncrementGram_distant K j i hji]
+
+
+
+
+
+/-- The tridiagonal truncation remains Hermitian. -/
+theorem colexTridiagonal_isHermitian {m : ℕ} (K : ℝ) :
+    (colexTridiagonal (m := m) K).IsHermitian := by
+  have hB := incrementGram_isHermitian (colexSqData (m := m) K)
+    (colexSqData_isHermitian K)
+  apply Matrix.IsHermitian.ext
+  intro i j
+  have hij := hB.apply i j
+  simp only [star_trivial] at hij ⊢
+  by_cases hEq : i = j
+  · subst j
+    simp [colexTridiagonal]
+  · have hEq' : j ≠ i := Ne.symm hEq
+    by_cases hAdj : i.val + 1 = j.val ∨ j.val + 1 = i.val
+    · have hAdj' : j.val + 1 = i.val ∨ i.val + 1 = j.val := hAdj.symm
+      simp [colexTridiagonal, hEq, hEq', hAdj, hAdj', hij]
+    · have hAdj' : ¬(j.val + 1 = i.val ∨ i.val + 1 = j.val) := by tauto
+      simp [colexTridiagonal, hEq, hEq', hAdj, hAdj']
+
+/-- The dense remainder is Hermitian. -/
+theorem colexRemainder_isHermitian {m : ℕ} (K : ℝ) :
+    (colexRemainder (m := m) K).IsHermitian := by
+  exact (colexTridiagonal_isHermitian K).sub
+    (incrementGram_isHermitian (colexSqData K) (colexSqData_isHermitian K))
+
+
+
+/-- The remainder vanishes on its diagonal. -/
+@[simp] theorem colexRemainder_diag {m : ℕ} (K : ℝ) (i : Fin m) :
+    colexRemainder K i i = 0 := by
+  simp [colexRemainder, colexTridiagonal]
+
+/-- The remainder vanishes on the upper adjacent diagonal. -/
+theorem colexRemainder_adjacent {m : ℕ} (K : ℝ) (i j : Fin m)
+    (hij : i.val + 1 = j.val) : colexRemainder K i j = 0 := by
+  have hne : i ≠ j := by intro h; subst j; simp at hij
+  simp [colexRemainder, colexTridiagonal, hne, hij]
+
+/-- A distant upper-triangular remainder entry is the zero-based larger index. -/
+theorem colexRemainder_distant {m : ℕ} (K : ℝ) (i j : Fin m)
+    (hij : i.val + 1 < j.val) : colexRemainder K i j = (j.val : ℝ) := by
+  have hne : i ≠ j := by intro h; subst j; omega
+  have hadj : ¬(i.val + 1 = j.val ∨ j.val + 1 = i.val) := by omega
+  simp [colexRemainder, colexTridiagonal, hne, hadj,
+    colexIncrementGram_distant K i j hij]
+
+/-- A distant lower-triangular remainder entry is the zero-based larger index. -/
+theorem colexRemainder_distant_rev {m : ℕ} (K : ℝ) (i j : Fin m)
+    (hji : j.val + 1 < i.val) : colexRemainder K i j = (i.val : ℝ) := by
+  have hne : i ≠ j := by intro h; subst j; omega
+  have hadj : ¬(i.val + 1 = j.val ∨ j.val + 1 = i.val) := by omega
+  simp [colexRemainder, colexTridiagonal, hne, hadj,
+    colexIncrementGram_distant_rev K i j hji]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Every remainder entry is bounded by the sum of its one-based indices. -/
+theorem colexRemainder_abs_entry_le {m : ℕ} (K : ℝ) (i j : Fin m) :
+    |colexRemainder K i j| ≤ (i.val + 1 : ℝ) + (j.val + 1 : ℝ) := by
+  rcases lt_trichotomy i.val j.val with hij | hij | hij
+  · by_cases hadj : i.val + 1 = j.val
+    · rw [colexRemainder_adjacent K i j hadj]
+      simp
+      positivity
+    · have hdist : i.val + 1 < j.val := by omega
+      rw [colexRemainder_distant K i j hdist]
+      rw [abs_of_nonneg (Nat.cast_nonneg _)]
+      have hi0 : (0 : ℝ) ≤ (i.val : ℝ) := by positivity
+      linarith
+  · have heq : i = j := Fin.ext hij
+    subst j
+    simp
+    positivity
+  · by_cases hadj : j.val + 1 = i.val
+    · have hzero : colexRemainder K j i = 0 := colexRemainder_adjacent K j i hadj
+      have hsym := (colexRemainder_isHermitian K).apply i j
+      simp only [star_trivial] at hsym
+      rw [← hsym, hzero]
+      simp
+      positivity
+    · have hdist : j.val + 1 < i.val := by omega
+      rw [colexRemainder_distant_rev K i j hdist]
+      rw [abs_of_nonneg (Nat.cast_nonneg _)]
+      have hj0 : (0 : ℝ) ≤ (j.val : ℝ) := by positivity
+      linarith
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances
+
+open Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+theorem solution {m : ℕ} (K : ℝ)
+    (x : Fin m → ℝ) :
+    |star x ⬝ᵥ (colexRemainder K *ᵥ x)| ≤
+      2 * (∑ i, |x i|) * (∑ i, (i.val + 1 : ℝ) * |x i|) := by
+  rw [dotProduct]
+  simp only [mulVec, star_trivial]
+  calc
+    |∑ i, x i * ∑ j, colexRemainder K i j * x j| ≤
+        ∑ i, |x i * ∑ j, colexRemainder K i j * x j| :=
+          Finset.abs_sum_le_sum_abs _ _
+    _ ≤
+        ∑ i, |x i| * ∑ j, |colexRemainder K i j * x j| := by
+          apply Finset.sum_le_sum
+          intro i hi
+          rw [abs_mul]
+          exact mul_le_mul_of_nonneg_left (Finset.abs_sum_le_sum_abs _ _)
+            (abs_nonneg _)
+    _ ≤ ∑ i, |x i| * ∑ j,
+          (((i.val + 1 : ℝ) + (j.val + 1 : ℝ)) * |x j|) := by
+          apply Finset.sum_le_sum
+          intro i hi
+          apply mul_le_mul_of_nonneg_left
+          · apply Finset.sum_le_sum
+            intro j hj
+            rw [abs_mul]
+            exact mul_le_mul_of_nonneg_right (colexRemainder_abs_entry_le K i j)
+              (abs_nonneg _)
+          · exact abs_nonneg _
+    _ = 2 * (∑ i, |x i|) * (∑ i, (i.val + 1 : ℝ) * |x i|) := by
+          let w : Fin m → ℝ := fun i => (i.val + 1 : ℝ)
+          change (∑ i, |x i| * ∑ j, (w i + w j) * |x j|) =
+            2 * (∑ i, |x i|) * (∑ i, w i * |x i|)
+          simp_rw [add_mul, Finset.sum_add_distrib, mul_add]
+          have h1 : (∑ i, |x i| * ∑ j, w i * |x j|) =
+              (∑ i, w i * |x i|) * (∑ j, |x j|) := by
+            calc
+              ∑ i, |x i| * ∑ j, w i * |x j| =
+                  ∑ i, (w i * |x i|) * ∑ j, |x j| := by
+                    apply Finset.sum_congr rfl
+                    intro i hi
+                    rw [← Finset.mul_sum]
+                    ring
+              _ = (∑ i, w i * |x i|) * (∑ j, |x j|) := by
+                    rw [Finset.sum_mul]
+          have h2 : (∑ i, |x i| * ∑ j, w j * |x j|) =
+              (∑ i, |x i|) * (∑ j, w j * |x j|) := by
+            rw [Finset.sum_mul]
+          rw [Finset.sum_add_distrib, h1, h2]
+          ring

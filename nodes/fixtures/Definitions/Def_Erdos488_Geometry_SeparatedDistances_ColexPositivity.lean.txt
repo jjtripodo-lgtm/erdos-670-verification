@@ -1,0 +1,237 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+/-- The symmetric pure-colex prescribed distance on `m+1` vertices. -/
+def colexDistance {m : ℕ} (K : ℝ) (i j : Fin (m + 1)) : ℝ :=
+  if i.val < j.val then K + colexLabel i.val j.val
+  else if j.val < i.val then K + colexLabel j.val i.val
+  else 0
+
+/-- Squared pure-colex distance data. -/
+def colexSqData {m : ℕ} (K : ℝ) : SqDistanceData (Fin (m + 1)) :=
+  fun i j => colexDistance K i j ^ 2
+
+
+
+
+
+
+
+
+
+/-- The adjacent prescribed distance attached to increment `i`. -/
+def colexA {m : ℕ} (K : ℝ) (i : Fin m) : ℝ :=
+  K + Nat.choose (i.val + 2) 2
+
+/-- One-based adjacent distance, convenient for path-energy formulas. -/
+def colexANat (K : ℝ) (j : ℕ) : ℝ :=
+  K + Nat.choose (j + 1) 2
+
+/-- Coefficient of the path square between one-based coordinates `j` and
+`j+1`; at the final coordinate it is the endpoint correction. -/
+noncomputable def colexPathCoeff (K : ℝ) (j : ℕ) : ℝ :=
+  colexANat K j ^ 2 / 2 + colexANat K (j + 1) - 1 / 2
+
+/-- One-based diagonal potential in the exact colex path decomposition. -/
+noncomputable def colexPotential (K : ℝ) (j : ℕ) : ℝ :=
+  if j = 1 then K ^ 2 / 2 - 2
+  else if j = 2 then -4
+  else (j - 2 : ℕ) * K + (j : ℝ) ^ 3 / 2 - (j : ℝ) ^ 2 - 2 * j
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- One adjacent path edge as a sparse symmetric matrix. -/
+noncomputable def colexPathEdgeMatrix {m : ℕ} (K : ℝ) (i : Fin (m - 1)) :
+    Matrix (Fin m) (Fin m) ℝ :=
+  let a : Fin m := ⟨i.val, by omega⟩
+  let b : Fin m := ⟨i.val + 1, by omega⟩
+  let c := colexPathCoeff K (i.val + 1)
+  Matrix.single a a c + Matrix.single b b c -
+    Matrix.single a b c - Matrix.single b a c
+
+/-- Sum of all adjacent path-edge matrices. -/
+noncomputable def colexPathEnergyMatrix {m : ℕ} (K : ℝ) :
+    Matrix (Fin m) (Fin m) ℝ :=
+  ∑ i : Fin (m - 1), colexPathEdgeMatrix K i
+
+/-- Diagonal matrix of colex potentials. -/
+noncomputable def colexPotentialMatrix {m : ℕ} (K : ℝ) :
+    Matrix (Fin m) (Fin m) ℝ :=
+  ∑ i : Fin m, Matrix.single i i (colexPotential K (i.val + 1))
+
+/-- Sparse endpoint correction at the last coordinate. -/
+noncomputable def colexEndpointMatrix {m : ℕ} (hm : 0 < m) (K : ℝ) :
+    Matrix (Fin m) (Fin m) ℝ :=
+  Matrix.single ⟨m - 1, Nat.sub_lt hm (by norm_num)⟩
+    ⟨m - 1, Nat.sub_lt hm (by norm_num)⟩ (colexPathCoeff K m)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- The diagonal and first off-diagonals of the colex increment Gram matrix. -/
+noncomputable def colexTridiagonal {m : ℕ} (K : ℝ) : Matrix (Fin m) (Fin m) ℝ :=
+  fun i j =>
+    if i = j then incrementGram (colexSqData K) i j
+    else if i.val + 1 = j.val ∨ j.val + 1 = i.val then
+      incrementGram (colexSqData K) i j
+    else 0
+
+/-- The positive-sign dense remainder, so that `B = T - R`. -/
+noncomputable def colexRemainder {m : ℕ} (K : ℝ) : Matrix (Fin m) (Fin m) ℝ :=
+  colexTridiagonal K - incrementGram (colexSqData K)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- The one-based coercive weight for the pure-colex quadratic form. -/
+noncomputable def colexWeight (K : ℝ) (j : ℕ) : ℝ :=
+  if j ≤ 2 then K ^ 2 / 24 else (K * j + j ^ 3) / 24
+
+/-- The diagonal comparison form used in pure-colex coercivity. -/
+noncomputable def colexQ {m : ℕ} (K : ℝ) (x : Fin m → ℝ) : ℝ :=
+  ∑ i, colexWeight K (i.val + 1) * x i ^ 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Reciprocal-weight sum controlling the unweighted absolute sum. -/
+noncomputable def colexS0 {m : ℕ} (K : ℝ) : ℝ :=
+  ∑ i : Fin m, (colexWeight K (i.val + 1))⁻¹
+
+/-- Reciprocal-weight sum controlling the one-based indexed absolute sum. -/
+noncomputable def colexS2 {m : ℕ} (K : ℝ) : ℝ :=
+  ∑ i : Fin m, ((i.val + 1 : ℝ) ^ 2 / colexWeight K (i.val + 1))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances

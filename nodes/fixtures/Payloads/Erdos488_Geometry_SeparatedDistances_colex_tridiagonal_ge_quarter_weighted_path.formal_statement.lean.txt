@@ -1,0 +1,7 @@
+theorem Erdos488.Geometry.SeparatedDistances.colex_tridiagonal_ge_quarter_weighted_path {m : ℕ} (hm : 2 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K) (x : Fin m → ℝ) :
+    colexANat K 1 ^ 2 / 4 * x ⟨0, by omega⟩ ^ 2 +
+      (∑ i : Fin (m-1), colexANat K (i.val+1) ^ 2 / 4 *
+        (x ⟨i.val, by omega⟩ - x ⟨i.val+1, by omega⟩)^2) +
+      colexANat K m ^ 2 / 4 * x ⟨m-1, by omega⟩^2 ≤
+      star x ⬝ᵥ (colexTridiagonal K *ᵥ x) := by sorry

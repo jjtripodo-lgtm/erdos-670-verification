@@ -1,0 +1,3 @@
+theorem Erdos488.Geometry.SeparatedDistances.colex_tridiagonal_ge_Q {m : ℕ} (hm : 2 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K) (x : Fin m → ℝ) :
+    colexQ K x ≤ star x ⬝ᵥ (colexTridiagonal K *ᵥ x) := by sorry
