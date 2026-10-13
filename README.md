@@ -65,6 +65,33 @@ establishes only the checks that ran. It does not establish full Palomar
 verification with independent kernels, either platform's acceptance,
 independent mathematical review, priority, or journal acceptance.
 
+## Official Palomar full preflight
+
+Palomar's [agent intake instructions](https://submit.palomar-registry.org/llms.txt)
+require its complete reusable workflow before intake. The standalone compatibility
+checks above do not replace that gate. `palomar-full-preflight.yml` calls the
+unmodified official workflow at commit
+`d4e41c1d5b0d114c4859e6e5831dc6d3ad1d0d44`, using `mode: full` and the
+`palomar-standard-v1` GitHub-hosted runner profile. Dispatch it manually with the
+exact public source commit intended for submission. It does not run on pushes.
+
+That official workflow includes protected canonical-Challenge compilation,
+source-provenance checks, sandboxed proof export and independent kernel replay.
+Its mechanical report must say `status: pass` before intake. This gate has not
+yet run for the selected submission commit; a later outcome must be established
+from its exact report, not inferred from the compatibility jobs.
+
+Unlike the compatibility harness, the upstream workflow writes a Bundler cache
+and uploads its bounded mechanical report with 90-day retention. Its standard
+public runner compute is free, but storage allowances and paid-usage controls
+must be checked before dispatch. On a restricted runner, its installer adds a
+path-specific AppArmor rule allowing user namespaces for its pinned bubblewrap
+binary. It also removes selected preinstalled SDKs and Docker images from the
+disposable VM. These official behaviors require explicit execution approval.
+The official profile's resource checks and sandbox must remain enabled. No secrets are inherited and repository permissions
+are read-only. This preflight does not submit, perform editorial review, or
+register a result.
+
 ## Reproducibility and runtime boundaries
 
 SOURCE_MANIFEST.json contains every original and candidate source SHA256.

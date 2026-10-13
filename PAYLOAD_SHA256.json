@@ -1,10 +1,11 @@
 {
   ".github/workflows/compatibility.yml": "f5252e3ed44250d8b5f30a5fa5ab9f4948335da484044b053a8a09a60590350a",
+  ".github/workflows/palomar-full-preflight.yml": "f11b578b442e4da945a41cca15d2ff3dbf09f96a22ae9dc9d207cf9b91646b8f",
   ".gitignore": "381baf73a18ba977491008877ccbed0dd013191f1ba362ae3a25af44abf56a51",
   "FIXTURE_SHA256.json": "1941fec23fc8802a810d17122ec3a6f572e50dd542d4141437aca1df6d0ad692",
   "LICENSE": "3587ec3f5eb141a9ec2a9470a10a8cae9bc904db51d2d7d4877bd5ff9751208e",
   "PALOMAR_MIGRATION_PATCHES.json": "42ea3a7e59901e56abd1ae2611d50d55556a2260b63b6e936e0f924bb3c0d1c2",
-  "README.md": "36bc3fbe803fcf67d260c5602f7bba62c08b68dc9fa02a6fd8ac4e221f87b548",
+  "README.md": "263c6ff6394f134034682f4ac2e31c7cfbe1b5e6b8bbffcc5e0c23bf0683b973",
   "SOURCE_MANIFEST.json": "29aedb0ee14354bececa54cc59a542d1b8308f4d7913742000c550eead8ee3b9",
   "fixtures/palomar/AxiomAudit.lean.txt": "027b078805c45d465e217dd04f2999744bf1a5dccd0ea6c7d4382d2b781f2be0",
   "fixtures/palomar/Challenge.lean.txt": "aed9a0308e74db66c96b1063731ed545727b518c50a76c3b265a4315d1077cd1",
