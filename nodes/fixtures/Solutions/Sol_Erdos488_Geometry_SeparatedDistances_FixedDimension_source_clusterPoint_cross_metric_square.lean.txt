@@ -1009,7 +1009,9 @@ open Matrix
 
 open Erdos488.Geometry.SeparatedDistances.FixedDimension
 
-theorem solution {m k : ℕ} (hk : 0 < k)
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem _root_.solution {m k : ℕ} (hk : 0 < k)
     (K : ℝ) (p : Fin (m+1) → EuclideanSpace ℝ (Fin m))
     (B : Fin (m+1) → EuclideanSpace ℝ (Fin m))
     (F G : Fin m → EuclideanSpace ℝ (Fin m))
@@ -1095,3 +1097,5 @@ theorem solution {m k : ℕ} (hk : 0 < k)
     (sourceCrossBaseline K k (sourcePairCode A J))
     (sourceAlpha k i) (sourceBeta k j)
     hfactor A J hne _ _ yi yj haxis hbase hprojA' hprojB'
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

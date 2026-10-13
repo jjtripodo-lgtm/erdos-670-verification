@@ -2068,7 +2068,9 @@ open Erdos488.Geometry.SeparatedDistances.FixedDimension
 
 open Erdos488.Geometry.SeparatedDistances
 
-theorem solution (n : ℕ) (hn : 68000 ≤ n) :
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem _root_.solution (n : ℕ) (hn : 68000 ≤ n) :
     ∃ P : Fin n → EuclideanSpace ℝ (Fin 458999),
       Function.Injective P ∧
       (∀ a b, a ≠ b → 1 ≤ dist (P a) (P b)) ∧
@@ -2108,3 +2110,5 @@ theorem solution (n : ℕ) (hn : 68000 ≤ n) :
   haveI : Nonempty (Fin n) := ⟨⟨0, by omega⟩⟩
   exact ⟨P, hinj, hmin, hsep, hdiam,
     finite_range_diam_lt_of_pairwise_lt P _ hdiam⟩
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

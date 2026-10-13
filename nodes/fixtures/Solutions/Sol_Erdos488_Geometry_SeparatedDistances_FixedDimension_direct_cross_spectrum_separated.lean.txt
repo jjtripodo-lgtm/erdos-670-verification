@@ -235,7 +235,9 @@ No adjacent quotient-error Lipschitz estimate or physical local-step H is used.
 All geometric inputs are visible as scalar square identities and pointwise errors. -/
 open Erdos488.Geometry.SeparatedDistances.FixedDimension
 
-theorem solution
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem _root_.solution
     (D : ℕ → ℕ → ℕ → ℝ) (ν f : ℕ → ℝ) (M k : ℕ) (hk : 0 < k)
     (s c r fstar E S νmin : ℝ) (hs : 0 ≤ s) (hc : 0 ≤ c)
     (hν : ∀ a, a < M → νmin ≤ ν a) (hνmin : s*fstar ≤ νmin)
@@ -307,3 +309,5 @@ theorem solution
     nlinarith
   intro a i j b u v ha hi hj hb hu hv hne
   exact three_digit_all_pairs_separated D M k hk hFine hCarry hMacro ha hi hj hb hu hv hne
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

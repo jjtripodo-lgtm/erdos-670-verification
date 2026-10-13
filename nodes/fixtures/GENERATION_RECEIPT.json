@@ -1050,8 +1050,8 @@
       "preamble_sha256": "05d940290ce9bb6526537be179a1d66c425f2227a4ed0573756746056a20a5e5",
       "formal_statement_sha256": "c22a8ffddb40172247e78dc9935c923653c1dcbee9e804078afe28560242e3a6",
       "staged_statement_sha256": "666df65ad5150ccae863cec97fa8e2d8d58c30f239e3b46aea5057cef0f1c49d",
-      "solution_sha256": "a3d68ddfb86a2041c7602dca630cf292d48b2a2984b1ca950940e2101c764883",
-      "solution_bytes": 15242
+      "solution_sha256": "ce5f51f1156e2f7634fddc1ab0ed5d661e52b7012b7981cae0deee52abc423b6",
+      "solution_bytes": 15369
     },
     {
       "kind": "theorem_node",
@@ -1242,8 +1242,8 @@
       "preamble_sha256": "cf1362e8f2cb12f1a6a6a9033aabe4843a6e842919cc268e9745d09200fde844",
       "formal_statement_sha256": "cdd908d5a57f52d7bfc320eed57f97cc0c4eb287227830f4a99ad906bed8e0fe",
       "staged_statement_sha256": "2e17a513525e86e81e9e2002ad9738e8d44edd3e47d7157c7e1fd8cf2014b9d8",
-      "solution_sha256": "7ace6789984c572cb3de104e7bad5f45cc0486e743e18715d78587dd95d85964",
-      "solution_bytes": 97661
+      "solution_sha256": "5117b34ff0362621e573c4018dc6630a2654be73d32d6a7d1a4c9d45227d80b6",
+      "solution_bytes": 97788
     },
     {
       "kind": "theorem_node",
@@ -1327,8 +1327,8 @@
       "preamble_sha256": "b6babea1e5273c9a639d5529d17351b9ddd42a24cd0077a061bcb840e9127d4d",
       "formal_statement_sha256": "d6fb1ab324a1dd484bebd357f3e2ce786c35cd6b9dc1bf19f104ce8c02a58607",
       "staged_statement_sha256": "4261e78bde1b343ac8dc80dd63ac95ba7577c1b082109494289ab8876bfdf48a",
-      "solution_sha256": "f9c484a029794c14fbed88f0574704edf88192aa79ee92fa796c09cd0ec2eb9a",
-      "solution_bytes": 14297
+      "solution_sha256": "2d9a607de7394055c9058297ca16bbeeca9acc94caa67e570e7f60480924da14",
+      "solution_bytes": 14424
     },
     {
       "kind": "theorem_node",
@@ -1559,8 +1559,8 @@
       "preamble_sha256": "08222428464d7f735d3f6acf8ea92b4663af7f1e1b4256da58a598638eb5861f",
       "formal_statement_sha256": "e5f42c1be9427489aac66ca6e5686d46c796447e95ec7d54b53f808615fa642f",
       "staged_statement_sha256": "67dfa66f75642f3b3dfcfb5a4f323af88bd1c78f77bd1bfa97b2326a7f33751b",
-      "solution_sha256": "ed28a6139766ea2676a7bb5121cd5d8d79687b253b4895404a2d9c03cfda1275",
-      "solution_bytes": 126308
+      "solution_sha256": "b60004ff87d42743dbae2f5ed08327dd30b9eb57b8cb0af9c11a3ccbcb127c74",
+      "solution_bytes": 126435
     },
     {
       "kind": "theorem_node",
@@ -1673,8 +1673,8 @@
       "preamble_sha256": "cddd0949368aad6755d031b2101d80ff198af1bde5a5e4924607a84cde51f36f",
       "formal_statement_sha256": "eb84ca481199023f356b3d5d725a7d4676c1b34e96a8cb5a36416991fe56c3a5",
       "staged_statement_sha256": "ae05715922c2efe1b444fe9ced5978401443849fb1cdf7e99a829b5a77ec0709",
-      "solution_sha256": "fb7f89e3afa1fd2e342ed6fbb79db3be9eb7a13738af1b60ca6a321a2eaec00a",
-      "solution_bytes": 36875
+      "solution_sha256": "713e009e3eafae51a52b405bffed66931c8834f24c2f629755a3aad504fb3692",
+      "solution_bytes": 37002
     },
     {
       "kind": "theorem_node",
@@ -1775,8 +1775,8 @@
       "preamble_sha256": "38dde132976541cd3f62c60cd594eb058d43dce996a736260a27ce66d2a6a237",
       "formal_statement_sha256": "c472d1bad9e0012c4894fffa9c4f27add5a612f938c6ddf3f2f0448883f4e156",
       "staged_statement_sha256": "f2359a59a5b692c7e2eec29e56bba2cf53d949d6b578226bb89b78f7e7180268",
-      "solution_sha256": "e617b00094fa320d45421b2735a6cc988dfbf4e0e2023bbacf0d7f6e55c119f5",
-      "solution_bytes": 24127
+      "solution_sha256": "ffcd19f77f82e45461203234f84f56aacb86889bcaf61f563d74ff216aee2fef",
+      "solution_bytes": 24254
     },
     {
       "kind": "theorem_node",
@@ -1864,8 +1864,8 @@
       "preamble_sha256": "4e78f9306b13678c380e476a84a4564c5aaf0ff4a9c5ce0b0dee871a5e236999",
       "formal_statement_sha256": "7bffd8c43d6f2e429c482da9ec75424b4e0adb6ea74b8761c204e6ff4ecd180c",
       "staged_statement_sha256": "749725a5090871a14c5cbdde2806ae2f135b4837b3a5cc4e0e59c258084e972c",
-      "solution_sha256": "369bcd3a759dcecfc610553ef955270a27db9d8c8fefdfef9834f2234651afff",
-      "solution_bytes": 21465
+      "solution_sha256": "31f28d2ecee9e582458a15a8525219c3048c9576ccb02109abdb3cfbb53f4ad6",
+      "solution_bytes": 21562
     },
     {
       "kind": "theorem_node",
@@ -1945,8 +1945,8 @@
       "preamble_sha256": "4e78f9306b13678c380e476a84a4564c5aaf0ff4a9c5ce0b0dee871a5e236999",
       "formal_statement_sha256": "b5f0e6b1130d8be5eb564de49e311cc4481dc094b1971af058874e0d41704672",
       "staged_statement_sha256": "ac42460987cfa77d2e6ee7dde97cd95a10d08907b055f1d1f0c0625a10a5c026",
-      "solution_sha256": "20f4c0c3661de0e49c38f7b9f090d1a91eb508922e32b1c07be24b09e0fbbd93",
-      "solution_bytes": 12672
+      "solution_sha256": "bca4661131f443d82fc8bcd3427fc5f8517813abec7e04068938b35d7ba3d8dc",
+      "solution_bytes": 12769
     },
     {
       "kind": "theorem_node",
@@ -2030,8 +2030,8 @@
       "preamble_sha256": "bd45ec63051817170a9336a14245e7821e2f8b89ea028c2716424fd9ea85227b",
       "formal_statement_sha256": "a3164eea2b277f4bbf711218e01401e9812ccc99224b6a569f154b5372f963ab",
       "staged_statement_sha256": "42c38c5aff1c04416312efb5c2474541df0a2e1ca67da2be65d2faf7a9987ad3",
-      "solution_sha256": "133c20d8ec682e7a7520f6bd543afb5094f46e0c0626534bea2af02529ee6cd5",
-      "solution_bytes": 12989
+      "solution_sha256": "a39bd8b54d977b455c21a817cb83dbf3448b230f524ac7e8747dfa3bb04bc774",
+      "solution_bytes": 13086
     },
     {
       "kind": "theorem_node",
@@ -2112,8 +2112,8 @@
       "preamble_sha256": "874d361072fb230dc46ea399ca1eedc3963667534c61b04c710de64f1e35dad0",
       "formal_statement_sha256": "03b63040b4fcc5f76df4dbad8f6ccce1f9e0e7992a93dc2bb67137ba3f343cd3",
       "staged_statement_sha256": "0b219b889b6f9eca2cdf01b33f4b4897f8f6dd8fa00ff2b8ba367cf2af686b54",
-      "solution_sha256": "c44152aa0158bba7c55b46d258d8fbda569d4d6f5746f18d49989de76c08f870",
-      "solution_bytes": 12448
+      "solution_sha256": "daac842c8e29550e552c68fed6e81a7633e33f5a4c5a8b7f8a2b38a78e00a953",
+      "solution_bytes": 12545
     }
   ],
   "build_targets": [
@@ -2187,7 +2187,7 @@
     "Mathlib.NumberTheory.Harmonic.Bounds",
     "Mathlib.Tactic"
   ],
-  "generator_sha256": "9140c9664bdb8fe72beb8f6ec007bdb66c3d6205c2a906bf0c5c071adc309eae",
+  "generator_sha256": "e01b6852a29bf58d5269eb495a03ee5d7f3a6eba7f83bbd668b2a4d11d3db882",
   "planner_sha256": "8180792a2b4fdd9fa629ead3e54165c3c34eedb3556f8cf8e18d8bee7a32251a",
   "source_layout": "Every module has one namespace and no variable, section, mutual or notation commands; unsupported contexts fail closed",
   "gates": {
@@ -2323,8 +2323,8 @@
       "sha256": "05d940290ce9bb6526537be179a1d66c425f2227a4ed0573756746056a20a5e5"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.solution.lean.txt": {
-      "bytes": 15242,
-      "sha256": "a3d68ddfb86a2041c7602dca630cf292d48b2a2984b1ca950940e2101c764883"
+      "bytes": 15369,
+      "sha256": "ce5f51f1156e2f7634fddc1ab0ed5d661e52b7012b7981cae0deee52abc423b6"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.formal_statement.lean.txt": {
       "bytes": 444,
@@ -2335,8 +2335,8 @@
       "sha256": "cf1362e8f2cb12f1a6a6a9033aabe4843a6e842919cc268e9745d09200fde844"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.solution.lean.txt": {
-      "bytes": 97661,
-      "sha256": "7ace6789984c572cb3de104e7bad5f45cc0486e743e18715d78587dd95d85964"
+      "bytes": 97788,
+      "sha256": "5117b34ff0362621e573c4018dc6630a2654be73d32d6a7d1a4c9d45227d80b6"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.formal_statement.lean.txt": {
       "bytes": 649,
@@ -2347,8 +2347,8 @@
       "sha256": "b6babea1e5273c9a639d5529d17351b9ddd42a24cd0077a061bcb840e9127d4d"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.solution.lean.txt": {
-      "bytes": 14297,
-      "sha256": "f9c484a029794c14fbed88f0574704edf88192aa79ee92fa796c09cd0ec2eb9a"
+      "bytes": 14424,
+      "sha256": "2d9a607de7394055c9058297ca16bbeeca9acc94caa67e570e7f60480924da14"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.formal_statement.lean.txt": {
       "bytes": 855,
@@ -2359,8 +2359,8 @@
       "sha256": "08222428464d7f735d3f6acf8ea92b4663af7f1e1b4256da58a598638eb5861f"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.solution.lean.txt": {
-      "bytes": 126308,
-      "sha256": "ed28a6139766ea2676a7bb5121cd5d8d79687b253b4895404a2d9c03cfda1275"
+      "bytes": 126435,
+      "sha256": "b60004ff87d42743dbae2f5ed08327dd30b9eb57b8cb0af9c11a3ccbcb127c74"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.formal_statement.lean.txt": {
       "bytes": 1675,
@@ -2371,8 +2371,8 @@
       "sha256": "cddd0949368aad6755d031b2101d80ff198af1bde5a5e4924607a84cde51f36f"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.solution.lean.txt": {
-      "bytes": 36875,
-      "sha256": "fb7f89e3afa1fd2e342ed6fbb79db3be9eb7a13738af1b60ca6a321a2eaec00a"
+      "bytes": 37002,
+      "sha256": "713e009e3eafae51a52b405bffed66931c8834f24c2f629755a3aad504fb3692"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.formal_statement.lean.txt": {
       "bytes": 1076,
@@ -2383,8 +2383,8 @@
       "sha256": "38dde132976541cd3f62c60cd594eb058d43dce996a736260a27ce66d2a6a237"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.solution.lean.txt": {
-      "bytes": 24127,
-      "sha256": "e617b00094fa320d45421b2735a6cc988dfbf4e0e2023bbacf0d7f6e55c119f5"
+      "bytes": 24254,
+      "sha256": "ffcd19f77f82e45461203234f84f56aacb86889bcaf61f563d74ff216aee2fef"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.formal_statement.lean.txt": {
       "bytes": 278,
@@ -2395,8 +2395,8 @@
       "sha256": "4e78f9306b13678c380e476a84a4564c5aaf0ff4a9c5ce0b0dee871a5e236999"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.solution.lean.txt": {
-      "bytes": 21465,
-      "sha256": "369bcd3a759dcecfc610553ef955270a27db9d8c8fefdfef9834f2234651afff"
+      "bytes": 21562,
+      "sha256": "31f28d2ecee9e582458a15a8525219c3048c9576ccb02109abdb3cfbb53f4ad6"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.formal_statement.lean.txt": {
       "bytes": 256,
@@ -2407,8 +2407,8 @@
       "sha256": "4e78f9306b13678c380e476a84a4564c5aaf0ff4a9c5ce0b0dee871a5e236999"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.solution.lean.txt": {
-      "bytes": 12672,
-      "sha256": "20f4c0c3661de0e49c38f7b9f090d1a91eb508922e32b1c07be24b09e0fbbd93"
+      "bytes": 12769,
+      "sha256": "bca4661131f443d82fc8bcd3427fc5f8517813abec7e04068938b35d7ba3d8dc"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.formal_statement.lean.txt": {
       "bytes": 218,
@@ -2419,8 +2419,8 @@
       "sha256": "bd45ec63051817170a9336a14245e7821e2f8b89ea028c2716424fd9ea85227b"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.solution.lean.txt": {
-      "bytes": 12989,
-      "sha256": "133c20d8ec682e7a7520f6bd543afb5094f46e0c0626534bea2af02529ee6cd5"
+      "bytes": 13086,
+      "sha256": "a39bd8b54d977b455c21a817cb83dbf3448b230f524ac7e8747dfa3bb04bc774"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.formal_statement.lean.txt": {
       "bytes": 462,
@@ -2431,8 +2431,8 @@
       "sha256": "874d361072fb230dc46ea399ca1eedc3963667534c61b04c710de64f1e35dad0"
     },
     "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.solution.lean.txt": {
-      "bytes": 12448,
-      "sha256": "c44152aa0158bba7c55b46d258d8fbda569d4d6f5746f18d49989de76c08f870"
+      "bytes": 12545,
+      "sha256": "daac842c8e29550e552c68fed6e81a7633e33f5a4c5a8b7f8a2b38a78e00a953"
     },
     "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated_solution.lean.txt": {
       "bytes": 739,
@@ -2515,44 +2515,44 @@
       "sha256": "f8db950da4e58321080dd71428265804a0fcd786b2f7da990749bb533c9e9e62"
     },
     "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.lean": {
-      "bytes": 15242,
-      "sha256": "a3d68ddfb86a2041c7602dca630cf292d48b2a2984b1ca950940e2101c764883"
+      "bytes": 15369,
+      "sha256": "ce5f51f1156e2f7634fddc1ab0ed5d661e52b7012b7981cae0deee52abc423b6"
     },
     "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.lean": {
-      "bytes": 97661,
-      "sha256": "7ace6789984c572cb3de104e7bad5f45cc0486e743e18715d78587dd95d85964"
+      "bytes": 97788,
+      "sha256": "5117b34ff0362621e573c4018dc6630a2654be73d32d6a7d1a4c9d45227d80b6"
     },
     "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.lean": {
-      "bytes": 14297,
-      "sha256": "f9c484a029794c14fbed88f0574704edf88192aa79ee92fa796c09cd0ec2eb9a"
+      "bytes": 14424,
+      "sha256": "2d9a607de7394055c9058297ca16bbeeca9acc94caa67e570e7f60480924da14"
     },
     "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.lean": {
-      "bytes": 126308,
-      "sha256": "ed28a6139766ea2676a7bb5121cd5d8d79687b253b4895404a2d9c03cfda1275"
+      "bytes": 126435,
+      "sha256": "b60004ff87d42743dbae2f5ed08327dd30b9eb57b8cb0af9c11a3ccbcb127c74"
     },
     "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.lean": {
-      "bytes": 36875,
-      "sha256": "fb7f89e3afa1fd2e342ed6fbb79db3be9eb7a13738af1b60ca6a321a2eaec00a"
+      "bytes": 37002,
+      "sha256": "713e009e3eafae51a52b405bffed66931c8834f24c2f629755a3aad504fb3692"
     },
     "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.lean": {
-      "bytes": 24127,
-      "sha256": "e617b00094fa320d45421b2735a6cc988dfbf4e0e2023bbacf0d7f6e55c119f5"
+      "bytes": 24254,
+      "sha256": "ffcd19f77f82e45461203234f84f56aacb86889bcaf61f563d74ff216aee2fef"
     },
     "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.lean": {
-      "bytes": 21465,
-      "sha256": "369bcd3a759dcecfc610553ef955270a27db9d8c8fefdfef9834f2234651afff"
+      "bytes": 21562,
+      "sha256": "31f28d2ecee9e582458a15a8525219c3048c9576ccb02109abdb3cfbb53f4ad6"
     },
     "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.lean": {
-      "bytes": 12672,
-      "sha256": "20f4c0c3661de0e49c38f7b9f090d1a91eb508922e32b1c07be24b09e0fbbd93"
+      "bytes": 12769,
+      "sha256": "bca4661131f443d82fc8bcd3427fc5f8517813abec7e04068938b35d7ba3d8dc"
     },
     "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.lean": {
-      "bytes": 12989,
-      "sha256": "133c20d8ec682e7a7520f6bd543afb5094f46e0c0626534bea2af02529ee6cd5"
+      "bytes": 13086,
+      "sha256": "a39bd8b54d977b455c21a817cb83dbf3448b230f524ac7e8747dfa3bb04bc774"
     },
     "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.lean": {
-      "bytes": 12448,
-      "sha256": "c44152aa0158bba7c55b46d258d8fbda569d4d6f5746f18d49989de76c08f870"
+      "bytes": 12545,
+      "sha256": "daac842c8e29550e552c68fed6e81a7633e33f5a4c5a8b7f8a2b38a78e00a953"
     },
     "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.lean": {
       "bytes": 3946,

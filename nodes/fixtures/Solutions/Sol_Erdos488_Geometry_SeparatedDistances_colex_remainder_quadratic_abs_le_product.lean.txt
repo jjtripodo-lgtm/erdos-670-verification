@@ -370,7 +370,9 @@ open Erdos488.Geometry.SeparatedDistances
 open scoped BigOperators
 open Matrix
 
-theorem solution {m : ℕ} (K : ℝ)
+namespace Erdos488.Geometry.SeparatedDistances
+
+theorem _root_.solution {m : ℕ} (K : ℝ)
     (x : Fin m → ℝ) :
     |star x ⬝ᵥ (colexRemainder K *ᵥ x)| ≤
       2 * (∑ i, |x i|) * (∑ i, (i.val + 1 : ℝ) * |x i|) := by
@@ -419,3 +421,5 @@ theorem solution {m : ℕ} (K : ℝ)
             rw [Finset.sum_mul]
           rw [Finset.sum_add_distrib, h1, h2]
           ring
+
+end Erdos488.Geometry.SeparatedDistances
