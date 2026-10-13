@@ -28,9 +28,15 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(manifest["module_count"], 54)
         self.assertEqual(len(manifest["modules"]), 54)
         self.assertEqual(len({r["path"] for r in manifest["modules"]}), 54)
+        shared = {p["path"] for p in read_json("PALOMAR_MIGRATION_PATCHES.json")
+                  if "prove2me" in p["platforms"]}
+        self.assertEqual(shared, {"Erdos488/Geometry/SeparatedDistances/PrefixSums.lean"})
         for row in manifest["modules"]:
             safe_path(row["path"])
-            self.assertEqual(row["source_sha256"], row["prove2me_sha256"])
+            if row["path"] in shared:
+                self.assertNotEqual(row["source_sha256"], row["prove2me_sha256"])
+            else:
+                self.assertEqual(row["source_sha256"], row["prove2me_sha256"])
             for key in ["source_sha256", "palomar_sha256", "prove2me_sha256"]:
                 self.assertRegex(row[key], r"^[0-9a-f]{64}$")
 

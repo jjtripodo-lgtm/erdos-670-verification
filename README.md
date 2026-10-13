@@ -27,8 +27,9 @@ not claims of optimal dimension, threshold, coefficient, or priority.
   compatibility edits. It builds all 54 modules and Solution, checks the final
   theorem's axioms, and runs the intact official `lake comparator` sandbox.
 - Prove2Me compatibility: Lean 4.33.1, Mathlib
-  0df444a360eaa60ab8c11dca51a86af692955474. The 54 source files are unchanged,
-  `autoImplicit = false` is enabled, and the job builds every source module
+  0df444a360eaa60ab8c11dca51a86af692955474. It applies the same explicit
+  linear-combination proof-step repair used by the Palomar port; the other 53
+  sources are unchanged. `autoImplicit = false` is enabled, and the job builds every source module
   and checks the final theorem's axioms. It does not import or upload a node.
 
 The permitted axioms are propext, Quot.sound, and Classical.choice. The Palomar
@@ -44,7 +45,7 @@ independent mathematical review, priority, or journal acceptance.
 ## Reproducibility and runtime boundaries
 
 SOURCE_MANIFEST.json contains every original and candidate source SHA256.
-PALOMAR_MIGRATION_PATCHES.json records the three exact edits and reasons.
+PALOMAR_MIGRATION_PATCHES.json records the three exact edits, reasons and platform scopes; its first proof-step repair is shared with Prove2Me.
 FIXTURE_SHA256.json covers the minimal source/configuration templates; Lean
 templates end in `.lean.txt` so this harness has no repository-level Lean
 project. Generated candidate trees contain only the 54 proof files and the

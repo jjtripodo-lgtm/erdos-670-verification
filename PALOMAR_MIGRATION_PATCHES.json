@@ -3,18 +3,28 @@
     "path": "Erdos488/Geometry/SeparatedDistances/PrefixSums.lean",
     "old": "    simp only [Function.comp_apply, L, Fintype.linearCombination_apply, transpose_apply,\n      prefixMatrix, prefixSums]",
     "new": "    change Fintype.linearCombination \u211d u ((prefixMatrix n)\u1d40 j) = prefixSums u j\n    rw [Fintype.linearCombination_apply]\n    simp only [transpose_apply, prefixMatrix, prefixSums]",
-    "reason": "Lean 4.35 simp did not reduce the local linear-map composition; expose the definitional application and rewrite the same linear-combination identity explicitly. The theorem signature and mathematical definitions are unchanged."
+    "reason": "Lean 4.35 simp did not reduce the local linear-map composition; expose the definitional application and rewrite the same linear-combination identity explicitly. The theorem signature and mathematical definitions are unchanged.",
+    "platforms": [
+      "palomar",
+      "prove2me"
+    ]
   },
   {
     "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceActualSpectrum.lean",
     "old": "private theorem sourcePairCode_exists_pair",
     "new": "public theorem sourcePairCode_exists_pair",
-    "reason": "The exposed noncomputable sourcePairDecode selects a witness using this lemma; the module system requires that dependency to be public. Only helper visibility changes; statement and proof are identical."
+    "reason": "The exposed noncomputable sourcePairDecode selects a witness using this lemma; the module system requires that dependency to be public. Only helper visibility changes; statement and proof are identical.",
+    "platforms": [
+      "palomar"
+    ]
   },
   {
     "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/UnorderedEdgeSeparation.lean",
     "old": "Sym2.isDiag_iff_proj_eq",
     "new": "Sym2.mk_isDiag_iff",
-    "reason": "Use the current Mathlib name for the same diagonal-pair equivalence. The theorem signature and mathematical definitions are unchanged."
+    "reason": "Use the current Mathlib name for the same diagonal-pair equivalence. The theorem signature and mathematical definitions are unchanged.",
+    "platforms": [
+      "palomar"
+    ]
   }
 ]

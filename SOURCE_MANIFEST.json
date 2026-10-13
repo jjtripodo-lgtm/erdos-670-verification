@@ -257,7 +257,7 @@
       "path": "Erdos488/Geometry/SeparatedDistances/PrefixSums.lean",
       "source_sha256": "59679a3d8a59b3a1d2400dd97ae00e01ce86d37d4f1719a937ab99832c002782",
       "palomar_sha256": "2eb6d47fdba5bcd0181dcb70b66fae5e2ba65cb945b6cc5fb61b5039b6315bbb",
-      "prove2me_sha256": "59679a3d8a59b3a1d2400dd97ae00e01ce86d37d4f1719a937ab99832c002782",
+      "prove2me_sha256": "8a2c5ebe3bef7038e34a2922c1f6d0321d630fe1caf1d183bfd6466e9690e291",
       "module": "Erdos488.Geometry.SeparatedDistances.PrefixSums",
       "imports": [
         "Erdos488.Geometry.SeparatedDistances.GramRealization",

@@ -60,14 +60,15 @@ def generate(platform, output, source_root=None):
             data = source.read_bytes()
         if digest(data) != row["source_sha256"]:
             raise ValueError("Source hash mismatch: " + str(path))
+        text = data.decode("utf-8")
         if platform == "palomar":
-            text = migrate(data.decode("utf-8"))
-            for patch in patches:
-                if patch["path"] == str(path):
-                    if text.count(patch["old"]) != 1:
-                        raise ValueError("Migration edit does not match once: " + str(path))
-                    text = text.replace(patch["old"], patch["new"], 1)
-            data = text.encode("utf-8")
+            text = migrate(text)
+        for patch in patches:
+            if platform in patch["platforms"] and patch["path"] == str(path):
+                if text.count(patch["old"]) != 1:
+                    raise ValueError("Migration edit does not match once: " + str(path))
+                text = text.replace(patch["old"], patch["new"], 1)
+        data = text.encode("utf-8")
         if digest(data) != row[platform + "_sha256"]:
             raise ValueError("Candidate hash mismatch: " + str(path))
         files[str(path)] = data
