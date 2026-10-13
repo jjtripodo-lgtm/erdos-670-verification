@@ -1,0 +1,602 @@
+{
+  "source_repository": "jjtripodo-lgtm/erdos-670-fixed-dimension",
+  "source_commit": "1e73a12ff1076dd11affadbf619ddbbef587133e",
+  "module_count": 54,
+  "modules": [
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/TrigonometricChord.lean",
+      "source_sha256": "40570d8bad67aeab4c395e49ceaac063d75c5297c0a2a54721b15bd78a518de0",
+      "palomar_sha256": "0697d6e119e0fb220160fd4ccedfcb9c2ab86e31f88d8dde706e57febac053f6",
+      "prove2me_sha256": "40570d8bad67aeab4c395e49ceaac063d75c5297c0a2a54721b15bd78a518de0",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.TrigonometricChord",
+      "imports": [
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SineDigits.lean",
+      "source_sha256": "92b3a9fce9691a0e00f56e840a75fc7380e380979e88d9337e8231c65d953345",
+      "palomar_sha256": "6f35948363f48c2158b11eaf2cb73b72df68e9464f253494c9b216d54d88ca81",
+      "prove2me_sha256": "92b3a9fce9691a0e00f56e840a75fc7380e380979e88d9337e8231c65d953345",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SineDigits",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.TrigonometricChord"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SpectrumSeparation.lean",
+      "source_sha256": "3d205d64de48c81103f68179657f79112a3d7befb41ceb0a5653b3ef0467ed29",
+      "palomar_sha256": "5469a0c974e970c489d8ec248ecf8a167482aa61d680bbc7308eeb0388f688a9",
+      "prove2me_sha256": "3d205d64de48c81103f68179657f79112a3d7befb41ceb0a5653b3ef0467ed29",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SpectrumSeparation",
+      "imports": [
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/DirectCrossSpectrum.lean",
+      "source_sha256": "98e65661665e8af0ec403e432957c395cca552ba2de057a5b7e3cff8995e96ac",
+      "palomar_sha256": "6e5450382a9764d7a45df6f23e0444ab208804f0ccf04fe634043b23a299b835",
+      "prove2me_sha256": "98e65661665e8af0ec403e432957c395cca552ba2de057a5b7e3cff8995e96ac",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.DirectCrossSpectrum",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SpectrumSeparation"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceCrossGuards.lean",
+      "source_sha256": "c8af0b3d950ae0ea48f7057d23cac9814a5008f24a1a5f200a24864a18701ae4",
+      "palomar_sha256": "726b06e45ac447f8b886ed2dfcfba7f64b45d32e25de19b1ef7926f6c3a15d3a",
+      "prove2me_sha256": "c8af0b3d950ae0ea48f7057d23cac9814a5008f24a1a5f200a24864a18701ae4",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossGuards",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SineDigits",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.DirectCrossSpectrum"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/Defs.lean",
+      "source_sha256": "9d696a0ba758b3ae236564116bf66b7462dcb4aac62c81cc000b9b8eb31ebaf3",
+      "palomar_sha256": "e4fcf84dc6616f1a0793a60316adb6e36b4605d1be0258300c28dc51f5733fa8",
+      "prove2me_sha256": "9d696a0ba758b3ae236564116bf66b7462dcb4aac62c81cc000b9b8eb31ebaf3",
+      "module": "Erdos488.Geometry.SeparatedDistances.Defs",
+      "imports": [
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.PosDef"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/GlobalCompletion.lean",
+      "source_sha256": "0c7d0187ab8c8e6265d37d349e6b7418ef069ebe70d95fc6455eb15d8df7131f",
+      "palomar_sha256": "9034a4e0d71c47ab7fe38fbfc6231447f2a0a82138b228a28863968467b2a70e",
+      "prove2me_sha256": "0c7d0187ab8c8e6265d37d349e6b7418ef069ebe70d95fc6455eb15d8df7131f",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.GlobalCompletion",
+      "imports": [
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/CompletionFactor.lean",
+      "source_sha256": "85bd0cc75f49257c34843e31f6c4e4a5f4efd9df6f0d7ff8af39edbc0e260cb7",
+      "palomar_sha256": "ea7116e3690f00b071639b9c6956c29ce6e1b8214a2fc1ca6bd3bcf95e6efc1b",
+      "prove2me_sha256": "85bd0cc75f49257c34843e31f6c4e4a5f4efd9df6f0d7ff8af39edbc0e260cb7",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.CompletionFactor",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.GlobalCompletion",
+        "Mathlib.Analysis.Matrix.Order"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/HarmonicLocalModel.lean",
+      "source_sha256": "c01a5a7687cd79c1427d69325313a2ce7f7fb5c64819adc4763c08e88e6d1f5f",
+      "palomar_sha256": "851239c24249d41dfe6bb4a22705d04ef22fc0103fd843cdeb52d9b5e7483d1d",
+      "prove2me_sha256": "c01a5a7687cd79c1427d69325313a2ce7f7fb5c64819adc4763c08e88e6d1f5f",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.HarmonicLocalModel",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.TrigonometricChord"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/TrigonometricFeatures.lean",
+      "source_sha256": "c4a5baefade16bf942d30c3a0d5890601ee8a5793082f55d20caaf38ec44c436",
+      "palomar_sha256": "70ae2db28acfa0122fe999f9c88667cf88d0e67af13fa50d9bb89dc5909064f1",
+      "prove2me_sha256": "c4a5baefade16bf942d30c3a0d5890601ee8a5793082f55d20caaf38ec44c436",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.TrigonometricFeatures",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.HarmonicLocalModel"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/CompletedTrigonometricFeatures.lean",
+      "source_sha256": "f9388d8b9c89b89f34884bfb191e87caf969a96d3c1a813039556ae48a577a75",
+      "palomar_sha256": "a4410762ef9d8fca952288c3d0b663a7fc993cedb9b1b1c65e02bdf9fb40968a",
+      "prove2me_sha256": "f9388d8b9c89b89f34884bfb191e87caf969a96d3c1a813039556ae48a577a75",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.CompletedTrigonometricFeatures",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.CompletionFactor",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.TrigonometricFeatures"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/EuclideanClusterCoordinates.lean",
+      "source_sha256": "a1ac4e3af6c7e52b85bbc287ad1193b4d964e74236dae9fa0b50bd9e24060bab",
+      "palomar_sha256": "55b2cf048a5a7f56ad17a34245cabb15f28fa2309f7e151c51439c67d11a8f29",
+      "prove2me_sha256": "a1ac4e3af6c7e52b85bbc287ad1193b4d964e74236dae9fa0b50bd9e24060bab",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanClusterCoordinates",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.Defs",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.CompletedTrigonometricFeatures"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/EuclideanCrossCoordinates.lean",
+      "source_sha256": "bf5d75e740bb0a5de06c8bd3c08b597b98fe09cebd8195a23bb2760084e48d2e",
+      "palomar_sha256": "be6c09f6059f2820e9d65b84d9fe72e010248f0a5e21e473011f59c46944e99b",
+      "prove2me_sha256": "bf5d75e740bb0a5de06c8bd3c08b597b98fe09cebd8195a23bb2760084e48d2e",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanCrossCoordinates",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanClusterCoordinates"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceCrossSpectrum.lean",
+      "source_sha256": "dcb41d4152296cb746eec3bd486a98e699d84c65579e1adbf489adc4518effae",
+      "palomar_sha256": "2b5f79405499530b4cc03bcf97062c64b5ab4a6489143a1fb58bc0192a8f42b9",
+      "prove2me_sha256": "dcb41d4152296cb746eec3bd486a98e699d84c65579e1adbf489adc4518effae",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossSpectrum",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossGuards",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanCrossCoordinates"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/PrimeRuler.lean",
+      "source_sha256": "b2cbe478c30ec8b0391b4d02bca358f21633c3c0de7f8274578e2124dc17173c",
+      "palomar_sha256": "9dfdaff29ceaf0ad90013b3107fcba42d1810719015c9e757a4fa7a14701f16c",
+      "prove2me_sha256": "b2cbe478c30ec8b0391b4d02bca358f21633c3c0de7f8274578e2124dc17173c",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.PrimeRuler",
+      "imports": [
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/PrimeRulerSeparation.lean",
+      "source_sha256": "90fe75f807ce75a632b8f81ee0a8ae7266a08bc6ce02e78d675bef687d3ad1fb",
+      "palomar_sha256": "f19ad0cd5470e04b79b656e7d5886632f852ee02947de715108a27477f84c6b7",
+      "prove2me_sha256": "90fe75f807ce75a632b8f81ee0a8ae7266a08bc6ce02e78d675bef687d3ad1fb",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.PrimeRulerSeparation",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.PrimeRuler"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/LocalRulerSeparation.lean",
+      "source_sha256": "a37fc6e7666681f9dfd57a8f476111c5e3cee0fc5664acf46186a9dbd829df76",
+      "palomar_sha256": "5ee6d836d43f94ce20030e405247c44ea167bb3b4c3d9a18df58fbed2c33796c",
+      "prove2me_sha256": "a37fc6e7666681f9dfd57a8f476111c5e3cee0fc5664acf46186a9dbd829df76",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.LocalRulerSeparation",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.PrimeRulerSeparation",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.HarmonicLocalModel"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceLocalGuards.lean",
+      "source_sha256": "d549e36433886c0a53325ca77df65266ef298c155aaafaacb8840ea997a9bf5e",
+      "palomar_sha256": "cd769c1e8339d8457bab29774bd67e1ddfd443829b952e8a91d2455ab4394156",
+      "prove2me_sha256": "d549e36433886c0a53325ca77df65266ef298c155aaafaacb8840ea997a9bf5e",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceLocalGuards",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossSpectrum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.LocalRulerSeparation"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceLocalSpectrum.lean",
+      "source_sha256": "83ccbc287deed29c4f510373b60a50f7523cb8a5865689f0fcb2b075631cc5e3",
+      "palomar_sha256": "c6522ebab5b84b7dbb646fa3945dd5846fc45fd727a2d109ecbb7746ae2ad85d",
+      "prove2me_sha256": "83ccbc287deed29c4f510373b60a50f7523cb8a5865689f0fcb2b075631cc5e3",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceLocalSpectrum",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceLocalGuards"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceMixedBands.lean",
+      "source_sha256": "a15e10e7b12b3bfb0de356d0f8539af79512feeb890d156c908f99fcf87e4841",
+      "palomar_sha256": "13ca3641aaccf303c2559238ce77fd48ddfec6357d0180bcdad346ab0f667f91",
+      "prove2me_sha256": "a15e10e7b12b3bfb0de356d0f8539af79512feeb890d156c908f99fcf87e4841",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceMixedBands",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceLocalSpectrum"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceReserveBudgets.lean",
+      "source_sha256": "fc5a809c5d893f70f51423c57b6d1c8f9b431f3bb533f276dfed1588c0194c6f",
+      "palomar_sha256": "f73cd36d49a871e5f30c2681e0079fc58a9410ba8fff8b1574a749175dc0bc71",
+      "prove2me_sha256": "fc5a809c5d893f70f51423c57b6d1c8f9b431f3bb533f276dfed1588c0194c6f",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceReserveBudgets",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceMixedBands"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/Flattening.lean",
+      "source_sha256": "6d8a8f8ca84755abf95f19bbdcce3eba4081c35ec00e2ca045eaf879d867cd7e",
+      "palomar_sha256": "db142a44ad86677497817199a70d2bbf2c7bb6a90232f8c7c57cc2f3ff5af3a0",
+      "prove2me_sha256": "6d8a8f8ca84755abf95f19bbdcce3eba4081c35ec00e2ca045eaf879d867cd7e",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.Flattening",
+      "imports": [
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/GramRealization.lean",
+      "source_sha256": "a240a1ab49ccf582ad967a37b950ca6a6ef8e41d8fb4831868377b6eadbeec01",
+      "palomar_sha256": "7a18d91959148ed441fb6cd0641a59cd5b8056935bb9adc9359fcf671f5cabfd",
+      "prove2me_sha256": "a240a1ab49ccf582ad967a37b950ca6a6ef8e41d8fb4831868377b6eadbeec01",
+      "module": "Erdos488.Geometry.SeparatedDistances.GramRealization",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.Defs",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/PrefixSums.lean",
+      "source_sha256": "59679a3d8a59b3a1d2400dd97ae00e01ce86d37d4f1719a937ab99832c002782",
+      "palomar_sha256": "2eb6d47fdba5bcd0181dcb70b66fae5e2ba65cb945b6cc5fb61b5039b6315bbb",
+      "prove2me_sha256": "59679a3d8a59b3a1d2400dd97ae00e01ce86d37d4f1719a937ab99832c002782",
+      "module": "Erdos488.Geometry.SeparatedDistances.PrefixSums",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.GramRealization",
+        "Mathlib.LinearAlgebra.Matrix.Block"
+      ],
+      "palomar_initial_module_port_sha256": "62fa61f525d0c111e86b190a3c75983c7270089d342fe5d0643d6959b430be70"
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/EuclideanRealization.lean",
+      "source_sha256": "d63bd7300d026ff27d52c67cfb471920b3edc316d31ac1d548d7e29266644314",
+      "palomar_sha256": "10780e7c3000ec5cc7ce6ecb9520b1565083e7a04d8ddacb620bdf9823f6d047",
+      "prove2me_sha256": "d63bd7300d026ff27d52c67cfb471920b3edc316d31ac1d548d7e29266644314",
+      "module": "Erdos488.Geometry.SeparatedDistances.EuclideanRealization",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.PrefixSums",
+        "Mathlib.Analysis.InnerProductSpace.PiL2"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/Labels.lean",
+      "source_sha256": "5bd3ddb10a4e827497db3c9952210cd0c1232054c31c714ae406ea16d391b35f",
+      "palomar_sha256": "b1a62c9759ca1ac4a72046ea883d423c7d5123de8cf9ee57633082a99043dbed",
+      "prove2me_sha256": "5bd3ddb10a4e827497db3c9952210cd0c1232054c31c714ae406ea16d391b35f",
+      "module": "Erdos488.Geometry.SeparatedDistances.Labels",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.Defs",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/ColexBase.lean",
+      "source_sha256": "f4ef600ffb08f6357b8d0bf74428286ce2617a32d7e34353905dbfea36c61db4",
+      "palomar_sha256": "5dfe82e61eecf5e6f616bb481224c60a0d071a69581b80720ccedb20e63716f2",
+      "prove2me_sha256": "f4ef600ffb08f6357b8d0bf74428286ce2617a32d7e34353905dbfea36c61db4",
+      "module": "Erdos488.Geometry.SeparatedDistances.ColexBase",
+      "imports": [
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/ColexPositivity.lean",
+      "source_sha256": "da4ea3133ef045bd76c06a2f956a67130889d2e2a532be23dbe02fb8aaf9a1b5",
+      "palomar_sha256": "dfc448e01897bdbb5bc93d9e0c8c642122bc77dc3531ab6ad8853a605d6b6f8a",
+      "prove2me_sha256": "da4ea3133ef045bd76c06a2f956a67130889d2e2a532be23dbe02fb8aaf9a1b5",
+      "module": "Erdos488.Geometry.SeparatedDistances.ColexPositivity",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.GramRealization",
+        "Erdos488.Geometry.SeparatedDistances.EuclideanRealization",
+        "Erdos488.Geometry.SeparatedDistances.Labels",
+        "Erdos488.Geometry.SeparatedDistances.ColexBase",
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/ColexReserve.lean",
+      "source_sha256": "62c7a55590ffffaf56632eab74bc544fea0125be8e5f07ba31a0367c255ad066",
+      "palomar_sha256": "3141287be83634fb67ae577c1b9ce6f222b8f1f01152728eccd2b5a2946c810c",
+      "prove2me_sha256": "62c7a55590ffffaf56632eab74bc544fea0125be8e5f07ba31a0367c255ad066",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserve",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.ColexPositivity"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/ColexReserveDirectCS.lean",
+      "source_sha256": "e8bd7220e2962f0f9bc557b5dde7e35c7d5bdca4c147f1fa6ef14b692cb3b1d6",
+      "palomar_sha256": "96cb72d2e23c9ad1e653fe10b8f5038593d5d44e41fe6d9eec51330187a0cc8a",
+      "prove2me_sha256": "e8bd7220e2962f0f9bc557b5dde7e35c7d5bdca4c147f1fa6ef14b692cb3b1d6",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserveDirectCS",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.ColexPositivity"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/IncidenceBridge.lean",
+      "source_sha256": "0b1c811368a409e84d7f9dad718450fbf17a65120ce1782cd1ea52d627c547a3",
+      "palomar_sha256": "442e3c8736ff3ca302519a00cfee8bb9f8836e911ecc9fd74fa5124302ae2d4a",
+      "prove2me_sha256": "0b1c811368a409e84d7f9dad718450fbf17a65120ce1782cd1ea52d627c547a3",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.IncidenceBridge",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.Defs",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.Flattening",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserve",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserveDirectCS"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/PotentialSolve.lean",
+      "source_sha256": "5d7ed3b800e6ce9f39b42896fd6126dea0e239fbd5e0fac24c6bde246cc8307d",
+      "palomar_sha256": "77a6f40e95bc9122a11ced206ef25d28f884d9940181d1024758970076392ac7",
+      "prove2me_sha256": "5d7ed3b800e6ce9f39b42896fd6126dea0e239fbd5e0fac24c6bde246cc8307d",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.PotentialSolve",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.IncidenceBridge"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/WeightedSchur.lean",
+      "source_sha256": "2c14b164bb4a17236fe313608d0fdc8b7fb7a9ad63e8d851d9c845cda646a142",
+      "palomar_sha256": "0d6cf738b246870ad132afd7b65031df9a11fbae820134a422bb3f2600d4b6fe",
+      "prove2me_sha256": "2c14b164bb4a17236fe313608d0fdc8b7fb7a9ad63e8d851d9c845cda646a142",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.WeightedSchur",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.PotentialSolve",
+        "Mathlib.Analysis.Real.Sqrt"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/HardyWeights.lean",
+      "source_sha256": "1c09496199eb2ab1d25b80bf9f515041f5332cdeeaef5dbb7025a91152420a0a",
+      "palomar_sha256": "c50fcce58d2b9e174dc29c1b33d66fc0c52ac9ad3f4942a34149595f38232451",
+      "prove2me_sha256": "1c09496199eb2ab1d25b80bf9f515041f5332cdeeaef5dbb7025a91152420a0a",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.HardyWeights",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.WeightedSchur"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/FiniteHardy.lean",
+      "source_sha256": "472f31e05f95d14f809f746eda497a68c3f6cfad0f055cd2d345872a75c1474b",
+      "palomar_sha256": "28b6bee1b0c8842d7b1d464f993b57100f4ed708255349d0cf6ca117c601bdac",
+      "prove2me_sha256": "472f31e05f95d14f809f746eda497a68c3f6cfad0f055cd2d345872a75c1474b",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.FiniteHardy",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.HardyWeights"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/TriangularBounds.lean",
+      "source_sha256": "5dafad3ed1210e28eccc756f12a553312e07bd2fa1307502b565ec921636e377",
+      "palomar_sha256": "01ca135266db8b31b256e8fcd8d26f482278e1735455295144f111d65e415d3e",
+      "prove2me_sha256": "5dafad3ed1210e28eccc756f12a553312e07bd2fa1307502b565ec921636e377",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.TriangularBounds",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.FiniteHardy"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/GeometricPotential.lean",
+      "source_sha256": "765e4363c9a202b4e0f22b41bcb7f1d4b5f0bdd991eed661293e3f3c3002d836",
+      "palomar_sha256": "d0e682949ac2c9a2db30b27972458c0a4a39fd8699d8097548169be08947173f",
+      "prove2me_sha256": "765e4363c9a202b4e0f22b41bcb7f1d4b5f0bdd991eed661293e3f3c3002d836",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.GeometricPotential",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.PotentialSolve"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/LiteralIncidence.lean",
+      "source_sha256": "d0a107d3211626b35cb1c431f01b4fc7ec3fd3547afb6dc38a52bb1f466f5973",
+      "palomar_sha256": "59d79af9f5dc2e76fecfb7b12f870ba9d37d63a9b63086351a6389e0ef7d2918",
+      "prove2me_sha256": "d0a107d3211626b35cb1c431f01b4fc7ec3fd3547afb6dc38a52bb1f466f5973",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.LiteralIncidence",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.TriangularBounds",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.GeometricPotential"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceOperatorBridge.lean",
+      "source_sha256": "48e2913fe771254f5ba077de57bd35928d09a03ecc658c8a52ce328ea9d7d478",
+      "palomar_sha256": "23b45b70c2075b64664b74cd8f589318189585fe88b3c0cbcaf6da0155a7a8bd",
+      "prove2me_sha256": "48e2913fe771254f5ba077de57bd35928d09a03ecc658c8a52ce328ea9d7d478",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceOperatorBridge",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceReserveBudgets",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.LiteralIncidence",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.CompletedTrigonometricFeatures"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/Parameters.lean",
+      "source_sha256": "39539a0b75eb74c86b8dafd93e6d40452b85cf9e6df1304c48787b6c1735088b",
+      "palomar_sha256": "273db32be775df1308ee666b14c7b09fd8b385916798f60a74879229ac570f72",
+      "prove2me_sha256": "39539a0b75eb74c86b8dafd93e6d40452b85cf9e6df1304c48787b6c1735088b",
+      "module": "Erdos488.Geometry.SeparatedDistances.Parameters",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.Defs",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceParameterBounds.lean",
+      "source_sha256": "53e88896bd605170c11d14f7a6fea42a761026d2d8076f2e68a09524f7a6626c",
+      "palomar_sha256": "c3ab3a2fa4cc5b4c583a2da838b54e9e36804f66eee4e1fb24080b523c699d36",
+      "prove2me_sha256": "53e88896bd605170c11d14f7a6fea42a761026d2d8076f2e68a09524f7a6626c",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceParameterBounds",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceOperatorBridge",
+        "Erdos488.Geometry.SeparatedDistances.Parameters"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceQuadraticMatrix.lean",
+      "source_sha256": "427a7456c12dd2e4fda0dac6313e4e76b1945e3e1621a25756704a5152f8c7bd",
+      "palomar_sha256": "fdaab9bee8539317c4e152f6a7ca25fcf192cbd66ffb579ce2a3833872431ca6",
+      "prove2me_sha256": "427a7456c12dd2e4fda0dac6313e4e76b1945e3e1621a25756704a5152f8c7bd",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceQuadraticMatrix",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceParameterBounds"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/GeometricLocalSeparation.lean",
+      "source_sha256": "d78635a29078698e85e4c8fdd247fe57553a2179a2c348aaeb9719b0ec3bc748",
+      "palomar_sha256": "833220b6905500353311dc4a2ac72a6b56d7cbe1a5b4d565a0a7baeb2a4d6c0f",
+      "prove2me_sha256": "d78635a29078698e85e4c8fdd247fe57553a2179a2c348aaeb9719b0ec3bc748",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.GeometricLocalSeparation",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanClusterCoordinates",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.LocalRulerSeparation"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceActualCrossMetric.lean",
+      "source_sha256": "ec85d75bb3a4a0cc23da237211f7ccdebecc52c05d73e547624eea4ffd69744d",
+      "palomar_sha256": "0eeb4db2ea0b3695f63e13ff9646063a063628985a7f2bf8e0fca5d939e2b1f6",
+      "prove2me_sha256": "ec85d75bb3a4a0cc23da237211f7ccdebecc52c05d73e547624eea4ffd69744d",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualCrossMetric",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceQuadraticMatrix",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.GeometricLocalSeparation"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceActualSpectrum.lean",
+      "source_sha256": "c74a71d6a4bb1752bfcebf95345fceef96dc6a0cc3919735771b64ff9283ce2d",
+      "palomar_sha256": "f92904692da016ccf2ea6d25ca320b165028983b26d8b651edac1bbcff4e3a2b",
+      "prove2me_sha256": "c74a71d6a4bb1752bfcebf95345fceef96dc6a0cc3919735771b64ff9283ce2d",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualSpectrum",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualCrossMetric"
+      ],
+      "palomar_initial_module_port_sha256": "3c4c627419138bc4be819a7f5a15e920d7c2425fefc4a17ab9a3f8f129d6ed33"
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/UnorderedEdgeSeparation.lean",
+      "source_sha256": "bcafead776d4d54b463da7f94bf0391d38a6443fc2cf25bfade3970ffe35d3b9",
+      "palomar_sha256": "9d6f04a31f70c94bdd6bab67fac17f631e7129c2bf14b6b5510d4b2146cb928c",
+      "prove2me_sha256": "bcafead776d4d54b463da7f94bf0391d38a6443fc2cf25bfade3970ffe35d3b9",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.UnorderedEdgeSeparation",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.Defs",
+        "Mathlib.Tactic"
+      ],
+      "palomar_initial_module_port_sha256": "24449c3cede2070286eefdbe174d4060355546438669bf74ff61965072feea87"
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/ClusterEdgeAssembly.lean",
+      "source_sha256": "c84410052ab9f41e7b76de74d847d95739fef9256992266329937b9effb131ed",
+      "palomar_sha256": "39376ab8db5af17af17f0267913642177f202e7080cff7e047faa74a65394437",
+      "prove2me_sha256": "c84410052ab9f41e7b76de74d847d95739fef9256992266329937b9effb131ed",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.ClusterEdgeAssembly",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.UnorderedEdgeSeparation"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourcePrime.lean",
+      "source_sha256": "22569801afcc48f93b02178f3fe81d21efbb61a34b9c32abbc2c8f769aa90bb2",
+      "palomar_sha256": "ee9dd0ea6ed2f007c837607fc43a41ad873a1a3c6289522d1fde1f7f95574cf7",
+      "prove2me_sha256": "22569801afcc48f93b02178f3fe81d21efbb61a34b9c32abbc2c8f769aa90bb2",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourcePrime",
+      "imports": [
+        "Mathlib.NumberTheory.Bertrand",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceActualSeparation.lean",
+      "source_sha256": "18bd0bbdb5127c157f26f6f4a3b3c47069af15f3fe9b11a2b552398fdcea20a8",
+      "palomar_sha256": "d0934ef3d158b3abf8b6aaca53c776f8f732a3618b65b64f4b12b24f97a8cace",
+      "prove2me_sha256": "18bd0bbdb5127c157f26f6f4a3b3c47069af15f3fe9b11a2b552398fdcea20a8",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualSeparation",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualSpectrum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.ClusterEdgeAssembly",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourcePrime"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceActualDiameter.lean",
+      "source_sha256": "542002fe6bbdb8510e2ae34af67246f1141c48d51ad22f1e9519bca8a450112c",
+      "palomar_sha256": "82a0a0463371aa3ca7a4c5c0f7943c1b58eed57ec72269d2bbc8d8ffe2fd120a",
+      "prove2me_sha256": "542002fe6bbdb8510e2ae34af67246f1141c48d51ad22f1e9519bca8a450112c",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualDiameter",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualCrossMetric",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceReserveBudgets"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/AllNArithmetic.lean",
+      "source_sha256": "6ab22c6b16e3b4579b296c467c8faed2ddf200476d33a1c461b67b6267e98c71",
+      "palomar_sha256": "6973a83f3ec791c096318f4250b4280b78e9c96d7f19ef40f87ea5218e078205",
+      "prove2me_sha256": "6ab22c6b16e3b4579b296c467c8faed2ddf200476d33a1c461b67b6267e98c71",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.AllNArithmetic",
+      "imports": [
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceFinalScalar.lean",
+      "source_sha256": "6ba2b52a98f627f24240280f91d062a7866ee31a52c295abbccdf4d613c58980",
+      "palomar_sha256": "2ed497cb4ab3a79f3e0c018be17fd847c619bc44f1de7c9db87b2553f7b148ec",
+      "prove2me_sha256": "6ba2b52a98f627f24240280f91d062a7866ee31a52c295abbccdf4d613c58980",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceFinalScalar",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceReserveBudgets",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.AllNArithmetic"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceAllNEmbedding.lean",
+      "source_sha256": "eef1bbd08fad3ab5c88b74ba2e2e25702b4f310a7148444a6bd789a6df1684b3",
+      "palomar_sha256": "f4f95171e24fddc2f54ba5e38ccc4b03a0d880be42f7e97aae933223c18d1253",
+      "prove2me_sha256": "eef1bbd08fad3ab5c88b74ba2e2e25702b4f310a7148444a6bd789a6df1684b3",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceAllNEmbedding",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.AllNArithmetic",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanClusterCoordinates",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceFinalScalar",
+        "Erdos488.Geometry.SeparatedDistances.Defs"
+      ]
+    },
+    {
+      "path": "Erdos488/Geometry/SeparatedDistances/FixedDimension/SourceFixedDimension670.lean",
+      "source_sha256": "97cfb0df31070d64c6a48cac85de205745e7ab8a267a7c8720891893050ddd58",
+      "palomar_sha256": "5f92624874e13ca65911dc201b1a6ce19cf183f9c829c4adaef36e8cf381fe9f",
+      "prove2me_sha256": "97cfb0df31070d64c6a48cac85de205745e7ab8a267a7c8720891893050ddd58",
+      "module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceFixedDimension670",
+      "imports": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualSeparation",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualDiameter",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceAllNEmbedding"
+      ]
+    }
+  ]
+}

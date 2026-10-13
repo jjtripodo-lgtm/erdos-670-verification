@@ -1,0 +1,133 @@
+name: Pinned compatibility checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/compatibility.yml'
+      - 'scripts/**'
+      - 'fixtures/**'
+      - '*MANIFEST.json'
+      - '*PATCHES.json'
+      - '*SHA256.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compatibility-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compatibility:
+    # Standard hosted Linux jobs in a PUBLIC repository only; no paid runners.
+    if: github.event.repository.private == false
+    name: ${{ matrix.platform }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [palomar, prove2me]
+    env:
+      PLATFORM: ${{ matrix.platform }}
+      LEAN_NUM_THREADS: '2'
+      MATHLIB_NO_CACHE_ON_UPDATE: '1'
+      MATHLIB_CACHE_DIR: ${{ runner.temp }}/mathlib-cache
+      LAKE_CACHE_DIR: ${{ runner.temp }}/lake-cache
+      COMPARATOR_BWRAP: ${{ runner.temp }}/bwrap-bin/bwrap
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Read the exact public harness commit without credentials
+        id: harness
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]]
+          git init --quiet "$RUNNER_TEMP/verifier"
+          git -C "$RUNNER_TEMP/verifier" remote add origin "https://github.com/$GITHUB_REPOSITORY.git"
+          git -C "$RUNNER_TEMP/verifier" fetch --quiet --depth=1 origin "$GITHUB_SHA"
+          git -C "$RUNNER_TEMP/verifier" checkout --quiet --detach "$GITHUB_SHA"
+          test "$(git -C "$RUNNER_TEMP/verifier" rev-parse HEAD)" = "$GITHUB_SHA"
+          echo "Harness: $GITHUB_REPOSITORY@$GITHUB_SHA"
+          echo "Runner image: ${ImageOS:-unknown} ${ImageVersion:-unknown}"
+          uname -a
+          python3 --version
+          git --version
+          curl --version
+          df -h "$RUNNER_TEMP"
+          free -h
+          python3 -c 'import os, shutil; p=os.environ["RUNNER_TEMP"]; f=shutil.disk_usage(p).free; print("Free GiB:", f/2**30); assert f >= 11*2**30, "Host capacity blocker: need at least 11 GiB free; no automatic system cleanup"'
+          python3 "$RUNNER_TEMP/verifier/scripts/test_adapter.py"
+
+      - name: Build pinned bubblewrap and require its full sandbox
+        id: sandbox
+        if: matrix.platform == 'palomar'
+        run: |
+          set -euo pipefail
+          # OS packages use Ubuntu's signed repositories; exact installed
+          # versions are recorded rather than claiming an immutable OS image.
+          sudo apt-get update -qq
+          sudo apt-get install --no-install-recommends -y meson ninja-build libcap-dev pkg-config
+          dpkg-query -W -f='${Package} ${Version}\n' meson ninja-build libcap-dev pkg-config
+          bash "$RUNNER_TEMP/verifier/scripts/install_bwrap.sh" "$RUNNER_TEMP/bwrap-bin"
+
+      - name: Generate and hash-check the code-only candidate
+        id: candidate
+        run: |
+          set -euo pipefail
+          python3 "$RUNNER_TEMP/verifier/scripts/make_candidate.py" "$PLATFORM" --output "$RUNNER_TEMP/candidate"
+          python3 "$RUNNER_TEMP/verifier/scripts/check_candidate.py" "$PLATFORM" "$RUNNER_TEMP/candidate"
+
+      - name: Install the hash-pinned official Lean toolchain
+        id: toolchain
+        run: bash "$RUNNER_TEMP/verifier/scripts/install_lean.sh" "$PLATFORM" "$RUNNER_TEMP/toolchain"
+
+      - name: Fetch only exact public dependency commits
+        id: dependencies
+        run: python3 "$RUNNER_TEMP/verifier/scripts/run_checks.py" "$PLATFORM" dependencies "$RUNNER_TEMP/candidate"
+
+      - name: Read the targeted canonical Mathlib build cache
+        id: cache
+        run: python3 "$RUNNER_TEMP/verifier/scripts/run_checks.py" "$PLATFORM" cache "$RUNNER_TEMP/candidate"
+
+      - name: Build all 54 source modules and configured targets
+        id: build
+        run: python3 "$RUNNER_TEMP/verifier/scripts/run_checks.py" "$PLATFORM" build "$RUNNER_TEMP/candidate"
+
+      - name: Check the final theorem's permitted axioms
+        id: axioms
+        run: python3 "$RUNNER_TEMP/verifier/scripts/run_checks.py" "$PLATFORM" axioms "$RUNNER_TEMP/candidate"
+
+      - name: Run the intact official sandboxed Comparator
+        id: comparator
+        if: matrix.platform == 'palomar'
+        run: python3 "$RUNNER_TEMP/verifier/scripts/run_checks.py" "$PLATFORM" comparator "$RUNNER_TEMP/candidate"
+
+      - name: Record precise outcomes in the job summary
+        if: always()
+        env:
+          HARNESS: ${{ steps.harness.outcome }}
+          SANDBOX: ${{ steps.sandbox.outcome }}
+          CANDIDATE: ${{ steps.candidate.outcome }}
+          TOOLCHAIN: ${{ steps.toolchain.outcome }}
+          DEPENDENCIES: ${{ steps.dependencies.outcome }}
+          CACHE: ${{ steps.cache.outcome }}
+          BUILD: ${{ steps.build.outcome }}
+          AXIOMS: ${{ steps.axioms.outcome }}
+          COMPARATOR: ${{ steps.comparator.outcome }}
+        run: |
+          {
+            echo "## $PLATFORM compatibility results"
+            echo "Harness commit: $GITHUB_SHA"
+            echo "Theorem source commit: 1e73a12ff1076dd11affadbf619ddbbef587133e"
+            for phase in HARNESS SANDBOX CANDIDATE TOOLCHAIN DEPENDENCIES CACHE BUILD AXIOMS COMPARATOR; do
+              echo "- $phase: ${!phase}"
+            done
+            echo ""
+            echo "These are mechanical compatibility checks. They are not a platform submission, platform acceptance, independent mathematical review, priority determination, or journal review."
+            echo "Prove2Me has no Comparator step; its skipped result is expected. Full source/config hashes, tool versions and dependency revisions are in the logs. No artifacts or reusable GitHub caches are uploaded."
+          } >> "$GITHUB_STEP_SUMMARY"
+          df -h "$RUNNER_TEMP"

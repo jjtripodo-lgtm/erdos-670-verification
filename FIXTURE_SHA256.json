@@ -1,0 +1,15 @@
+{
+  "palomar/AxiomAudit.lean.txt": "027b078805c45d465e217dd04f2999744bf1a5dccd0ea6c7d4382d2b781f2be0",
+  "palomar/Challenge.lean.txt": "aed9a0308e74db66c96b1063731ed545727b518c50a76c3b265a4315d1077cd1",
+  "palomar/LICENSE": "3587ec3f5eb141a9ec2a9470a10a8cae9bc904db51d2d7d4877bd5ff9751208e",
+  "palomar/Solution.lean.txt": "4428a059b3f5807b4e43e9e27b8c3bc55c9202290cff65fad0026d5e57b1ca47",
+  "palomar/comparator.json": "b83a56761f7222177039605b509ee133652f02978ded6d68cdf4bcf9b36c1e11",
+  "palomar/lake-manifest.json": "ebbe585097e693521b919355d0b87454d2c30a080bfe5083979d9e2dcec5882f",
+  "palomar/lakefile.toml": "326198448c24b8345427fa6fe03a09519a8949c0483a2e37a63efa0a69742301",
+  "palomar/lean-toolchain": "8dc8d6f560141069d9073e370611716ef77ada0da8ffa37e2149f44b2e63ac7a",
+  "prove2me/AxiomAudit.lean.txt": "6ef6915480b4829dbb36cf2361b851f1241f3ef888e98cc3c3948401e34317e4",
+  "prove2me/LICENSE": "3587ec3f5eb141a9ec2a9470a10a8cae9bc904db51d2d7d4877bd5ff9751208e",
+  "prove2me/lake-manifest.json": "c94eed389692ce27a34480450fa1e3c97dbc92fd1b3970603f2ec7cbe31b4b33",
+  "prove2me/lakefile.toml": "d8914ebe2c7789ee40874913257a3f510fcc3c84449288cf3580975a64614fb3",
+  "prove2me/lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71"
+}
