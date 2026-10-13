@@ -1,0 +1,165 @@
+name: Pinned Prove2Me declaration extraction
+
+on:
+  workflow_dispatch:
+    inputs:
+      storage_guard_confirmed:
+        description: 'Owner has checked at least 128 MiB included storage headroom and paid-overage blocking'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prove2me-extraction-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  extract:
+    if: github.event.repository.private == false && inputs.storage_guard_confirmed == true
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    env:
+      BASE_HARNESS_SHA: 5510ffd94156d48dbe393ac619586b935212da79
+      LEAN_NUM_THREADS: '2'
+      MATHLIB_NO_CACHE_ON_UPDATE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Read the exact public wrapper and frozen harness anonymously
+        id: inputs
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'jjtripodo-lgtm/erdos-670-verification'
+          [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]]
+          for item in "wrapper:$GITHUB_SHA" "verifier:$BASE_HARNESS_SHA"; do
+            folder="${item%%:*}"
+            commit="${item#*:}"
+            git init --quiet "$RUNNER_TEMP/$folder"
+            git -C "$RUNNER_TEMP/$folder" remote add origin "https://github.com/$GITHUB_REPOSITORY.git"
+            git -C "$RUNNER_TEMP/$folder" fetch --quiet --depth=1 origin "$commit"
+            git -C "$RUNNER_TEMP/$folder" checkout --quiet --detach "$commit"
+            test "$(git -C "$RUNNER_TEMP/$folder" rev-parse HEAD)" = "$commit"
+          done
+          {
+            echo "MATHLIB_CACHE_DIR=$RUNNER_TEMP/mathlib-cache"
+            echo "LAKE_CACHE_DIR=$RUNNER_TEMP/lake-cache"
+          } >> "$GITHUB_ENV"
+          echo "Extraction wrapper: $GITHUB_REPOSITORY@$GITHUB_SHA"
+          echo "Frozen compatibility harness: $BASE_HARNESS_SHA"
+          echo "Runner image: ${ImageOS:-unknown} ${ImageVersion:-unknown}"
+          python3 --version
+          df -h "$RUNNER_TEMP"
+          free -h
+          python3 - <<'PY'
+          import os, shutil
+          free = shutil.disk_usage(os.environ["RUNNER_TEMP"]).free
+          print("Initial free GiB:", free / 2**30)
+          if free < 16 * 2**30:
+              raise RuntimeError("Need at least 16 GiB free; no automatic cleanup")
+          PY
+          python3 "$RUNNER_TEMP/verifier/scripts/test_adapter.py"
+          python3 "$RUNNER_TEMP/wrapper/extraction/check_payload.py"
+          python3 -m unittest discover -s "$RUNNER_TEMP/wrapper/extraction" -p 'test_support.py' -v
+
+      - name: Fetch pinned ephemeral extraction tools and test the adapter
+        id: upstream
+        run: |
+          set -euo pipefail
+          python3 "$RUNNER_TEMP/wrapper/extraction/fetch_upstream.py" --output "$RUNNER_TEMP/prove2me-upstream"
+          PROVE2ME_TEST_EXTRACTORS="$RUNNER_TEMP/prove2me-upstream" \
+            python3 -m unittest discover -s "$RUNNER_TEMP/wrapper/extraction/adapter" -p 'test_*.py' -v
+
+      - name: Generate and hash-check the exact public candidate
+        id: candidate
+        run: |
+          set -euo pipefail
+          python3 "$RUNNER_TEMP/verifier/scripts/make_candidate.py" prove2me --output "$RUNNER_TEMP/candidate"
+          python3 "$RUNNER_TEMP/verifier/scripts/check_candidate.py" prove2me "$RUNNER_TEMP/candidate"
+
+      - name: Install the hash-pinned official Lean 4.33.1 toolchain
+        id: toolchain
+        run: bash "$RUNNER_TEMP/verifier/scripts/install_lean.sh" prove2me "$RUNNER_TEMP/toolchain"
+
+      - name: Fetch only exact public dependency commits
+        id: dependencies
+        run: python3 "$RUNNER_TEMP/verifier/scripts/run_checks.py" prove2me dependencies "$RUNNER_TEMP/candidate"
+
+      - name: Read the targeted canonical Mathlib cache
+        id: cache
+        run: python3 "$RUNNER_TEMP/verifier/scripts/run_checks.py" prove2me cache "$RUNNER_TEMP/candidate"
+
+      - name: Rebuild all 54 source modules in this disposable runtime
+        id: build
+        run: python3 "$RUNNER_TEMP/verifier/scripts/run_checks.py" prove2me build "$RUNNER_TEMP/candidate"
+
+      - name: Audit the exact final theorem's axioms
+        id: axioms
+        run: python3 "$RUNNER_TEMP/verifier/scripts/run_checks.py" prove2me axioms "$RUNNER_TEMP/candidate"
+
+      - name: Extract real declarations and source positions serially
+        id: extraction
+        run: |
+          set -euo pipefail
+          python3 "$RUNNER_TEMP/wrapper/extraction/adapter/run_extraction.py" \
+            --project "$RUNNER_TEMP/candidate" \
+            --manifest "$RUNNER_TEMP/verifier/SOURCE_MANIFEST.json" \
+            --extractors "$RUNNER_TEMP/prove2me-upstream" \
+            --toolchain-bin "$RUNNER_TEMP/toolchain/lean-4.33.1-linux/bin" \
+            --output "$RUNNER_TEMP/prove2me-extraction" \
+            --wrapper-commit "$GITHUB_SHA" \
+            --harness-commit "$BASE_HARNESS_SHA" \
+            --workflow-run-url "https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
+            --execute --resources-coordinated
+          python3 "$RUNNER_TEMP/verifier/scripts/check_candidate.py" prove2me "$RUNNER_TEMP/candidate" --allow-build
+          python3 "$RUNNER_TEMP/wrapper/extraction/adapter/export_artifact.py" "$RUNNER_TEMP/prove2me-extraction/artifact"
+
+      - name: Retain only the successful bounded source-derived artifact
+        id: artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: prove2me-extraction-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/prove2me-extraction/artifact/
+          if-no-files-found: error
+          retention-days: 1
+          include-hidden-files: false
+          overwrite: false
+          compression-level: 6
+
+      - name: Record exact phase outcomes
+        if: always()
+        env:
+          INPUTS: ${{ steps.inputs.outcome }}
+          CANDIDATE: ${{ steps.candidate.outcome }}
+          TOOLCHAIN: ${{ steps.toolchain.outcome }}
+          DEPENDENCIES: ${{ steps.dependencies.outcome }}
+          CACHE: ${{ steps.cache.outcome }}
+          BUILD: ${{ steps.build.outcome }}
+          AXIOMS: ${{ steps.axioms.outcome }}
+          UPSTREAM: ${{ steps.upstream.outcome }}
+          EXTRACTION: ${{ steps.extraction.outcome }}
+          ARTIFACT: ${{ steps.artifact.outcome }}
+          ARTIFACT_ID: ${{ steps.artifact.outputs.artifact-id }}
+          ARTIFACT_URL: ${{ steps.artifact.outputs.artifact-url }}
+          ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact-digest }}
+        run: |
+          {
+            echo '## Prove2Me extraction outcomes'
+            echo "Wrapper commit: $GITHUB_SHA"
+            echo "Frozen compatibility harness: $BASE_HARNESS_SHA"
+            echo 'Theorem base: 1e73a12ff1076dd11affadbf619ddbbef587133e'
+            for phase in INPUTS CANDIDATE TOOLCHAIN DEPENDENCIES CACHE BUILD AXIOMS UPSTREAM EXTRACTION ARTIFACT; do
+              echo "- $phase: ${!phase}"
+            done
+            echo "Artifact ID: $ARTIFACT_ID"
+            echo "Artifact URL: $ARTIFACT_URL"
+            echo "Artifact ZIP SHA256: $ARTIFACT_DIGEST"
+            echo ''
+            echo 'Extraction is not transformed-node verification or platform acceptance. No Prove2Me API or upload is performed.'
+            echo 'Only successful, schema-checked source-derived data is retained, capped at 64 MiB uncompressed for one day. Upstream tools, dependencies, compiled objects and raw diagnostics are excluded. Ordinary public run logs follow separate repository retention.'
+          } >> "$GITHUB_STEP_SUMMARY"
+          df -h "$RUNNER_TEMP"

@@ -1,0 +1,118 @@
+-- Independently authored parser/reference companion. Never modifies the official oracle.
+import Lean
+open Lean
+
+private def point (mapping : FileMap) (raw : String.Pos.Raw) : Json :=
+  let human := mapping.toPosition raw
+  Json.mkObj [("line", toJson human.line), ("col", toJson human.column),
+    ("offset", toJson raw.byteIdx)]
+
+private def span (mapping : FileMap) (tree : Syntax) : Json :=
+  match tree.getPos?, tree.getTailPos? with
+  | some first, some last => Json.mkObj [
+      ("start", point mapping first), ("end", point mapping last)]
+  | _, _ => Json.null
+
+private def originallyWritten (tree : Syntax) : Bool :=
+  match tree.getHeadInfo with
+  | .original .. => true
+  | _ => false
+
+private partial def emitSyntax
+    (mapping : FileMap) (region : String) (parent : Option Nat)
+    (tree : Syntax) (nextId : Nat) : IO Nat := do
+  let payload := match tree with
+    | .atom _ token => Json.str token
+    | .ident _ _ identifier _ => Json.str identifier.toString
+    | _ => Json.null
+  let parentJson := match parent with
+    | some number => toJson number
+    | none => Json.null
+  let row := Json.mkObj [
+    ("kind", Json.str "syntaxNode"), ("region", Json.str region),
+    ("id", toJson nextId), ("parent", parentJson),
+    ("syntaxKind", Json.str tree.getKind.toString),
+    ("original", toJson (originallyWritten tree)),
+    ("range", span mapping tree), ("payload", payload)]
+  IO.println row.compress
+  if tree.getKind == ``Lean.Parser.Command.declId then
+    IO.println (Json.mkObj [
+      ("kind", Json.str "binding"), ("region", Json.str region),
+      ("syntaxNodeId", toJson nextId),
+      ("nameText", Json.str tree[0].getId.toString),
+      ("range", span mapping tree[0])]).compress
+  let mut cursor := nextId + 1
+  for descendant in tree.getArgs do
+    cursor ← emitSyntax mapping region (some nextId) descendant cursor
+  return cursor
+
+private def emitReferences
+    (mapping : FileMap) (world : Environment) (thisModule : Name)
+    (forest : PersistentArray Elab.InfoTree) : IO Unit := do
+  let mut queue := forest.foldl (fun items tree => tree :: items) []
+  let mut emitted : Std.HashSet String := {}
+  while !queue.isEmpty do
+    match queue with
+    | [] => pure ()
+    | tree :: rest =>
+      queue := rest
+      match tree with
+      | .context _ body => queue := body :: queue
+      | .hole _ => pure ()
+      | .node record children =>
+        queue := children.foldl (fun items child => child :: items) queue
+        match record with
+        | .ofTermInfo term =>
+          match term.expr with
+          | .const symbol _ =>
+            if originallyWritten term.stx then
+              match term.stx.getPos?, term.stx.getTailPos? with
+              | some first, some last =>
+                let identity := symbol.toString ++ ":" ++ toString first.byteIdx ++ ":" ++ toString last.byteIdx
+                unless emitted.contains identity do
+                  emitted := emitted.insert identity
+                  let home := match world.getModuleIdxFor? symbol with
+                    | some index => world.header.moduleNames[index.toNat]?.getD thisModule
+                    | none => thisModule
+                  IO.println (Json.mkObj [
+                    ("kind", Json.str "referenceIdentity"),
+                    ("const", Json.str symbol.toString),
+                    ("userName", Json.str ((privateToUserName? symbol).getD symbol).toString),
+                    ("originModule", Json.str home.toString),
+                    ("start", point mapping first), ("end", point mapping last)]).compress
+              | _, _ => pure ()
+          | _ => pure ()
+        | _ => pure ()
+
+unsafe def main (arguments : List String) : IO UInt32 := do
+  if arguments.length != 2 then
+    IO.eprintln "source_facts: provide a source path and its exact manifest module"
+    return 2
+  let file := arguments[0]!
+  let moduleName := arguments[1]!.toName
+  let source ← IO.FS.readFile file
+  Lean.initSearchPath (← Lean.findSysroot)
+  Lean.enableInitializersExecution
+  let input := Parser.mkInputContext source file
+  let settings := ({} : Options).setBool `autoImplicit false
+  let (imports, cursor, diagnostics) ← Parser.parseHeader input
+  let (world, diagnostics) ← Elab.processHeader imports settings diagnostics input
+  let commands := Elab.Command.mkState world diagnostics settings
+  let commands := { commands with infoState := { enabled := true } }
+  let completed ← IO.processCommands input cursor commands
+  if completed.commandState.messages.hasErrors then
+    for problem in completed.commandState.messages.toList do
+      IO.eprintln (← problem.toString)
+    IO.eprintln "strict-option source re-elaboration failed; no companion facts are valid"
+    return 1
+  IO.println (Json.mkObj [
+    ("kind", Json.str "companionOptions"),
+    ("module", Json.str moduleName.toString),
+    ("autoImplicit", Json.bool false)]).compress
+  let mut next ← emitSyntax input.fileMap "header" none imports 0
+  let mut commandIndex := 0
+  for command in completed.commands do
+    next ← emitSyntax input.fileMap ("command:" ++ toString commandIndex) none command next
+    commandIndex := commandIndex + 1
+  emitReferences input.fileMap completed.commandState.env moduleName completed.commandState.infoState.trees
+  return 0

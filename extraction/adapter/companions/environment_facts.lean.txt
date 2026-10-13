@@ -1,0 +1,28 @@
+-- Independently authored companion metadata probe. Not an upstream extractor patch.
+-- PROJECT_IMPORTS
+import Lean
+set_option pp.universes true
+set_option pp.fullNames true
+set_option pp.explicit true
+set_option pp.proofs true
+open Lean
+
+run_meta do
+  let world ← getEnv
+  for (symbol, description) in world.constants.toList do
+    let some index := world.getModuleIdxFor? symbol | continue
+    let some owner := world.header.moduleNames[index.toNat]? | continue
+    unless (`Erdos488).isPrefixOf owner do continue
+    let constructors : List String := match description with
+      | .inductInfo declaration => declaration.ctors.map (fun item => item.toString)
+      | _ => []
+    let printed ← Lean.Meta.ppExpr description.type
+    let row := Json.mkObj [
+      ("kind", Json.str "environmentDeclaration"),
+      ("name", Json.str symbol.toString),
+      ("module", Json.str owner.toString),
+      ("userName", Json.str ((privateToUserName? symbol).getD symbol).toString),
+      ("isPrivate", toJson ((privateToUserName? symbol).isSome)),
+      ("constructorNames", toJson constructors),
+      ("typePretty", Json.str printed.pretty)]
+    IO.println row.compress

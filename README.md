@@ -7,7 +7,7 @@ node package.
 
 The paper and original formalization remain in the separate
 [frozen v1.0.0 release](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/releases/tag/v1.0.0).
-Every run reads precisely 54 Lean source files from
+The compatibility harness reads precisely 54 Lean source files from
 [commit 1e73a12ff1076dd11affadbf619ddbbef587133e](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/1e73a12ff1076dd11affadbf619ddbbef587133e/lean-fixed670).
 The frozen release is archived as [DOI 10.5281/zenodo.23329194](https://doi.org/10.5281/zenodo.23329194).
 This repository neither changes that release nor copies the paper into this one.
@@ -31,8 +31,13 @@ also passed Prove2Me's 54-module build and final axiom audit. The checked harnes
 commit was `7f7c0d588f7510c59d44757ee8d4e41b545009cc`.
 Every published proof/configuration byte matches that Palomar job's recorded hashes.
 The additional metadata and documentation have been validated separately.
-Palomar's own independent-kernel verification, editorial review, submission
-and registration have not occurred.
+The immutable submission snapshot `5510ffd94156d48dbe393ac619586b935212da79`
+subsequently passed the [complete official preflight](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38340299337)
+and [Palomar production verification](https://github.com/PalomarRegistry/PalomarSubmission/actions/runs/38342636995),
+checked at 2026-10-13 03:44:33 UTC. con-ron, NanoDa and the default Lean kernel
+accepted the solution. These are mechanical results; no editorial or registration
+outcome is inferred from them. The selected source remains that exact immutable
+commit even as this verification repository gains separate tooling.
 
 Submission selection is `project_path=palomar`, with repository-relative
 Comparator path `palomar/comparator.json`, metadata
@@ -60,10 +65,10 @@ Challenge template contains one deliberate proof hole defining the statement
 Comparator must match. Challenge alone is not a proof; Solution imports the
 substantive development and never imports Challenge.
 
-See the individual workflow step outcomes and logs for actual results. A pass
-establishes only the checks that ran. It does not establish full Palomar
-verification with independent kernels, either platform's acceptance,
-independent mathematical review, priority, or journal acceptance.
+See the individual workflow step outcomes and logs for actual results. Each pass
+establishes only the checks that ran. The separate complete Palomar runs establish
+their recorded independent-kernel checks. None of these mechanical results implies
+editorial acceptance, independent mathematical review, priority or journal acceptance.
 
 ## Official Palomar full preflight
 
@@ -77,9 +82,12 @@ exact public source commit intended for submission. It does not run on pushes.
 
 That official workflow includes protected canonical-Challenge compilation,
 source-provenance checks, sandboxed proof export and independent kernel replay.
-Its mechanical report must say `status: pass` before intake. This gate has not
-yet run for the selected submission commit; a later outcome must be established
-from its exact report, not inferred from the compatibility jobs.
+Its mechanical report must say `status: pass` before intake. This gate passed for
+`5510ffd94156d48dbe393ac619586b935212da79` in the linked complete preflight,
+with `stage: complete` and all three kernels accepting. The report has no
+mechanical errors or warnings; ordinary Lean style/deprecation warnings remain
+in compiler output. Metadata inside the frozen package records its earlier
+preparation-time status, rather than a later registry outcome.
 
 Unlike the compatibility harness, the upstream workflow writes a Bundler cache
 and uploads its bounded mechanical report with 90-day retention. Its standard
@@ -92,6 +100,23 @@ The official profile's resource checks and sandbox must remain enabled. No secre
 are read-only. This preflight does not submit, perform editorial review, or
 register a result.
 
+## Prove2Me declaration extraction
+
+[The separate extraction tools](extraction/README.md) prepare actual dependency,
+type and source-position facts from the same Lean 4.33.1 compatibility copy.
+The new extraction workflow is manual-only and binds both its own commit and the
+frozen `5510ffd94156d48dbe393ac619586b935212da79` compatibility harness.
+It repeats the build and axiom gates in its disposable runtime before extraction.
+Successful extraction is distinct from transformed-node verification or a platform
+submission. Inspect its exact phase results and bounded artifact before using any
+generated facts; Python tests alone are not extraction evidence.
+
+This additional workflow proposes one validated, source-derived artifact capped
+at 64 MiB uncompressed with one-day retention, after verifying included storage
+headroom and paid-overage blocking. Its public code and ordinary logs have
+separate retention. The existing two compatibility jobs retain their original
+no-artifact behavior and also rerun when the root integrity manifest changes.
+
 ## Reproducibility and runtime boundaries
 
 SOURCE_MANIFEST.json contains every original and candidate source SHA256.
@@ -100,8 +125,9 @@ FIXTURE_SHA256.json covers the minimal source/configuration templates; Lean
 templates end in `.lean.txt`. Generated test candidates contain only the 54
 proof files and the platform's allowlisted Lean/configuration/license files.
 The separately published `palomar/` tree also contains its reviewed submission
-metadata and source inventory. Importers, manuscript files, private reports,
-and prebuilt proof objects are omitted.
+metadata and source inventory. Manuscript files, private reports and prebuilt proof objects are omitted.
+The independent extraction adapter is included separately; the official Prove2Me
+scripts are fetched only for ephemeral documented use and are not vendored or relicensed.
 
 Each matrix job gets a separate standard ubuntu-22.04 full virtual machine in
 a public repository. There are no third-party Actions, repository secrets,
