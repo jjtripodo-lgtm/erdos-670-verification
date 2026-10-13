@@ -15,6 +15,17 @@ class NodesTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             p=Path(temp)/'candidate';v.materialize(p);(p/'lean-toolchain').write_text('wrong')
             with self.assertRaises(ValueError):v.check(p)
+    def test_global_solutions_preserve_original_namespace_context(self):
+        with tempfile.TemporaryDirectory() as temp:
+            p=Path(temp)/'candidate';v.materialize(p);r=v.check(p)
+            for node in r['records']:
+                if node['kind']!='theorem_node':continue
+                namespace=node['theorem_name'].rsplit('.',1)[0]
+                solution=(p/(node['solution_module'].replace('.','/')+'.lean')).read_text()
+                marker='\nnamespace '+namespace+'\n\ntheorem _root_.solution'
+                self.assertEqual(solution.count(marker),1)
+                self.assertTrue(solution.endswith('\nend '+namespace+'\n'))
+                self.assertNotIn('\ntheorem solution',solution)
     def test_extra_candidate_file_fails(self):
         with tempfile.TemporaryDirectory() as temp:
             p=Path(temp)/'candidate';v.materialize(p);(p/'Extra.lean').write_text('')

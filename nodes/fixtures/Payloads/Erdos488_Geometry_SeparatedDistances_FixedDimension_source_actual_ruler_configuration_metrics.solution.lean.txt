@@ -3137,7 +3137,9 @@ open Matrix
 
 open Erdos488.Geometry.SeparatedDistances.FixedDimension
 
-theorem solution {n k : ℕ}
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem _root_.solution {n k : ℕ}
     (hm : 34000 ≤ n+2) (hk : 2 ≤ k) (prime : ℕ) :
     ∃ P : Fin (n+2) × Fin k →
         EuclideanSpace ℝ (ClusterCoordinate (Fin (n+1)) (n+2)),
@@ -3195,3 +3197,5 @@ theorem solution {n k : ℕ}
       i.val j.val
       (3*(primeRuler prime k A.val i.val : ℝ))
       (3*(primeRuler prime k J.val j.val : ℝ))
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

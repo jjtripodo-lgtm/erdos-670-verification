@@ -8,9 +8,14 @@ repository.
 ## Current Prove2Me status: candidate awaiting hosted validation
 
 The prepared candidate contains 10 theorem/solution pairs and 28 definition
-bundles. Its static tests passed. The transformed Lean 4.33.1 build and all
-20 exact type comparisons have **not run**. It is not yet platform-ready and
-has not been submitted to Prove2Me.
+bundles. The [first transformed-node run](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38409539381)
+compiled all 28 definition bundles, 10 theorem stubs, and four solutions, then
+stopped on namespace lookup in a generated solution wrapper. The targeted repair
+preserves each solution's original namespace while exporting a global `solution`;
+the original theorem statements and proof bodies are unchanged.
+The repaired candidate awaits a fresh Lean 4.33.1 run. All 20 exact type
+comparisons and the definition-axiom checks remain **not run**. It is not yet
+platform-ready and has not been submitted to Prove2Me.
 
 The next step is the manual
 [Pinned Prove2Me transformed-node preflight](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/workflows/prove2me-nodes.yml):

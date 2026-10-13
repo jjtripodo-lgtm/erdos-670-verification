@@ -402,7 +402,9 @@ open Matrix
 
 open Erdos488.Geometry.SeparatedDistances.FixedDimension
 
-theorem solution {n : ℕ} (k : ℕ)
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem _root_.solution {n : ℕ} (k : ℕ)
     (hm : 34000 ≤ n+1) (hk : 2 ≤ k)
     (F G : Fin n → EuclideanSpace ℝ (Fin n))
     (hF : ∀ t : Fin n → ℝ,
@@ -465,3 +467,5 @@ theorem solution {n : ℕ} (k : ℕ)
     _ = (3*s^2*7056*c^2*S)*(K+(n : ℕ)) := by ring
     _ ≤ (3*s^2*7056*c^2*S)*W := hWscaled
     _ = sourceReserve1Sq (n+1) k * S := by rw [hformula]; ring
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

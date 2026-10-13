@@ -506,7 +506,9 @@ no diameter or separation property of the points. -/
 
 open Erdos488.Geometry.SeparatedDistances.FixedDimension
 
-theorem solution {m k : ℕ}
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem _root_.solution {m k : ℕ}
     (hm : 34000 ≤ m+1) (hk : 2 ≤ k) (prime : ℕ)
     (P : Fin (m+1) × Fin k → EuclideanSpace ℝ
       (ClusterCoordinate (Fin m) (m+1)))
@@ -622,3 +624,5 @@ theorem solution {m k : ℕ}
       simpa only [dist_comm, K, S, A, E, M] using h
   · have h := hcrosscap C B hyx j i
     simpa only [dist_comm, K, S, A, E, M] using h
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

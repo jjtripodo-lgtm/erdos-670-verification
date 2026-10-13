@@ -619,7 +619,9 @@ open Erdos488.Geometry.SeparatedDistances
 open scoped BigOperators
 open Matrix
 
-theorem solution {m : ℕ} (hm : 2 ≤ m) (K : ℝ) :
+namespace Erdos488.Geometry.SeparatedDistances
+
+theorem _root_.solution {m : ℕ} (hm : 2 ≤ m) (K : ℝ) :
     colexTridiagonal K = colexPathEnergyMatrix K + colexPotentialMatrix K +
       colexEndpointMatrix (lt_of_lt_of_le Nat.zero_lt_two hm) K := by
   ext a b
@@ -685,3 +687,5 @@ theorem solution {m : ℕ} (hm : 2 ≤ m) (K : ℝ) :
         ring
       · rw [colexPathEnergyMatrix_distant_zero K a b hab (by tauto)]
         simp [colexTridiagonal, hab, hadj, hrev]
+
+end Erdos488.Geometry.SeparatedDistances

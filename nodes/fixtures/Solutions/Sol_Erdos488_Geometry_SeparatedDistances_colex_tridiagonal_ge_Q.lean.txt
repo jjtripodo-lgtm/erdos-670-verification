@@ -340,7 +340,9 @@ open Erdos488.Geometry.SeparatedDistances
 open scoped BigOperators
 open Matrix
 
-theorem solution {m : ℕ} (hm : 2 ≤ m)
+namespace Erdos488.Geometry.SeparatedDistances
+
+theorem _root_.solution {m : ℕ} (hm : 2 ≤ m)
     {K : ℝ} (hK : 10 ≤ K) (x : Fin m → ℝ) :
     colexQ K x ≤ star x ⬝ᵥ (colexTridiagonal K *ᵥ x) := by
   let z0 : Fin m := ⟨0, by omega⟩
@@ -402,3 +404,5 @@ theorem solution {m : ℕ} (hm : 2 ≤ m)
   dsimp [e0, z0, z1] at hfirst htailPath hpotTail hend ⊢
   rw [hw1, hw2]
   nlinarith
+
+end Erdos488.Geometry.SeparatedDistances
