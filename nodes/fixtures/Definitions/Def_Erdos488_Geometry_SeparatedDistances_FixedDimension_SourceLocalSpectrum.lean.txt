@@ -1,0 +1,41 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+noncomputable def sourceRadius (m k : ℕ) : ℝ := Real.sqrt 17500*(m : ℝ)*(k : ℝ)^2
+noncomputable def sourceTheta (k : ℕ) : ℝ := Real.sqrt (1/32)/(k : ℝ)
+noncomputable def sourceLocalDistance (p m k : ℕ) (b₁ b₂ : ℝ) (A i δ : ℕ) : ℝ :=
+  localDistanceModel (sourceRadius m k) (sourceTheta k) b₁ b₂ δ (rulerArc p k A i δ)
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

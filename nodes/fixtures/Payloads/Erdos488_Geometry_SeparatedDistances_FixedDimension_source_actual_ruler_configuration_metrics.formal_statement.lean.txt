@@ -1,0 +1,16 @@
+theorem Erdos488.Geometry.SeparatedDistances.FixedDimension.source_actual_ruler_configuration_metrics {n k : ℕ}
+    (hm : 34000 ≤ n+2) (hk : 2 ≤ k) (prime : ℕ) :
+    ∃ P : Fin (n+2) × Fin k →
+        EuclideanSpace ℝ (ClusterCoordinate (Fin (n+1)) (n+2)),
+      (∀ A : Fin (n+2), ∀ i j : Fin k, i.val < j.val →
+        dist (P (A,j)) (P (A,i)) =
+          sourceLocalDistance prime (n+2) k
+            (sourceReserve1 (n+2) k) (sourceReserve0 (n+2) k)
+            A.val i.val (j.val-i.val)) ∧
+      (∀ A J : Fin (n+2), A.val < J.val →
+        ∀ i j : Fin k,
+          dist (P (A,i)) (P (J,j))^2 =
+            (sourceCrossBaseline (sourceOffset (n+2) : ℝ) k
+                (sourcePairCode A J) +
+              sourceAlpha k i.val + sourceBeta k j.val)^2 -
+              2*sourceAlpha k i.val*sourceBeta k j.val) := by sorry

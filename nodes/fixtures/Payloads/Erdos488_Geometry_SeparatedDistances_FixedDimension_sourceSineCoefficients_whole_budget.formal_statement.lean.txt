@@ -1,0 +1,12 @@
+theorem Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSineCoefficients_whole_budget {n : ℕ} (k : ℕ)
+    (hm : 34000 ≤ n+1) (hk : 2 ≤ k)
+    (F G : Fin n → EuclideanSpace ℝ (Fin n))
+    (hF : ∀ t : Fin n → ℝ,
+      ‖∑ a, t a • F a‖ ^ 2 ≤
+        576 * ((sourceOffset (n+1) : ℝ)+(n : ℕ)) * ∑ a, t a ^ 2)
+    (hG : ∀ t : Fin n → ℝ,
+      ‖∑ a, t a • G a‖ ^ 2 ≤
+        3600 * ((sourceOffset (n+1) : ℝ)+(n : ℕ)) * ∑ a, t a ^ 2)
+    (t : Fin (n+1) → ℝ) :
+    3 * ‖∑ A, t A • sourceSineCoefficient k F G A‖ ^ 2 ≤
+      sourceReserve1Sq (n+1) k * ∑ A, t A ^ 2 := by sorry

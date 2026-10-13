@@ -1,0 +1,33 @@
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Tactic
+
+/-! Exact integer-ruler layer. Unlike a residue-only statement, these theorems
+refer to the actual differences of the explicit ruler positions. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- The unscaled deterministic integer ruler. The geometric candidate uses 3 times this. -/
+def primeRuler (p k A i : ℕ) : ℤ :=
+  4 * (p : ℤ) * (i : ℤ) + ((i^2 + 2*k*A*i) % p : ℕ)
+
+/-- A positive-lag difference, kept in the integers so subtraction never truncates. -/
+def primeRulerGap (p k A i δ : ℕ) : ℤ :=
+  primeRuler p k A (i + δ) - primeRuler p k A i
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

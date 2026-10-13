@@ -1,0 +1,44 @@
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+
+
+/-- Extend a finite family by zero to natural-number indices. -/
+def finExtendZero {n : ℕ} {E : Type*} [Zero E] (v : Fin n → E) (a : ℕ) : E :=
+  if h : a < n then v ⟨a, h⟩ else 0
+
+
+
+
+
+/-- Extend finite squared-distance data by zero outside its vertex range. -/
+def sqDistanceExtendZero {n : ℕ} (D : SqDistanceData (Fin (n + 1)))
+    (a b : ℕ) : ℝ :=
+  if ha : a < n + 1 then
+    if hb : b < n + 1 then D ⟨a, ha⟩ ⟨b, hb⟩ else 0
+  else 0
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances

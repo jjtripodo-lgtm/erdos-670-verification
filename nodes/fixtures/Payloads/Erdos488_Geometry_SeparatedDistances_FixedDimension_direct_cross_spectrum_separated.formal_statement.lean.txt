@@ -1,0 +1,18 @@
+theorem Erdos488.Geometry.SeparatedDistances.FixedDimension.direct_cross_spectrum_separated
+    (D : ℕ → ℕ → ℕ → ℝ) (ν f : ℕ → ℝ) (M k : ℕ) (hk : 0 < k)
+    (s c r fstar E S νmin : ℝ) (hs : 0 ≤ s) (hc : 0 ≤ c)
+    (hν : ∀ a, a < M → νmin ≤ ν a) (hνmin : s*fstar ≤ νmin)
+    (hf : ∀ i, i < k → |f i| ≤ fstar)
+    (hstep : ∀ i, i+1 < k → r ≤ f (i+1)-f i)
+    (hbase : ∀ a, a+1 < M → S ≤ ν (a+1)-ν a)
+    (hpos : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k → 0 < D a i j)
+    (hsquare : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k →
+      (D a i j)^2=(ν a+s*c*f i+s*f j)^2-2*(s*c*f i)*(s*f j))
+    (herror : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k →
+      |D a i j-(ν a+s*c*f i+s*f j)| ≤ E)
+    (hfine₁ : 1 ≤ s*r)
+    (hfine₂ : νmin+s*(c+1)*fstar+E ≤ s*r*(νmin-s*fstar))
+    (hcarry : 1 ≤ s*(c*r-2*fstar)-2*E)
+    (hmacro : 1 ≤ S-2*(s*(c+1)*fstar)-2*E) :
+    ∀ a i j b u v, a < M → i < k → j < k → b < M → u < k → v < k →
+      (a,i,j) ≠ (b,u,v) → 1 ≤ |D a i j-D b u v| := by sorry

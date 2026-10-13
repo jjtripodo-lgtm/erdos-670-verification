@@ -1,0 +1,7 @@
+theorem Erdos488.Geometry.SeparatedDistances.FixedDimension.fixed_dimension_erdos_670 (n : ℕ) (hn : 68000 ≤ n) :
+    ∃ P : Fin n → EuclideanSpace ℝ (Fin 458999),
+      Function.Injective P ∧
+      (∀ a b, a ≠ b → 1 ≤ dist (P a) (P b)) ∧
+      SeparatedConfiguration P ∧
+      (∀ a b, dist (P a) (P b) < (37 / 50 : ℝ) * (n : ℝ) ^ 2) ∧
+      Metric.diam (Set.range P) < (37 / 50 : ℝ) * (n : ℝ) ^ 2 := by sorry

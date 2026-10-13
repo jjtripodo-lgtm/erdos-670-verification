@@ -1,0 +1,49 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Real.Sqrt
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds
+
+open scoped BigOperators Matrix
+open Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+noncomputable def finePotential {n : ℕ} (K : ℝ) (a : Fin n) (v : Fin (n+1)) : ℝ :=
+  if v.val < a.val+1 then K+(Nat.choose (a.val+1) 2:ℝ)+v.val+1 else 0
+noncomputable def coarsePotential {n : ℕ} (K : ℝ) (a : Fin n) (v : Fin (n+1)) : ℝ :=
+  if a.val < v.val then K+(Nat.choose v.val 2:ℝ)+a.val+1 else 0
+
+
+
+
+
+
+noncomputable def fineIncidence (n : ℕ) (K : ℝ) : Matrix (Fin n) (Fin n) ℝ :=
+  fun i a => (pathIncidence n *ᵥ finePotential K a) i
+noncomputable def coarseIncidence (n : ℕ) (K : ℝ) : Matrix (Fin n) (Fin n) ℝ :=
+  fun i a => (pathIncidence n *ᵥ coarsePotential K a) i
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

@@ -1,0 +1,309 @@
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SpectrumSeparation
+/-! The finite ordering layer only. No Euclidean realization or local-distance
+geometry is assumed proved by this file. Every scalar guard is explicit. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- Sum adjacent unit gaps over a bounded natural index interval. -/
+theorem bounded_step_sum (f : ℕ → ℝ) (N : ℕ)
+    (hstep : ∀ i, i + 1 < N → 1 ≤ f (i + 1) - f i) :
+    ∀ i j, i ≤ j → j < N → (j : ℝ) - (i : ℝ) ≤ f j - f i := by
+  intro i j
+  induction j with
+  | zero =>
+      intro hij _
+      have hi : i = 0 := by omega
+      subst i
+      simp
+  | succ j ih =>
+      intro hij hj
+      by_cases h : i ≤ j
+      · have h1 := ih h (by omega)
+        have h2 := hstep j hj
+        push_cast
+        linarith
+      · have hi : i = j + 1 := by omega
+        subst i
+        simp
+
+/-- Adjacent unit gaps imply weak monotonicity, including equal endpoints. -/
+theorem bounded_step_mono (f : ℕ → ℝ) (N : ℕ)
+    (hstep : ∀ i, i + 1 < N → 1 ≤ f (i + 1) - f i)
+    {i j : ℕ} (hij : i ≤ j) (hj : j < N) : f i ≤ f j := by
+  have h := bounded_step_sum f N hstep i j hij hj
+  have hc : (i : ℝ) ≤ j := by exact_mod_cast hij
+  linarith
+
+/-- A nonempty chain of adjacent unit gaps has gap at least one. -/
+theorem bounded_step_gap (f : ℕ → ℝ) (N : ℕ)
+    (hstep : ∀ i, i + 1 < N → 1 ≤ f (i + 1) - f i)
+    {i j : ℕ} (hij : i < j) (hj : j < N) : 1 ≤ f j - f i := by
+  have h := bounded_step_sum f N hstep i j (by omega) hj
+  have hc : (i : ℝ) + 1 ≤ j := by exact_mod_cast hij
+  linarith
+
+/-- Fine-digit gaps and last-to-first carries order the entire rectangular block.
+The carry hypothesis is on the last fine digit, not on equal fine digits. -/
+theorem rectangular_lex_gap (F : ℕ → ℕ → ℝ) (M k : ℕ) (hk : 0 < k)
+    (hfine : ∀ a, a < M → ∀ b, b + 1 < k → 1 ≤ F a (b + 1) - F a b)
+    (hcarry : ∀ a, a + 1 < M → 1 ≤ F (a + 1) 0 - F a (k - 1))
+    {a b a' b' : ℕ} (ha : a < M) (hb : b < k) (ha' : a' < M) (hb' : b' < k)
+    (hlex : a < a' ∨ (a = a' ∧ b < b')) : 1 ≤ F a' b' - F a b := by
+  have hrow (c : ℕ) (hc : c < M) {i j : ℕ} (hij : i ≤ j) (hj : j < k) :
+      F c i ≤ F c j := bounded_step_mono (F c) k (hfine c hc) hij hj
+  have hfirst : ∀ c, c + 1 < M → 1 ≤ F (c + 1) 0 - F c 0 := by
+    intro c hc
+    have h1 := hrow c (by omega) (show 0 ≤ k - 1 by omega) (by omega)
+    have h2 := hcarry c hc
+    linarith
+  rcases hlex with haa | ⟨rfl, hbb⟩
+  · have h1 := hrow a ha (show b ≤ k - 1 by omega) (by omega)
+    have h2 := hcarry a (by omega)
+    have h3 := bounded_step_mono (fun c => F c 0) M hfirst
+      (show a + 1 ≤ a' by omega) ha'
+    have h4 := hrow a' ha' (show 0 ≤ b' by omega) hb'
+    linarith
+  · exact bounded_step_gap (F a) k (hfine a ha) hbb hb'
+
+/-- All distinct cells, not just adjacent cells, are separated. -/
+theorem rectangular_all_pairs_separated (F : ℕ → ℕ → ℝ) (M k : ℕ) (hk : 0 < k)
+    (hfine : ∀ a, a < M → ∀ b, b + 1 < k → 1 ≤ F a (b + 1) - F a b)
+    (hcarry : ∀ a, a + 1 < M → 1 ≤ F (a + 1) 0 - F a (k - 1))
+    {a b a' b' : ℕ} (ha : a < M) (hb : b < k) (ha' : a' < M) (hb' : b' < k)
+    (hne : (a,b) ≠ (a',b')) : 1 ≤ |F a b - F a' b'| := by
+  by_cases hlex : a < a' ∨ (a = a' ∧ b < b')
+  · have h := rectangular_lex_gap F M k hk hfine hcarry ha hb ha' hb' hlex
+    have habs := le_abs_self (F a' b' - F a b)
+    rw [abs_sub_comm] at habs
+    linarith
+  · have hrev : a' < a ∨ (a' = a ∧ b' < b) := by
+      have hn : a ≠ a' ∨ b ≠ b' := by
+        by_contra h
+        push Not at h
+        exact hne (by rcases h with ⟨rfl,rfl⟩; rfl)
+      omega
+    have h := rectangular_lex_gap F M k hk hfine hcarry ha' hb' ha hb hrev
+    exact h.trans (le_abs_self _)
+
+
+
+
+
+
+
+/-- A rectangular block has its first and last entries as genuine extrema. -/
+theorem rectangular_endpoints (F : ℕ → ℕ → ℝ) (M k : ℕ) (hM : 0 < M) (hk : 0 < k)
+    (hfine : ∀ a, a < M → ∀ b, b + 1 < k → 1 ≤ F a (b + 1) - F a b)
+    (hcarry : ∀ a, a + 1 < M → 1 ≤ F (a + 1) 0 - F a (k - 1))
+    {a b : ℕ} (ha : a < M) (hb : b < k) :
+    F 0 0 ≤ F a b ∧ F a b ≤ F (M - 1) (k - 1) := by
+  constructor
+  · by_cases hz : a = 0 ∧ b = 0
+    · rcases hz with ⟨rfl,rfl⟩; rfl
+    · have hlex : 0 < a ∨ (0 = a ∧ 0 < b) := by omega
+      have h := rectangular_lex_gap F M k hk hfine hcarry hM hk ha hb hlex
+      linarith
+  · by_cases hz : a = M - 1 ∧ b = k - 1
+    · rcases hz with ⟨rfl,rfl⟩; rfl
+    · have hlex : a < M-1 ∨ (a = M-1 ∧ b < k-1) := by omega
+      have h := rectangular_lex_gap F M k hk hfine hcarry ha hb (by omega) (by omega) hlex
+      linarith
+
+/-- Ordered macro, coarse, and fine digits: all distinct triples are separated.
+The proof exhausts equal/different macro blocks and both inner digit cases. -/
+theorem three_digit_all_pairs_separated (D : ℕ → ℕ → ℕ → ℝ) (M k : ℕ) (hk : 0 < k)
+    (hfine : ∀ a, a < M → ∀ i, i < k → ∀ j, j+1 < k →
+      1 ≤ D a i (j+1)-D a i j)
+    (hcarry : ∀ a, a < M → ∀ i, i+1 < k →
+      1 ≤ D a (i+1) 0-D a i (k-1))
+    (hmacro : ∀ a, a+1 < M → 1 ≤ D (a+1) 0 0-D a (k-1) (k-1))
+    {a i j b u v : ℕ} (ha : a < M) (hi : i < k) (hj : j < k)
+    (hb : b < M) (hu : u < k) (hv : v < k)
+    (hne : (a,i,j) ≠ (b,u,v)) : 1 ≤ |D a i j-D b u v| := by
+  have hend (c : ℕ) (hc : c < M) (x y : ℕ) (hx : x < k) (hy : y < k) :=
+    rectangular_endpoints (D c) k k hk hk (hfine c hc) (hcarry c hc) hx hy
+  have hfirst : ∀ c, c+1 < M → 1 ≤ D (c+1) 0 0-D c 0 0 := by
+    intro c hc
+    have h₀ := (hend c (by omega) 0 0 hk hk).2
+    have h₁ := hmacro c hc
+    linarith
+  have hordered : ∀ c x y d z w, c < M → x < k → y < k → d < M → z < k → w < k →
+      c < d → 1 ≤ D d z w-D c x y := by
+    intro c x y d z w hc hx hy hd hz hw hcd
+    have h₀ := (hend c hc x y hx hy).2
+    have h₁ := hmacro c (by omega)
+    have h₂ := bounded_step_mono (fun c => D c 0 0) M hfirst (show c+1 ≤ d by omega) hd
+    have h₃ := (hend d hd z w hz hw).1
+    linarith
+  rcases lt_trichotomy a b with hab | hab | hab
+  · have h := hordered a i j b u v ha hi hj hb hu hv hab
+    have ht := le_abs_self (D b u v-D a i j)
+    rw [abs_sub_comm] at ht
+    linarith
+  · subst b
+    have hne' : (i,j) ≠ (u,v) := by
+      intro h
+      apply hne
+      rcases Prod.mk.inj h with ⟨rfl,rfl⟩
+      rfl
+    exact rectangular_all_pairs_separated (D a) k k hk (hfine a ha) (hcarry a ha)
+      hi hj hu hv hne'
+  · exact (hordered b u v a i j hb hu hv ha hi hj hab).trans (le_abs_self _)
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.DirectCrossSpectrum
+/-! Derivative-free cross-spectrum ordering, adopting JRL PR 3002.
+No adjacent quotient-error Lipschitz estimate or physical local-step H is used.
+All geometric inputs are visible as scalar square identities and pointwise errors. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- Exact cancellation of the coarse digit from a fine squared increment. -/
+theorem cross_fine_polarization (ν α β₀ β₁ : ℝ) :
+    ((ν+α+β₁)^2-2*α*β₁)-((ν+α+β₀)^2-2*α*β₀) =
+      (β₁-β₀)*(2*ν+β₁+β₀) := by ring
+
+
+
+/-- The polynomial form of the fine guard propagates to every larger baseline. -/
+theorem direct_fine_guard_propagates (g ν₀ ν b A E : ℝ)
+    (hg : 1 ≤ g) (hν : ν₀ ≤ ν) (hguard : ν₀+A+E ≤ g*(ν₀-b)) :
+    ν+A+E ≤ g*(ν-b) := by
+  nlinarith [mul_nonneg (sub_nonneg.mpr hg) (sub_nonneg.mpr hν)]
+
+/-- A unit fine gap follows directly from squares and endpoint upper bounds. -/
+theorem polarized_fine_gap (ν b A E g β₀ β₁ D₀ D₁ : ℝ)
+    (hg : 0 ≤ g) (hν : b ≤ ν) (hβ₀ : -b ≤ β₀) (hβ₁ : -b ≤ β₁)
+    (hβ : g ≤ β₁-β₀) (hD₀ : 0 ≤ D₀) (hD₁ : 0 < D₁)
+    (hu₀ : D₀ ≤ ν+A+E) (hu₁ : D₁ ≤ ν+A+E)
+    (hsq : D₁^2-D₀^2=(β₁-β₀)*(2*ν+β₁+β₀))
+    (hguard : ν+A+E ≤ g*(ν-b)) : 1 ≤ D₁-D₀ := by
+  have hfactor : 2*(ν-b) ≤ 2*ν+β₁+β₀ := by linarith
+  have hprod := mul_le_mul hβ hfactor
+    (show 0 ≤ 2*(ν-b) by linarith) (show 0 ≤ β₁-β₀ by linarith)
+  have hsum : 0 < D₁+D₀ := by linarith
+  have hmul : 1*(D₁+D₀) ≤ (D₁-D₀)*(D₁+D₀) := by nlinarith
+  exact (mul_le_mul_iff_of_pos_right hsum).1 hmul
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-! Derivative-free cross-spectrum ordering, adopting JRL PR 3002.
+No adjacent quotient-error Lipschitz estimate or physical local-step H is used.
+All geometric inputs are visible as scalar square identities and pointwise errors. -/
+open Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem solution
+    (D : ℕ → ℕ → ℕ → ℝ) (ν f : ℕ → ℝ) (M k : ℕ) (hk : 0 < k)
+    (s c r fstar E S νmin : ℝ) (hs : 0 ≤ s) (hc : 0 ≤ c)
+    (hν : ∀ a, a < M → νmin ≤ ν a) (hνmin : s*fstar ≤ νmin)
+    (hf : ∀ i, i < k → |f i| ≤ fstar)
+    (hstep : ∀ i, i+1 < k → r ≤ f (i+1)-f i)
+    (hbase : ∀ a, a+1 < M → S ≤ ν (a+1)-ν a)
+    (hpos : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k → 0 < D a i j)
+    (hsquare : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k →
+      (D a i j)^2=(ν a+s*c*f i+s*f j)^2-2*(s*c*f i)*(s*f j))
+    (herror : ∀ a, a < M → ∀ i, i < k → ∀ j, j < k →
+      |D a i j-(ν a+s*c*f i+s*f j)| ≤ E)
+    (hfine₁ : 1 ≤ s*r)
+    (hfine₂ : νmin+s*(c+1)*fstar+E ≤ s*r*(νmin-s*fstar))
+    (hcarry : 1 ≤ s*(c*r-2*fstar)-2*E)
+    (hmacro : 1 ≤ S-2*(s*(c+1)*fstar)-2*E) :
+    ∀ a i j b u v, a < M → i < k → j < k → b < M → u < k → v < k →
+      (a,i,j) ≠ (b,u,v) → 1 ≤ |D a i j-D b u v| := by
+  have hpert (i j : ℕ) (hi : i < k) (hj : j < k) :
+      |s*c*f i+s*f j| ≤ s*(c+1)*fstar := by
+    obtain ⟨hli,hui⟩ := abs_le.mp (hf i hi)
+    obtain ⟨hlj,huj⟩ := abs_le.mp (hf j hj)
+    have h₀ := mul_le_mul_of_nonneg_left hli (mul_nonneg hs hc)
+    have h₁ := mul_le_mul_of_nonneg_left hui (mul_nonneg hs hc)
+    have h₂ := mul_le_mul_of_nonneg_left hlj hs
+    have h₃ := mul_le_mul_of_nonneg_left huj hs
+    apply abs_le.mpr
+    constructor <;> nlinarith
+  have hupper (a i j : ℕ) (ha : a < M) (hi : i < k) (hj : j < k) :
+      D a i j ≤ ν a+s*(c+1)*fstar+E := by
+    have h₀ := (abs_le.mp (hpert i j hi hj)).2
+    have h₁ := (abs_le.mp (herror a ha i hi j hj)).2
+    linarith
+  have hFine : ∀ a, a < M → ∀ i, i < k → ∀ j, j+1 < k →
+      1 ≤ D a i (j+1)-D a i j := by
+    intro a ha i hi j hj
+    have hj₀ : j < k := by omega
+    have hβ := mul_le_mul_of_nonneg_left (hstep j hj) hs
+    have hβ₀ := mul_le_mul_of_nonneg_left (abs_le.mp (hf j hj₀)).1 hs
+    have hβ₁ := mul_le_mul_of_nonneg_left (abs_le.mp (hf (j+1) hj)).1 hs
+    apply polarized_fine_gap (ν a) (s*fstar) (s*(c+1)*fstar) E (s*r)
+      (s*f j) (s*f (j+1)) (D a i j) (D a i (j+1))
+      (by linarith) (hνmin.trans (hν a ha))
+      (by nlinarith) (by nlinarith) (by nlinarith)
+      (hpos a ha i hi j hj₀).le (hpos a ha i hi (j+1) hj)
+      (hupper a i j ha hi hj₀) (hupper a i (j+1) ha hi hj)
+    · rw [hsquare a ha i hi (j+1) hj, hsquare a ha i hi j hj₀]
+      exact cross_fine_polarization _ _ _ _
+    · exact direct_fine_guard_propagates _ _ _ _ _ _ hfine₁ (hν a ha) hfine₂
+  have hCarry : ∀ a, a < M → ∀ i, i+1 < k →
+      1 ≤ D a (i+1) 0-D a i (k-1) := by
+    intro a ha i hi
+    have hi₀ : i < k := by omega
+    have hlast : k-1 < k := by omega
+    have h₀ := mul_le_mul_of_nonneg_left (hstep i hi) (mul_nonneg hs hc)
+    have h₁ := mul_le_mul_of_nonneg_left (abs_le.mp (hf 0 hk)).1 hs
+    have h₂ := mul_le_mul_of_nonneg_left (abs_le.mp (hf (k-1) hlast)).2 hs
+    have he₀ := (abs_le.mp (herror a ha i hi₀ (k-1) hlast)).2
+    have he₁ := (abs_le.mp (herror a ha (i+1) hi 0 hk)).1
+    nlinarith
+  have hMacro : ∀ a, a+1 < M → 1 ≤ D (a+1) 0 0-D a (k-1) (k-1) := by
+    intro a ha
+    have ha₀ : a < M := by omega
+    have hlast : k-1 < k := by omega
+    have h₀ := (abs_le.mp (hpert 0 0 hk hk)).1
+    have h₁ := (abs_le.mp (hpert (k-1) (k-1) hlast hlast)).2
+    have he₀ := (abs_le.mp (herror a ha₀ (k-1) hlast (k-1) hlast)).2
+    have he₁ := (abs_le.mp (herror (a+1) ha 0 hk 0 hk)).1
+    have hb := hbase a ha
+    nlinarith
+  intro a i j b u v ha hi hj hb hu hv hne
+  exact three_digit_all_pairs_separated D M k hk hFine hCarry hMacro ha hi hj hb hu hv hne

@@ -1,0 +1,33 @@
+theorem Erdos488.Geometry.SeparatedDistances.FixedDimension.source_clusterPoint_cross_metric_square {m k : ℕ} (hk : 0 < k)
+    (K : ℝ) (p : Fin (m+1) → EuclideanSpace ℝ (Fin m))
+    (B : Fin (m+1) → EuclideanSpace ℝ (Fin m))
+    (F G : Fin m → EuclideanSpace ℝ (Fin m))
+    (V : Matrix (Fin (m+1) × Fin 5) (Fin (m+1) × Fin 5) ℝ)
+    (hpd : ∀ i j,
+      ‖p j-p i‖ ^ 2 =
+        offDiagonalShift (colexSqData (m:=m) K)
+          (sourceFlatteningRadius (m+1) k) i j)
+    (hB : ∀ A J, inner ℝ (p A-p J) (B A) =
+      sourceQuadraticPotential k A J)
+    (hF : ∀ i a, inner ℝ (p i.succ-p i.castSucc) (F a) =
+      fineIncidence m K i a)
+    (hG : ∀ i a, inner ℝ (p i.succ-p i.castSucc) (G a) =
+      coarseIncidence m K i a)
+    (b₀ b₁ : ℝ)
+    (hfactor : (sourceActiveMatrix k B F G)ᵀ *
+        (sourceActiveMatrix k B F G) + Vᵀ * V =
+        Matrix.diagonal (fun q : Fin (m+1) × Fin 5 =>
+          trigWeight b₀ b₁ b₀ q.2))
+    (hreserve : 2*b₀^2+b₁^2 ≤ (sourceRadius (m+1) k)^2)
+    (A J : Fin (m+1)) (hAJ : A.val < J.val)
+    (i j : ℕ) (yi yj : ℝ) :
+    let R := sourceRadius (m+1) k
+    let axis := Real.sqrt (R^2-(2*b₀^2+b₁^2))
+    let z (t : ℕ) := sourceTheta k * ((t : ℝ)-((k : ℝ)-1)/2)
+    dist (clusterPoint (fun A q => p A q) (sourceActiveMatrix k B F G)
+        V (sourceMacroStep (k : ℝ)) R axis A (z i) yi)
+      (clusterPoint (fun A q => p A q) (sourceActiveMatrix k B F G)
+        V (sourceMacroStep (k : ℝ)) R axis J (z j) yj)^2 =
+      (sourceCrossBaseline K k (sourcePairCode A J) +
+        sourceAlpha k i + sourceBeta k j)^2 -
+        2*sourceAlpha k i*sourceBeta k j := by sorry

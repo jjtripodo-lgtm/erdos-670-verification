@@ -1,0 +1,30 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+
+/-! Literal two-harmonic local distance model: feature monotonicity, cone bounds,
+and uniform lower separation transfer. This is independent of the global Gram construction. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+noncomputable def harmonicEnergy (θ b₁ b₂ δ : ℝ) : ℝ :=
+  (2*b₁*Real.sin (θ*δ/2))^2+(2*b₂*Real.sin (θ*δ))^2
+
+noncomputable def localDistanceModel (R θ b₁ b₂ δ d : ℝ) : ℝ :=
+  Real.sqrt ((circleChord R d)^2+harmonicEnergy θ b₁ b₂ δ)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

@@ -1,0 +1,467 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Real.Sqrt
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SineDigits
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- The source square-root scaling meets the required uniform envelope exactly. -/
+theorem source_theta_scale (k : ℕ) (hk : 0 < k) :
+    (Real.sqrt (1/32)/(k : ℝ))^2*(k : ℝ)^2=1/32 := by
+  have hk' : (k : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hk)
+  rw [div_pow,Real.sq_sqrt (by norm_num)]
+  field_simp
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossGuards
+/-! Universal source-parameter cross guards, not finite sampled certificates.
+The hypotheses are k≥2 and K≥72247875/4, with the literal source formulas. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+theorem sourceOffset_lower (m : ℕ) (hm : 34000 ≤ m) :
+    (72247875/4 : ℝ) ≤ sourceOffset m := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have h := Nat.le_ceil ((m : ℝ)*((m : ℝ)-1)/64)
+  change (72247875/4 : ℝ) ≤ (⌈(m : ℝ)*((m : ℝ)-1)/64⌉₊ : ℝ)
+  nlinarith [sq_nonneg ((m : ℝ)-34000)]
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceLocalSpectrum
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+
+
+theorem sourceTheta_pos (k : ℕ) (hk : 0 < k) : 0 < sourceTheta k := by
+  have hk' : (0 : ℝ) < k := by exact_mod_cast hk
+  unfold sourceTheta
+  positivity
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceReserveBudgets
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- The normalized first reserve is literally the source's original operator expression. -/
+theorem sourceReserve1Sq_eq_operator_formula (m k : ℕ) (hm : 34000 ≤ m) (hk : 2 ≤ k) :
+    sourceReserve1Sq m k =
+      3*(84*(9/8 : ℝ)*((9/8)*(k : ℝ))*
+        Real.sqrt ((sourceOffset m : ℝ)+(m : ℝ))/sourceTheta k)^2 := by
+  have hK := sourceOffset_lower m hm
+  have hm' : (0 : ℝ) ≤ m := by positivity
+  have hsqrt := Real.sq_sqrt (show 0 ≤ (sourceOffset m : ℝ)+(m : ℝ) by positivity)
+  have hθ : sourceTheta k ≠ 0 := (sourceTheta_pos k (by omega)).ne'
+  have hs : (sourceTheta k)^2*(k : ℝ)^2=1/32 := source_theta_scale k (by omega)
+  rw [div_pow,← mul_div_assoc]
+  apply (eq_div_iff (pow_ne_zero 2 hθ)).2
+  unfold sourceReserve1Sq
+  simp only [mul_pow,hsqrt]
+  have hmul := congrArg (fun x : ℝ => x*(k : ℝ)^2*((sourceOffset m : ℝ)+(m : ℝ))) hs
+  nlinarith only [hmul]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceOperatorBridge
+/-! The source's actual three-group coefficient operator. This module starts
+with the rational anchored potential and a whole-family matrix estimate. -/
+
+open scoped BigOperators Matrix
+open Matrix
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+theorem sourceFineShift_sum {n : ℕ} {E : Type*}
+    [AddCommMonoid E] [Module ℝ E] (F : Fin n → E)
+    (t : Fin (n+1) → ℝ) :
+    (∑ A : Fin (n+1), t A • sourceFineShift F A) =
+      ∑ a : Fin n, t a.succ • F a := by
+  rw [Fin.sum_univ_succ]
+  simp [sourceFineShift]
+
+theorem sourceCoarseShift_sum {n : ℕ} {E : Type*}
+    [AddCommMonoid E] [Module ℝ E] (G : Fin n → E)
+    (t : Fin (n+1) → ℝ) :
+    (∑ A : Fin (n+1), t A • sourceCoarseShift G A) =
+      ∑ a : Fin n, t a.castSucc • G a := by
+  rw [Fin.sum_univ_castSucc]
+  simp [sourceCoarseShift]
+
+theorem sourceFineShift_sq_sum_le {n : ℕ} (t : Fin (n+1) → ℝ) :
+    (∑ a : Fin n, t a.succ ^ 2) ≤ ∑ A : Fin (n+1), t A ^ 2 := by
+  rw [Fin.sum_univ_succ]
+  exact le_add_of_nonneg_left (sq_nonneg (t 0))
+
+theorem sourceCoarseShift_sq_sum_le {n : ℕ} (t : Fin (n+1) → ℝ) :
+    (∑ a : Fin n, t a.castSucc ^ 2) ≤ ∑ A : Fin (n+1), t A ^ 2 := by
+  rw [Fin.sum_univ_castSucc]
+  exact le_add_of_nonneg_right (sq_nonneg (t (Fin.last n)))
+
+theorem sourceFineShift_whole_bound {n : ℕ} {K : ℝ} (hK : 0 ≤ K)
+    (F : Fin n → EuclideanSpace ℝ (Fin n))
+    (hF : ∀ t : Fin n → ℝ,
+      ‖∑ a, t a • F a‖ ^ 2 ≤
+        576 * (K+(n : ℕ)) * ∑ a, t a ^ 2)
+    (t : Fin (n+1) → ℝ) :
+    ‖∑ A, t A • sourceFineShift F A‖ ^ 2 ≤
+      576 * (K+(n : ℕ)) * ∑ A, t A ^ 2 := by
+  rw [sourceFineShift_sum]
+  calc
+    _ ≤ 576 * (K+(n : ℕ)) * ∑ a : Fin n, t a.succ ^ 2 :=
+      hF (fun a => t a.succ)
+    _ ≤ 576 * (K+(n : ℕ)) * ∑ A : Fin (n+1), t A ^ 2 :=
+      mul_le_mul_of_nonneg_left (sourceFineShift_sq_sum_le t) (by positivity)
+
+theorem sourceCoarseShift_whole_bound {n : ℕ} {K : ℝ} (hK : 0 ≤ K)
+    (G : Fin n → EuclideanSpace ℝ (Fin n))
+    (hG : ∀ t : Fin n → ℝ,
+      ‖∑ a, t a • G a‖ ^ 2 ≤
+        3600 * (K+(n : ℕ)) * ∑ a, t a ^ 2)
+    (t : Fin (n+1) → ℝ) :
+    ‖∑ A, t A • sourceCoarseShift G A‖ ^ 2 ≤
+      3600 * (K+(n : ℕ)) * ∑ A, t A ^ 2 := by
+  rw [sourceCoarseShift_sum]
+  calc
+    _ ≤ 3600 * (K+(n : ℕ)) * ∑ a : Fin n, t a.castSucc ^ 2 :=
+      hG (fun a => t a.castSucc)
+    _ ≤ 3600 * (K+(n : ℕ)) * ∑ A : Fin (n+1), t A ^ 2 :=
+      mul_le_mul_of_nonneg_left (sourceCoarseShift_sq_sum_le t) (by positivity)
+
+/-- The sharp whole-family triangle estimate behind the source's 84 constant.
+Applying a factor-two square estimate here would exceed the source reserve. -/
+theorem source_sharp_sine_triangle
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (X Y : E) (W S c : ℝ)
+    (hW : 0 ≤ W) (hS : 0 ≤ S) (hc : 1 ≤ c)
+    (hX : ‖X‖ ^ 2 ≤ 576 * W * S)
+    (hY : ‖Y‖ ^ 2 ≤ 3600 * W * S) :
+    ‖X+c • Y‖ ^ 2 ≤ 7056 * c ^ 2 * W * S := by
+  let T := Real.sqrt (W*S)
+  have hWS : 0 ≤ W*S := mul_nonneg hW hS
+  have hT : 0 ≤ T := Real.sqrt_nonneg _
+  have hT2 : T^2 = W*S := Real.sq_sqrt hWS
+  have hX' : ‖X‖ ≤ 24*T := by
+    have hn := norm_nonneg X
+    nlinarith [hX]
+  have hY' : ‖Y‖ ≤ 60*T := by
+    have hn := norm_nonneg Y
+    nlinarith [hY]
+  have hc0 : 0 ≤ c := by linarith
+  have htri : ‖X+c • Y‖ ≤ ‖X‖+c*‖Y‖ := by
+    simpa only [norm_smul, Real.norm_eq_abs, abs_of_nonneg hc0] using
+      (norm_add_le X (c • Y))
+  have hYmul := mul_le_mul_of_nonneg_left hY' hc0
+  have hnorm : ‖X+c • Y‖ ≤ 84*c*T := by
+    have h84 : (24+60*c)*T ≤ 84*c*T := by nlinarith
+    linarith
+  have hnonneg : 0 ≤ ‖X+c • Y‖ := norm_nonneg _
+  nlinarith [sq_nonneg (84*c*T-‖X+c • Y‖)]
+
+/-- After the two endpoint shifts, the literal fine/coarse columns obey the
+sharp 84-constant whole-family bound. -/
+theorem source_shifted_sine_whole_bound {n : ℕ} {K c : ℝ}
+    (hK : 0 ≤ K) (hc : 1 ≤ c)
+    (F G : Fin n → EuclideanSpace ℝ (Fin n))
+    (hF : ∀ t : Fin n → ℝ,
+      ‖∑ a, t a • F a‖ ^ 2 ≤
+        576 * (K+(n : ℕ)) * ∑ a, t a ^ 2)
+    (hG : ∀ t : Fin n → ℝ,
+      ‖∑ a, t a • G a‖ ^ 2 ≤
+        3600 * (K+(n : ℕ)) * ∑ a, t a ^ 2)
+    (t : Fin (n+1) → ℝ) :
+    ‖∑ A, t A • (sourceFineShift F A + c • sourceCoarseShift G A)‖ ^ 2 ≤
+      7056 * c ^ 2 * (K+(n : ℕ)) * ∑ A, t A ^ 2 := by
+  let X := ∑ A, t A • sourceFineShift F A
+  let Y := ∑ A, t A • sourceCoarseShift G A
+  have hsum :
+      (∑ A, t A • (sourceFineShift F A + c • sourceCoarseShift G A)) =
+        X+c • Y := by
+    simp [X, Y, smul_add, Finset.sum_add_distrib, Finset.smul_sum, smul_smul,
+      mul_comm]
+  rw [hsum]
+  apply source_sharp_sine_triangle X Y (K+(n : ℕ))
+    (∑ A, t A ^ 2) c (by positivity)
+    (Finset.sum_nonneg (fun A _ => sq_nonneg _)) hc
+  · exact sourceFineShift_whole_bound hK F hF t
+  · exact sourceCoarseShift_whole_bound hK G hG t
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-! The source's actual three-group coefficient operator. This module starts
+with the rational anchored potential and a whole-family matrix estimate. -/
+
+open scoped BigOperators Matrix
+open Matrix
+
+open Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem solution {n : ℕ} (k : ℕ)
+    (hm : 34000 ≤ n+1) (hk : 2 ≤ k)
+    (F G : Fin n → EuclideanSpace ℝ (Fin n))
+    (hF : ∀ t : Fin n → ℝ,
+      ‖∑ a, t a • F a‖ ^ 2 ≤
+        576 * ((sourceOffset (n+1) : ℝ)+(n : ℕ)) * ∑ a, t a ^ 2)
+    (hG : ∀ t : Fin n → ℝ,
+      ‖∑ a, t a • G a‖ ^ 2 ≤
+        3600 * ((sourceOffset (n+1) : ℝ)+(n : ℕ)) * ∑ a, t a ^ 2)
+    (t : Fin (n+1) → ℝ) :
+    3 * ‖∑ A, t A • sourceSineCoefficient k F G A‖ ^ 2 ≤
+      sourceReserve1Sq (n+1) k * ∑ A, t A ^ 2 := by
+  let K : ℝ := sourceOffset (n+1)
+  let c : ℝ := (9/8 : ℝ) * (k : ℝ)
+  let s : ℝ := (9/8 : ℝ) / sourceTheta k
+  let W : ℝ := K+(n+1 : ℕ)
+  let S : ℝ := ∑ A : Fin (n+1), t A ^ 2
+  have hc : 1 ≤ c := by
+    dsimp [c]
+    have hk' : (2 : ℝ) ≤ k := by exact_mod_cast hk
+    nlinarith only [hk']
+  have hK : 0 ≤ K := Nat.cast_nonneg _
+  have hW : 0 ≤ W := by dsimp [W]; positivity
+  have hS : 0 ≤ S := Finset.sum_nonneg (fun A _ => sq_nonneg _)
+  have hθ : 0 < sourceTheta k := sourceTheta_pos k (by omega)
+  have hs : 0 ≤ s := by dsimp [s]; positivity
+  have hsum : (∑ A, t A • sourceSineCoefficient k F G A) =
+      s • (∑ A, t A •
+        (sourceFineShift F A+c • sourceCoarseShift G A)) := by
+    rw [Finset.smul_sum]
+    apply Finset.sum_congr rfl
+    intro A _
+    change t A • (s • (sourceFineShift F A+c • sourceCoarseShift G A)) =
+      s • (t A • (sourceFineShift F A+c • sourceCoarseShift G A))
+    exact smul_comm _ _ _
+  have hsharp := source_shifted_sine_whole_bound hK hc F G hF hG t
+  have hW0 : K+(n : ℕ) ≤ W := by
+    dsimp [W]
+    push_cast
+    linarith
+  have hscaled := mul_le_mul_of_nonneg_left hsharp
+    (show 0 ≤ 3*s^2 by positivity)
+  have hWscaled := mul_le_mul_of_nonneg_left hW0
+    (show 0 ≤ 3*s^2*7056*c^2*S by positivity)
+  have hformula : sourceReserve1Sq (n+1) k * S =
+      3*s^2*(7056*c^2*W*S) := by
+    rw [sourceReserve1Sq_eq_operator_formula (n+1) k hm hk]
+    dsimp [s, c, W, K]
+    simp only [mul_pow, div_pow, Real.sq_sqrt (by positivity :
+      0 ≤ (sourceOffset (n+1) : ℝ)+(n+1 : ℕ))]
+    ring
+  rw [hsum]
+  calc
+    3 * ‖s • (∑ A, t A •
+        (sourceFineShift F A+c • sourceCoarseShift G A))‖ ^ 2 =
+      3*s^2*‖∑ A, t A •
+        (sourceFineShift F A+c • sourceCoarseShift G A)‖ ^ 2 := by
+        rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg hs]
+        ring
+    _ ≤ 3*s^2*(7056*c^2*(K+(n : ℕ))*S) := hscaled
+    _ = (3*s^2*7056*c^2*S)*(K+(n : ℕ)) := by ring
+    _ ≤ (3*s^2*7056*c^2*S)*W := hWscaled
+    _ = sourceReserve1Sq (n+1) k * S := by rw [hformula]; ring

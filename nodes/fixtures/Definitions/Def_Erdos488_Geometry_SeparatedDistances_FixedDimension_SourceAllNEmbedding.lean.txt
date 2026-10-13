@@ -1,0 +1,84 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets
+
+/-! Distance-preserving deletion and coordinate padding for the all-size step. -/
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+open Erdos488.Geometry.SeparatedDistances
+
+
+
+
+
+/-- The induced map on non-diagonal unordered edges. -/
+def sourceEdgeMap {ι κ : Type*} (f : ι → κ) (hf : Function.Injective f) :
+    Edge ι → Edge κ := fun e =>
+  ⟨Sym2.map f e.1, (Sym2.isDiag_map hf).not.mpr e.2⟩
+
+
+
+
+
+
+
+
+
+/-- Extend coordinates by zero along a disjoint sum. -/
+noncomputable def sourceSumPad {ι κ : Type*} [Fintype ι] [Fintype κ]
+    (x : EuclideanSpace ℝ ι) : EuclideanSpace ℝ (ι ⊕ κ) :=
+  WithLp.toLp 2 (Sum.elim (fun i => x i) (fun _ => 0))
+
+
+
+/-- Pad an arbitrary finite Euclidean coordinate type into `Fin D`. -/
+noncomputable def sourcePadCoordinates {ι : Type*} [Fintype ι] {D : ℕ}
+    (hcard : Fintype.card ι ≤ D) (x : EuclideanSpace ℝ ι) :
+    EuclideanSpace ℝ (Fin D) :=
+  let e₁ := Fintype.equivFin ι
+  let e₂ : Fin (Fintype.card ι) ⊕ Fin (D - Fintype.card ι) ≃
+      Fin (Fintype.card ι + (D - Fintype.card ι)) := finSumFinEquiv
+  let e₃ := finCongr (Nat.add_sub_of_le hcard)
+  (LinearIsometryEquiv.piLpCongrLeft 2 ℝ ℝ e₃)
+    ((LinearIsometryEquiv.piLpCongrLeft 2 ℝ ℝ e₂)
+      (sourceSumPad (κ := Fin (D - Fintype.card ι))
+        ((LinearIsometryEquiv.piLpCongrLeft 2 ℝ ℝ e₁) x)))
+
+
+
+/-- Delete the surplus vertices by taking the first `n` positions of a finite
+enumeration of the rectangular cluster grid. -/
+noncomputable def sourceDeletionEmbedding {n m k : ℕ} (hsize : n ≤ m*k) :
+    Fin n → Fin m × Fin k :=
+  (Fintype.equivFinOfCardEq (α := Fin m × Fin k) (by simp)).symm ∘
+    Fin.castLE hsize
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

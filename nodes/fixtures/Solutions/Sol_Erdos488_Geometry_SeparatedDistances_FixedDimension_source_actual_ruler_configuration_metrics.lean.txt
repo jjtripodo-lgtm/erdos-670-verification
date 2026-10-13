@@ -1,0 +1,3197 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Real.Sqrt
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding
+import Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget
+import Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square
+import Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product
+import Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q
+import Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.GramRealization
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+/-- A two-dimensional finite-difference sum telescopes to its four corners. -/
+theorem rectangular_mixed_difference_telescope (F : ℕ → ℕ → ℝ)
+    {i j : ℕ} (hij : i ≤ j) :
+    (∑ a ∈ Finset.Ico i j, ∑ b ∈ Finset.Ico i j,
+      (F (a + 1) (b + 1) - F (a + 1) b - F a (b + 1) + F a b)) =
+      F j j - F j i - F i j + F i i := by
+  have hinner (a : ℕ) :
+      (∑ b ∈ Finset.Ico i j,
+        (F (a + 1) (b + 1) - F (a + 1) b - F a (b + 1) + F a b)) =
+        (F (a + 1) j - F (a + 1) i) - (F a j - F a i) := by
+    have h1 := Finset.sum_Ico_sub (fun b => F (a + 1) b) hij
+    have h2 := Finset.sum_Ico_sub (fun b => F a b) hij
+    rw [← h1, ← h2, ← Finset.sum_sub_distrib]
+    apply Finset.sum_congr rfl
+    intro b hb
+    ring
+  simp_rw [hinner]
+  have hout := Finset.sum_Ico_sub (fun a => F a j - F a i) hij
+  rw [hout]
+  ring
+
+/-- Symmetric squared-distance data produce a symmetric increment Gram matrix. -/
+theorem incrementGram_isHermitian {n : ℕ} (D : SqDistanceData (Fin (n + 1)))
+    (hD : D.IsHermitian) : (incrementGram D).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro i j
+  simp only [incrementGram, starRingEnd_apply, star_trivial]
+  have h11 := hD.apply i.succ j.succ
+  have h10 := hD.apply i.succ j.castSucc
+  have h01 := hD.apply i.castSucc j.succ
+  have h00 := hD.apply i.castSucc j.castSucc
+  simp only [star_trivial] at h11 h10 h01 h00
+  rw [← h11, ← h10, ← h01, ← h00]
+  ring
+
+/-- For symmetric zero-diagonal data, the block mixed difference is the endpoint value. -/
+theorem mixed_difference_block_eq_distance (D : ℕ → ℕ → ℝ)
+    (hD : ∀ i j, D i j = D j i) (hdiag : ∀ i, D i i = 0)
+    {i j : ℕ} (hij : i ≤ j) :
+    (∑ a ∈ Finset.Ico i j, ∑ b ∈ Finset.Ico i j,
+      (-(1 / 2 : ℝ) *
+        (D (a + 1) (b + 1) - D (a + 1) b - D a (b + 1) + D a b))) =
+      D i j := by
+  calc
+    _ = -(1 / 2 : ℝ) *
+        (∑ a ∈ Finset.Ico i j, ∑ b ∈ Finset.Ico i j,
+          (D (a + 1) (b + 1) - D (a + 1) b - D a (b + 1) + D a b)) := by
+          rw [Finset.mul_sum]
+          apply Finset.sum_congr rfl
+          intro a ha
+          rw [Finset.mul_sum]
+    _ = -(1 / 2 : ℝ) * (D j j - D j i - D i j + D i i) := by
+          rw [rectangular_mixed_difference_telescope D hij]
+    _ = D i j := by
+      rw [hdiag, hdiag, hD j i]
+      ring
+
+
+
+/-- A positive-definite Gram realization, with its finite dimension packaged explicitly. -/
+theorem posDef_exists_fd_independent_gram {n : ℕ}
+    (B : Matrix (Fin n) (Fin n) ℝ) (hB : B.PosDef) :
+    ∃ (E : Type) (_ : NormedAddCommGroup E) (_ : InnerProductSpace ℝ E)
+      (_ : FiniteDimensional ℝ E) (u : Fin n → E),
+      Matrix.gram ℝ u = B ∧ LinearIndependent ℝ u ∧ Module.finrank ℝ E = n := by
+  letI := B.toNormedAddCommGroup hB
+  letI := B.toInnerProductSpace hB.posSemidef
+  let u : Fin n → (Fin n → ℝ) := fun i => Pi.single i 1
+  have hgram : Matrix.gram ℝ u = B := by
+    classical
+    ext i j
+    change ((B *ᵥ Pi.single j 1) ⬝ᵥ star (Pi.single i 1)) = B i j
+    rw [Matrix.mulVec_single]
+    simp only [MulOpposite.op_one, one_smul, dotProduct, Pi.star_apply,
+      star_trivial, Matrix.col_apply]
+    rw [Finset.sum_eq_single i]
+    · simp
+    · intro b hb hbi
+      simp [hbi]
+    · simp
+  haveI : FiniteDimensional ℝ (Fin n → ℝ) := inferInstance
+  have hfinrank : Module.finrank ℝ (Fin n → ℝ) = n := by simp
+  exact ⟨Fin n → ℝ, inferInstance, inferInstance, inferInstance, u, hgram,
+    Pi.linearIndependent_single_one (Fin n) ℝ, hfinrank⟩
+
+/-- The squared norm of a finite block sum is the corresponding double Gram sum. -/
+theorem norm_sq_block_sum_eq_gram_sum {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] (u : ℕ → E) (i j : ℕ) :
+    ‖∑ a ∈ Finset.Ico i j, u a‖ ^ 2 =
+      ∑ a ∈ Finset.Ico i j, ∑ b ∈ Finset.Ico i j, Matrix.gram ℝ u a b := by
+  rw [← real_inner_self_eq_norm_sq]
+  simp only [sum_inner, inner_sum, Matrix.gram_apply]
+  apply Finset.sum_congr rfl
+  intro a ha
+  apply Finset.sum_congr rfl
+  intro b hb
+  exact real_inner_comm _ _
+
+/-- Successive partial sums differ by precisely the intervening block of increments. -/
+theorem partial_sum_sub_partial_sum {E : Type*} [AddCommGroup E]
+    (u : ℕ → E) {i j : ℕ} (hij : i ≤ j) :
+    (∑ a ∈ Finset.range j, u a) - (∑ a ∈ Finset.range i, u a) =
+      ∑ a ∈ Finset.Ico i j, u a := by
+  rw [Finset.sum_Ico_eq_sub u hij]
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.PrefixSums
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+
+
+
+
+theorem prefixMatrix_det (n : ℕ) : (prefixMatrix n).det = 1 := by
+  rw [Matrix.det_of_upperTriangular]
+  · simp [prefixMatrix]
+  · intro i j hji
+    have hji' : j < i := by simpa using hji
+    simp [prefixMatrix, not_le.mpr hji']
+
+theorem prefixMatrix_columns_linearIndependent (n : ℕ) :
+    LinearIndependent ℝ (prefixMatrix n)ᵀ := by
+  apply Matrix.linearIndependent_cols_of_det_ne_zero
+  rw [prefixMatrix_det]
+  norm_num
+
+/-- Prefix sums of a linearly independent finite family remain linearly independent. -/
+theorem linearIndependent_prefixSums {n : ℕ} {E : Type*}
+    [AddCommMonoid E] [Module ℝ E] (u : Fin n → E)
+    (hu : LinearIndependent ℝ u) : LinearIndependent ℝ (prefixSums u) := by
+  let L : (Fin n → ℝ) →ₗ[ℝ] E := Fintype.linearCombination ℝ u
+  have hLinj : Function.Injective L := by
+    exact linearIndependent_iff_injective_fintypeLinearCombination.mp hu
+  have hmapped : LinearIndependent ℝ (L ∘ (prefixMatrix n)ᵀ) :=
+    (prefixMatrix_columns_linearIndependent n).map_injOn L hLinj.injOn
+  have heq : L ∘ (prefixMatrix n)ᵀ = prefixSums u := by
+    funext j
+    change Fintype.linearCombination ℝ u ((prefixMatrix n)ᵀ j) = prefixSums u j
+    rw [Fintype.linearCombination_apply]
+    simp only [transpose_apply, prefixMatrix, prefixSums]
+    simpa only [ite_smul, one_smul, zero_smul] using
+      (Finset.sum_filter (s := Finset.univ) (fun i : Fin n => i ≤ j) u).symm
+  rwa [heq] at hmapped
+
+
+
+
+
+/-- Cumulative points of independent increments are affinely independent. -/
+theorem affineIndependent_cumulativePoints {n : ℕ} {E : Type*}
+    [AddCommGroup E] [Module ℝ E] (u : Fin n → E)
+    (hu : LinearIndependent ℝ u) : AffineIndependent ℝ (cumulativePoints u) := by
+  rw [affineIndependent_iff_linearIndependent_vsub ℝ (cumulativePoints u) 0]
+  rw [← linearIndependent_equiv (finSuccNeZeroEquiv n)]
+  simpa [Function.comp_def, cumulativePoints, finSuccNeZeroEquiv] using
+    linearIndependent_prefixSums u hu
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.EuclideanRealization
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+/-- A positive-definite real matrix is the Gram matrix of independent standard Euclidean vectors. -/
+theorem posDef_exists_euclidean_independent_gram {n : ℕ}
+    (B : Matrix (Fin n) (Fin n) ℝ) (hB : B.PosDef) :
+    ∃ v : Fin n → EuclideanSpace ℝ (Fin n),
+      Matrix.gram ℝ v = B ∧ LinearIndependent ℝ v := by
+  obtain ⟨E, instNorm, instInner, instFD, u, hGram, hLI, hdim⟩ :=
+    posDef_exists_fd_independent_gram B hB
+  letI := instNorm
+  letI := instInner
+  letI := instFD
+  let b := (stdOrthonormalBasis ℝ E).reindex (finCongr hdim)
+  let L := b.repr
+  let v : Fin n → EuclideanSpace ℝ (Fin n) := fun i => L (u i)
+  have hvGram : Matrix.gram ℝ v = B := by
+    ext i j
+    change inner ℝ (L (u i)) (L (u j)) = B i j
+    exact (L.inner_map_map (u i) (u j)).trans (congrFun (congrFun hGram i) j)
+  have hvLI : LinearIndependent ℝ v := by
+    exact hLI.map_injOn L.toLinearMap L.injective.injOn
+  exact ⟨v, hvGram, hvLI⟩
+
+
+
+/-- A finite prefix sum equals the corresponding range sum of the zero extension. -/
+theorem prefixSums_eq_sum_range {n : ℕ} {E : Type*} [AddCommMonoid E]
+    (v : Fin n → E) (j : Fin n) :
+    prefixSums v j = ∑ a ∈ Finset.range (j.val + 1), finExtendZero v a := by
+  let e : Fin (j.val + 1) ≃ {i : Fin n // i.val < j.val + 1} :=
+    Fin.castLEquiv (Nat.succ_le_iff.mpr j.isLt)
+  have hsub :
+      (∑ i : {i : Fin n // i.val < j.val + 1}, v i) =
+        ∑ i : Fin (j.val + 1), v (e i) := by
+    exact (Fintype.sum_equiv e (fun i => v (e i)) (fun i => v i) (fun _ => rfl)).symm
+  rw [prefixSums]
+  calc
+    (∑ i : Fin n with i ≤ j, v i) =
+        ∑ i : {i : Fin n // i.val < j.val + 1}, v i := by
+          apply Finset.sum_subtype
+          intro i
+          simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+          omega
+    _ = ∑ i : Fin (j.val + 1), v (e i) := hsub
+    _ = ∑ a ∈ Finset.range (j.val + 1), finExtendZero v a := by
+      rw [Finset.sum_fin_eq_sum_range]
+      apply Finset.sum_congr rfl
+      intro a ha
+      have ha' : a < j.val + 1 := Finset.mem_range.mp ha
+      have han : a < n := lt_of_lt_of_le ha' (Nat.succ_le_iff.mpr j.isLt)
+      have haj : a ≤ j.val := by omega
+      simp [e, finExtendZero, han, haj]
+
+/-- Cumulative points are natural-number partial sums of the zero-extended increments. -/
+theorem cumulativePoints_eq_sum_range {n : ℕ} {E : Type*} [AddCommMonoid E]
+    (v : Fin n → E) (j : Fin (n + 1)) :
+    cumulativePoints v j = ∑ a ∈ Finset.range j.val, finExtendZero v a := by
+  refine Fin.cases ?_ (fun k => ?_) j
+  · simp [cumulativePoints]
+  · simpa [cumulativePoints] using prefixSums_eq_sum_range v k
+
+
+
+theorem sqDistanceExtendZero_symmetric {n : ℕ} (D : SqDistanceData (Fin (n + 1)))
+    (hD : D.IsHermitian) (a b : ℕ) :
+    sqDistanceExtendZero D a b = sqDistanceExtendZero D b a := by
+  by_cases ha : a < n + 1 <;> by_cases hb : b < n + 1
+  · simp only [sqDistanceExtendZero, ha, hb, ↓reduceDIte]
+    simpa only [star_trivial] using hD.apply ⟨b, hb⟩ ⟨a, ha⟩
+  · simp [sqDistanceExtendZero, ha, hb]
+  · simp [sqDistanceExtendZero, ha, hb]
+  · simp [sqDistanceExtendZero, ha, hb]
+
+theorem sqDistanceExtendZero_diag {n : ℕ} (D : SqDistanceData (Fin (n + 1)))
+    (hdiag : ∀ i, D i i = 0) (a : ℕ) : sqDistanceExtendZero D a a = 0 := by
+  by_cases ha : a < n + 1
+  · simp [sqDistanceExtendZero, ha, hdiag]
+  · simp [sqDistanceExtendZero, ha]
+
+/-- Positive increment Gram data realize all ordered squared distances in standard Euclidean space. -/
+theorem posDef_incrementGram_realizes_in_euclideanSpace_ordered {n : ℕ}
+    (D : SqDistanceData (Fin (n + 1))) (hDsym : D.IsHermitian)
+    (hdiag : ∀ i, D i i = 0) (hB : (incrementGram D).PosDef) :
+    ∃ p : Fin (n + 1) → EuclideanSpace ℝ (Fin n),
+      AffineIndependent ℝ p ∧
+      ∀ i j : Fin (n + 1), i.val ≤ j.val → ‖p j - p i‖ ^ 2 = D i j := by
+  obtain ⟨v, hvGram, hvLI⟩ :=
+    posDef_exists_euclidean_independent_gram (incrementGram D) hB
+  let p := cumulativePoints v
+  refine ⟨p, affineIndependent_cumulativePoints v hvLI, ?_⟩
+  intro i j hij
+  rw [show p j = ∑ a ∈ Finset.range j.val, finExtendZero v a from
+        cumulativePoints_eq_sum_range v j,
+      show p i = ∑ a ∈ Finset.range i.val, finExtendZero v a from
+        cumulativePoints_eq_sum_range v i,
+      partial_sum_sub_partial_sum (finExtendZero v) hij,
+      norm_sq_block_sum_eq_gram_sum]
+  have hsum :
+      (∑ a ∈ Finset.Ico i.val j.val, ∑ b ∈ Finset.Ico i.val j.val,
+        Matrix.gram ℝ (finExtendZero v) a b) =
+      ∑ a ∈ Finset.Ico i.val j.val, ∑ b ∈ Finset.Ico i.val j.val,
+        (-(1 / 2 : ℝ) *
+          (sqDistanceExtendZero D (a + 1) (b + 1) -
+           sqDistanceExtendZero D (a + 1) b -
+           sqDistanceExtendZero D a (b + 1) +
+           sqDistanceExtendZero D a b)) := by
+    apply Finset.sum_congr rfl
+    intro a ha
+    have hai : i.val ≤ a := (Finset.mem_Ico.mp ha).1
+    have haj : a < j.val := (Finset.mem_Ico.mp ha).2
+    have han : a < n := lt_of_lt_of_le haj (Nat.lt_succ_iff.mp j.isLt)
+    apply Finset.sum_congr rfl
+    intro b hb
+    have hbj : b < j.val := (Finset.mem_Ico.mp hb).2
+    have hbn : b < n := lt_of_lt_of_le hbj (Nat.lt_succ_iff.mp j.isLt)
+    have hgramab := congrFun (congrFun hvGram ⟨a, han⟩) ⟨b, hbn⟩
+    simp only [Matrix.gram_apply, finExtendZero, han, hbn, ↓reduceDIte] at hgramab ⊢
+    rw [hgramab]
+    simp [incrementGram, sqDistanceExtendZero, han, hbn, Nat.lt_succ_of_lt han,
+      Nat.lt_succ_of_lt hbn]
+  rw [hsum]
+  rw [mixed_difference_block_eq_distance (sqDistanceExtendZero D)
+    (sqDistanceExtendZero_symmetric D hDsym)
+    (sqDistanceExtendZero_diag D hdiag) hij]
+  simp [sqDistanceExtendZero, i.isLt, j.isLt]
+
+/-- Positive increment Gram data realize all squared distances in standard Euclidean space. -/
+theorem posDef_incrementGram_realizes_in_euclideanSpace {n : ℕ}
+    (D : SqDistanceData (Fin (n + 1))) (hDsym : D.IsHermitian)
+    (hdiag : ∀ i, D i i = 0) (hB : (incrementGram D).PosDef) :
+    ∃ p : Fin (n + 1) → EuclideanSpace ℝ (Fin n),
+      AffineIndependent ℝ p ∧ ∀ i j, ‖p j - p i‖ ^ 2 = D i j := by
+  obtain ⟨p, hpaff, hp⟩ :=
+    posDef_incrementGram_realizes_in_euclideanSpace_ordered D hDsym hdiag hB
+  refine ⟨p, hpaff, ?_⟩
+  intro i j
+  by_cases hij : i.val ≤ j.val
+  · exact hp i j hij
+  · have hji : j.val ≤ i.val := Nat.le_of_lt (Nat.lt_of_not_ge hij)
+    have h := hp j i hji
+    have hnorm : ‖p j - p i‖ = ‖p i - p j‖ := by
+      rw [show p j - p i = -(p i - p j) by abel, norm_neg]
+    have hD : D j i = D i j := by
+      simpa only [star_trivial] using hDsym.apply i j
+    rw [hnorm, h, hD]
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.ColexPositivity
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+
+
+
+
+/-- The prescribed distance from a vertex to itself vanishes. -/
+@[simp] theorem colexDistance_self {m : ℕ} (K : ℝ) (i : Fin (m + 1)) :
+    colexDistance K i i = 0 := by
+  simp [colexDistance]
+
+/-- Pure-colex prescribed distances are symmetric. -/
+theorem colexDistance_symm {m : ℕ} (K : ℝ) (i j : Fin (m + 1)) :
+    colexDistance K i j = colexDistance K j i := by
+  by_cases hij : i.val < j.val
+  · simp [colexDistance, hij, Nat.not_lt.mpr hij.le]
+  · by_cases hji : j.val < i.val
+    · simp [colexDistance, hji, Nat.not_lt.mpr hji.le]
+    · have h : i = j := Fin.ext (Nat.le_antisymm (Nat.not_lt.mp hji) (Nat.not_lt.mp hij))
+      subst j
+      simp
+
+/-- Squared pure-colex distance data are Hermitian. -/
+theorem colexSqData_isHermitian {m : ℕ} (K : ℝ) :
+    (colexSqData (m := m) K).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro i j
+  simp only [colexSqData, star_trivial]
+  rw [colexDistance_symm]
+
+/-- Squared pure-colex distance data have zero diagonal. -/
+@[simp] theorem colexSqData_diag {m : ℕ} (K : ℝ) (i : Fin (m + 1)) :
+    colexSqData K i i = 0 := by
+  simp [colexSqData]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- The increment Gram matrix is tridiagonal part minus dense remainder. -/
+theorem colex_incrementGram_eq_tridiagonal_sub_remainder {m : ℕ} (K : ℝ) :
+    incrementGram (colexSqData (m := m) K) =
+      colexTridiagonal K - colexRemainder K := by
+  ext i j
+  simp [colexRemainder]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Every pure-colex comparison weight is positive once `K ≥ 10`. -/
+theorem colexWeight_pos {K : ℝ} (hK : 10 ≤ K) (j : ℕ) (hj : 1 ≤ j) :
+    0 < colexWeight K j := by
+  unfold colexWeight
+  split_ifs with h
+  · have hKpos : 0 < K := by linarith
+    positivity
+  · have hjR : (0 : ℝ) < j := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hj)
+    have hKpos : 0 < K := by linarith
+    positivity
+
+/-- The pure-colex comparison form is nonnegative. -/
+theorem colexQ_nonneg {m : ℕ} {K : ℝ} (hK : 10 ≤ K) (x : Fin m → ℝ) :
+    0 ≤ colexQ K x := by
+  unfold colexQ
+  apply Finset.sum_nonneg
+  intro i hi
+  exact mul_nonneg (colexWeight_pos hK _ (by omega)).le (sq_nonneg _)
+
+/-- The pure-colex comparison form is strictly positive away from zero. -/
+theorem colexQ_pos {m : ℕ} {K : ℝ} (hK : 10 ≤ K) {x : Fin m → ℝ}
+    (hx : x ≠ 0) : 0 < colexQ K x := by
+  obtain ⟨i, hi⟩ := Function.ne_iff.mp hx
+  unfold colexQ
+  apply Finset.sum_pos'
+  · intro j hj
+    exact mul_nonneg (colexWeight_pos hK _ (by omega)).le (sq_nonneg _)
+  · refine ⟨i, Finset.mem_univ _, ?_⟩
+    exact mul_pos (colexWeight_pos hK _ (by omega)) (sq_pos_of_ne_zero hi)
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Weighted Cauchy bound for the sum of absolute coordinates. -/
+theorem colex_abs_sum_sq_le {m : ℕ} {K : ℝ} (hK : 10 ≤ K) (x : Fin m → ℝ) :
+    (∑ i, |x i|) ^ 2 ≤ colexS0 (m := m) K * colexQ K x := by
+  unfold colexS0 colexQ
+  apply Finset.sum_sq_le_sum_mul_sum_of_sq_le_mul Finset.univ
+  · intro i hi
+    exact inv_nonneg.mpr (colexWeight_pos hK _ (by omega)).le
+  · intro i hi
+    exact mul_nonneg (colexWeight_pos hK _ (by omega)).le (sq_nonneg _)
+  · intro i hi
+    have hw := (colexWeight_pos hK (i.val + 1) (by omega)).ne'
+    rw [sq_abs]
+    field_simp [hw]
+    exact le_rfl
+
+/-- Weighted Cauchy bound for the one-based indexed absolute sum. -/
+theorem colex_indexed_abs_sum_sq_le {m : ℕ} {K : ℝ} (hK : 10 ≤ K)
+    (x : Fin m → ℝ) :
+    (∑ i, (i.val + 1 : ℝ) * |x i|) ^ 2 ≤ colexS2 (m := m) K * colexQ K x := by
+  unfold colexS2 colexQ
+  apply Finset.sum_sq_le_sum_mul_sum_of_sq_le_mul Finset.univ
+  · intro i hi
+    exact div_nonneg (sq_nonneg _) (colexWeight_pos hK _ (by omega)).le
+  · intro i hi
+    exact mul_nonneg (colexWeight_pos hK _ (by omega)).le (sq_nonneg _)
+  · intro i hi
+    have hw := (colexWeight_pos hK (i.val + 1) (by omega)).ne'
+    rw [mul_pow, sq_abs]
+    field_simp [hw]
+    exact le_rfl
+
+
+
+
+
+/-- The real harmonic number is at least one once its index is nonzero. -/
+theorem one_le_harmonic_of_one_le {n : ℕ} (hn : 1 ≤ n) :
+    (1 : ℝ) ≤ (harmonic n : ℝ) := by
+  rw [harmonic_eq_sum_Icc]
+  push_cast
+  have hmem : 1 ∈ Finset.Icc 1 n := by simp [hn]
+  have hnonneg : ∀ i ∈ Finset.Icc 1 n, (0 : ℝ) ≤ (i : ℝ)⁻¹ := by
+    intro i hi
+    positivity
+  have h := Finset.single_le_sum hnonneg hmem
+  norm_num at h ⊢
+  exact h
+
+/-- A uniform reciprocal-weight bound, deliberately coarse at the first two
+coordinates so that no finite-sum split is needed. -/
+theorem colexWeight_inv_le {K : ℝ} (hK : 10 ≤ K) {j : ℕ} (hj : 1 ≤ j) :
+    (colexWeight K j)⁻¹ ≤ 29 / (K * j) := by
+  have hKpos : 0 < K := by linarith
+  have hjR : (0 : ℝ) < j := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hj)
+  unfold colexWeight
+  split_ifs with hsmall
+  · have hj2R : (j : ℝ) ≤ 2 := by exact_mod_cast hsmall
+    rw [inv_div]
+    apply (le_div_iff₀ (mul_pos hKpos hjR)).2
+    rw [div_mul_eq_mul_div]
+    apply (div_le_iff₀ (sq_pos_of_pos hKpos)).2
+    nlinarith
+  · have hden : 0 < K * (j : ℝ) + (j : ℝ) ^ 3 := by positivity
+    rw [inv_div]
+    apply (le_div_iff₀ (mul_pos hKpos hjR)).2
+    rw [div_mul_eq_mul_div]
+    apply (div_le_iff₀ hden).2
+    nlinarith [sq_nonneg (j : ℝ)]
+
+/-- A uniform indexed reciprocal-weight bound. -/
+theorem colexIndexSq_div_weight_le {K : ℝ} (hK : 10 ≤ K) {j : ℕ}
+    (hj : 1 ≤ j) :
+    (j : ℝ) ^ 2 / colexWeight K j ≤ 26 / (j : ℝ) := by
+  have hKpos : 0 < K := by linarith
+  have hjR : (0 : ℝ) < j := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hj)
+  unfold colexWeight
+  split_ifs with hsmall
+  · have hj2R : (j : ℝ) ≤ 2 := by exact_mod_cast hsmall
+    apply (le_div_iff₀ hjR).2
+    rw [div_mul_eq_mul_div]
+    apply (div_le_iff₀ (div_pos (sq_pos_of_pos hKpos) (by norm_num : (0 : ℝ) < 24))).2
+    nlinarith [sq_nonneg (j : ℝ), mul_self_nonneg ((j : ℝ) - 1)]
+  · have hden : 0 < (K * (j : ℝ) + (j : ℝ) ^ 3) / 24 := by positivity
+    apply (le_div_iff₀ hjR).2
+    rw [div_mul_eq_mul_div]
+    apply (div_le_iff₀ hden).2
+    nlinarith [sq_nonneg (j : ℝ)]
+
+/-- The reciprocal one-based indices carried by `Fin m` form an initial
+segment of the real harmonic sum through `m+1`. -/
+theorem fin_reciprocal_sum_le_harmonic_succ (m : ℕ) :
+    (∑ i : Fin m, ((i.val + 1 : ℝ)⁻¹)) ≤ (harmonic (m + 1) : ℝ) := by
+  rw [harmonic]
+  push_cast
+  have heq : (∑ i : Fin m, ((i.val + 1 : ℝ)⁻¹)) =
+      ∑ i ∈ Finset.range m, ((i + 1 : ℝ)⁻¹) := by
+    rw [Finset.sum_fin_eq_sum_range]
+    apply Finset.sum_congr rfl
+    intro i hi
+    simp [Finset.mem_range.mp hi]
+  rw [heq]
+  apply Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono (Nat.le_succ m))
+  intro i hi hnot
+  positivity
+
+/-- Coarse harmonic control of the reciprocal comparison weights. -/
+theorem colex_S0_le {m : ℕ} {K : ℝ} (hK : 10 ≤ K) :
+    colexS0 (m := m) K ≤ 29 * (harmonic (m + 1) : ℝ) / K := by
+  have hKpos : 0 < K := by linarith
+  unfold colexS0
+  calc
+    ∑ i : Fin m, (colexWeight K (i.val + 1))⁻¹ ≤
+        ∑ i : Fin m, 29 / (K * (i.val + 1 : ℝ)) := by
+          apply Finset.sum_le_sum
+          intro i hi
+          simpa using colexWeight_inv_le hK (j := i.val + 1)
+            (Nat.succ_le_succ (Nat.zero_le i.val))
+    _ = (29 / K) * ∑ i : Fin m, ((i.val + 1 : ℝ)⁻¹) := by
+          rw [Finset.mul_sum]
+          apply Finset.sum_congr rfl
+          intro i hi
+          have hj : (0 : ℝ) < (i.val + 1 : ℕ) := by positivity
+          field_simp [hKpos.ne', hj.ne']
+    _ ≤ (29 / K) * (harmonic (m + 1) : ℝ) := by
+          exact mul_le_mul_of_nonneg_left (fin_reciprocal_sum_le_harmonic_succ m)
+            (div_nonneg (by norm_num) hKpos.le)
+    _ = 29 * (harmonic (m + 1) : ℝ) / K := by ring
+
+/-- Coarse harmonic control of the indexed reciprocal comparison weights. -/
+theorem colex_S2_le {m : ℕ} {K : ℝ} (hK : 10 ≤ K) :
+    colexS2 (m := m) K ≤ 26 * (harmonic (m + 1) : ℝ) := by
+  unfold colexS2
+  calc
+    ∑ i : Fin m, ((i.val + 1 : ℝ) ^ 2 / colexWeight K (i.val + 1)) ≤
+        ∑ i : Fin m, 26 / (i.val + 1 : ℝ) := by
+          apply Finset.sum_le_sum
+          intro i hi
+          simpa using colexIndexSq_div_weight_le hK (j := i.val + 1)
+            (Nat.succ_le_succ (Nat.zero_le i.val))
+    _ = 26 * ∑ i : Fin m, ((i.val + 1 : ℝ)⁻¹) := by
+          rw [Finset.mul_sum]
+          apply Finset.sum_congr rfl
+          intro i hi
+          rw [div_eq_mul_inv]
+    _ ≤ 26 * (harmonic (m + 1) : ℝ) := by
+          exact mul_le_mul_of_nonneg_left (fin_reciprocal_sum_le_harmonic_succ m)
+            (by norm_num)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserve
+/-! Stronger-offset colex remainder control for the fixed-dimensional candidate.
+The predecessor theorem's exact source is blob
+8d62b42bc6da2281fbc54ba4659b7a9265964b76 in john-lean-math. -/
+
+namespace Erdos488.Geometry.SeparatedDistances
+open scoped BigOperators
+open Matrix
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+lemma colexANat_le_K_add_sq {K : ℝ} (j : ℕ) :
+    colexANat K j ≤ K + (j:ℝ)^2 := by
+  unfold colexANat
+  push_cast [Nat.cast_choose_two]
+  have hj : (0:ℝ) ≤ j := by positivity
+  have hprod : (j:ℝ) ≤ (j:ℝ)^2 := by
+    rcases Nat.eq_zero_or_pos j with rfl | hj'
+    · norm_num
+    · have hj1 : (1:ℝ) ≤ j := by exact_mod_cast hj'
+      nlinarith
+  nlinarith
+
+/-- Complementary diagonal weight bound. This uses the existing comparison
+form, independently of the new gradient-energy inequality. -/
+lemma colexWeight_ge_adjacent_square {m j : ℕ} (hj : 1 ≤ j) (hjm : j ≤ m)
+    {K : ℝ} (hK : 10 ≤ K) :
+    colexANat K j ^ 2 ≤ 36*(K+m)*colexWeight K j := by
+  have hm0 : (0:ℝ) ≤ m := by positivity
+  have hj0 : (0:ℝ) ≤ j := by positivity
+  have hj1 : (1:ℝ) ≤ j := by exact_mod_cast hj
+  have hjmR : (j:ℝ) ≤ m := by exact_mod_cast hjm
+  have hp0 : 0 ≤ colexANat K j := by unfold colexANat; positivity
+  have hp := colexANat_le_K_add_sq (K:=K) j
+  unfold colexWeight
+  split_ifs with hj2
+  · have hcases : j=1 ∨ j=2 := by omega
+    rcases hcases with rfl | rfl <;> norm_num [colexANat, Nat.choose] <;>
+      nlinarith [sq_nonneg (K-10), mul_nonneg hm0 (sq_nonneg K)]
+  · have h₁ : K+(j:ℝ)^2 ≤ (K+m)*j := by
+      have ht := mul_nonneg (sub_nonneg.mpr hj1) (show 0 ≤ K by linarith)
+      have hu := mul_nonneg (sub_nonneg.mpr hjmR) hj0
+      nlinarith
+    have h₂ := mul_le_mul_of_nonneg_right h₁ (show 0 ≤ K+(j:ℝ)^2 by positivity)
+    have h₃ : colexANat K j ^ 2 ≤ (K+(j:ℝ)^2)^2 := by nlinarith
+    have h₄ : 0 ≤ (K+m)*(K*j+(j:ℝ)^3) := by positivity
+    nlinarith
+
+
+/-- The full tridiagonal form controls the complementary adjacent-length
+weighted diagonal form with the candidate's constant 36. -/
+theorem colex_tridiagonal_ge_adjacent_diagonal {m : ℕ} (hm : 2 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K) (x : Fin m → ℝ) :
+    (∑ i, colexANat K (i.val+1)^2 * x i ^ 2) ≤
+      36*(K+m) * (star x ⬝ᵥ (colexTridiagonal K *ᵥ x)) := by
+  have hsum : (∑ i, colexANat K (i.val+1)^2 * x i ^ 2) ≤
+      36*(K+m)*colexQ K x := by
+    unfold colexQ
+    rw [Finset.mul_sum]
+    apply Finset.sum_le_sum
+    intro i hi
+    have h := mul_le_mul_of_nonneg_right
+      (colexWeight_ge_adjacent_square (m:=m) (j:=i.val+1) (by omega) (by omega) hK)
+      (sq_nonneg (x i))
+    simpa only [mul_assoc] using h
+  exact hsum.trans (mul_le_mul_of_nonneg_left (colex_tridiagonal_ge_Q hm hK x)
+    (by positivity))
+
+
+/-- Scalar assembly of the two reserves after an off-diagonal radius shift.
+The literal incidence/weighted-path identification remains a separate bridge. -/
+theorem radius_shift_preserves_two_reserves (G T W L r K : ℝ)
+    (hL : 0 ≤ L) (hG : T/2 ≤ G) (hT : W/4 ≤ T)
+    (hW : K^2*L ≤ W) (hr : r ≤ K^2/16) :
+    W/16 ≤ G-r*L ∧ T/4 ≤ G-r*L := by
+  have hcost := mul_le_mul_of_nonneg_right hr hL
+  constructor <;> nlinarith
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserveDirectCS
+/-! The direct Cauchy--Schwarz closure of the literal colex macro reserve.
+This is an alternative to the weighted-Young argument in `ColexReserve`;
+the matrix, comparison form, harmonic sums, and offset are unchanged. -/
+
+namespace Erdos488.Geometry.SeparatedDistances
+
+open scoped BigOperators
+open Matrix
+
+private lemma two_product_le_two_sqrt_product (a b s t q : ℝ)
+    (hs : 0 ≤ s) (ht : 0 ≤ t) (hq : 0 ≤ q)
+    (ha2 : a ^ 2 ≤ s * q) (hb2 : b ^ 2 ≤ t * q) :
+    2 * a * b ≤ 2 * Real.sqrt (s * t) * q := by
+  have hst : 0 ≤ s * t := mul_nonneg hs ht
+  have hsq : (Real.sqrt (s * t)) ^ 2 = s * t := Real.sq_sqrt hst
+  have hroot : 0 ≤ Real.sqrt (s * t) := Real.sqrt_nonneg _
+  have hsq1 := mul_le_mul_of_nonneg_right ha2 (sq_nonneg b)
+  have hsq2 := mul_le_mul_of_nonneg_left hb2 (mul_nonneg hs hq)
+  have hprod : (a * b) ^ 2 ≤ (Real.sqrt (s * t) * q) ^ 2 := by
+    calc
+      (a * b) ^ 2 = a ^ 2 * b ^ 2 := by ring
+      _ ≤ s * q * b ^ 2 := hsq1
+      _ ≤ s * q * (t * q) := hsq2
+      _ = (s * t) * q ^ 2 := by ring
+      _ = (Real.sqrt (s * t)) ^ 2 * q ^ 2 := by
+        exact (congrArg (fun z : ℝ => z * q ^ 2) hsq).symm
+      _ = (Real.sqrt (s * t) * q) ^ 2 := by ring
+  nlinarith [mul_nonneg hroot hq]
+
+private lemma sqrt_product_budget (s t H K : ℝ)
+    (_hs : 0 ≤ s) (ht : 0 ≤ t) (hH : 0 ≤ H) (hK : 0 < K)
+    (hlarge : 16384 * H ^ 2 ≤ K)
+    (hsb : s ≤ 29 * H / K) (htb : t ≤ 26 * H) :
+    2 * Real.sqrt (s * t) ≤ Real.sqrt (754 : ℝ) / 64 := by
+  have hprod : s * t ≤ (754 / 16384 : ℝ) := by
+    calc
+      s * t ≤ (29 * H / K) * t := mul_le_mul_of_nonneg_right hsb ht
+      _ ≤ (29 * H / K) * (26 * H) :=
+        mul_le_mul_of_nonneg_left htb (div_nonneg (by positivity) hK.le)
+      _ = 754 * H ^ 2 / K := by ring
+      _ ≤ (754 / 16384 : ℝ) := by
+        apply (div_le_iff₀ hK).2
+        nlinarith [hlarge]
+  have hsqrt := Real.sqrt_le_sqrt hprod
+  have h754 : (Real.sqrt (754 : ℝ)) ^ 2 = 754 := Real.sq_sqrt (by norm_num)
+  have hquot : (Real.sqrt (754 / 16384 : ℝ)) ^ 2 = 754 / 16384 :=
+    Real.sq_sqrt (by norm_num)
+  have hroot_eq : Real.sqrt (754 / 16384 : ℝ) = Real.sqrt (754 : ℝ) / 128 := by
+    nlinarith [Real.sqrt_nonneg (754 / 16384 : ℝ), Real.sqrt_nonneg (754 : ℝ)]
+  rw [hroot_eq] at hsqrt
+  linarith
+
+private lemma sqrt754_div64_lt_half : Real.sqrt (754 : ℝ) / 64 < 1 / 2 := by
+  have hsq : (Real.sqrt (754 : ℝ)) ^ 2 = 754 := Real.sq_sqrt (by norm_num)
+  have hnonneg : 0 ≤ Real.sqrt (754 : ℝ) := Real.sqrt_nonneg _
+  nlinarith
+
+/-- Direct Cauchy--Schwarz on the actual colex remainder and its two
+reciprocal-weight sums. The intermediate radical is retained explicitly. -/
+theorem colex_remainder_abs_le_direct_cauchy {m : ℕ} (hm : 2 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (m + 1) : ℝ) ^ 2 ≤ K) (x : Fin m → ℝ) :
+    |star x ⬝ᵥ (colexRemainder K *ᵥ x)| ≤
+      2 * Real.sqrt (colexS0 (m := m) K * colexS2 (m := m) K) * colexQ K x ∧
+    2 * Real.sqrt (colexS0 (m := m) K * colexS2 (m := m) K) * colexQ K x ≤
+      Real.sqrt (754 : ℝ) / 64 * colexQ K x := by
+  let a : ℝ := ∑ i, |x i|
+  let b : ℝ := ∑ i, (i.val + 1 : ℝ) * |x i|
+  let q : ℝ := colexQ K x
+  let H : ℝ := (harmonic (m + 1) : ℝ)
+  have hq : 0 ≤ q := colexQ_nonneg hK x
+  have hs : 0 ≤ colexS0 (m := m) K := by
+    unfold colexS0
+    apply Finset.sum_nonneg
+    intro i hi
+    exact inv_nonneg.mpr (colexWeight_pos hK _ (by omega)).le
+  have ht : 0 ≤ colexS2 (m := m) K := by
+    unfold colexS2
+    apply Finset.sum_nonneg
+    intro i hi
+    exact div_nonneg (sq_nonneg _) (colexWeight_pos hK _ (by omega)).le
+  have ha2 : a ^ 2 ≤ colexS0 (m := m) K * q := by
+    simpa [a, q] using colex_abs_sum_sq_le hK x
+  have hb2 : b ^ 2 ≤ colexS2 (m := m) K * q := by
+    simpa [b, q] using colex_indexed_abs_sum_sq_le hK x
+  have hH1 : 1 ≤ H := by
+    simpa [H] using (one_le_harmonic_of_one_le (by omega : 1 ≤ m + 1))
+  have hH : 0 ≤ H := by linarith
+  have hKpos : 0 < K := by linarith
+  have hsbudget : colexS0 (m := m) K ≤ 29 * H / K := by
+    simpa [H] using (colex_S0_le (m := m) hK)
+  have htbudget : colexS2 (m := m) K ≤ 26 * H := by
+    simpa [H] using (colex_S2_le (m := m) hK)
+  have hCS := two_product_le_two_sqrt_product a b
+    (colexS0 (m := m) K) (colexS2 (m := m) K) q
+    hs ht hq ha2 hb2
+  have hcoef := sqrt_product_budget (colexS0 (m := m) K)
+    (colexS2 (m := m) K) H K hs ht hH hKpos hlarge hsbudget htbudget
+  constructor
+  · calc
+      |star x ⬝ᵥ (colexRemainder K *ᵥ x)| ≤ 2 * a * b := by
+        simpa [a, b] using colex_remainder_quadratic_abs_le_product K x
+      _ ≤ 2 * Real.sqrt (colexS0 (m := m) K * colexS2 (m := m) K) * q := hCS
+      _ = 2 * Real.sqrt (colexS0 (m := m) K * colexS2 (m := m) K) *
+          colexQ K x := rfl
+  · exact mul_le_mul_of_nonneg_right hcoef hq
+
+
+
+/-- On the literal increment Gram, direct Cauchy--Schwarz retains half of
+the actual tridiagonal quadratic form. -/
+theorem colex_incrementGram_ge_half_tridiagonal_direct {m : ℕ} (hm : 2 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (m + 1) : ℝ) ^ 2 ≤ K) (x : Fin m → ℝ) :
+    (1 / 2 : ℝ) * (star x ⬝ᵥ (colexTridiagonal K *ᵥ x)) ≤
+      star x ⬝ᵥ (incrementGram (colexSqData (m := m) K) *ᵥ x) := by
+  have hq : 0 ≤ colexQ K x := colexQ_nonneg hK x
+  have hT := colex_tridiagonal_ge_Q hm hK x
+  obtain ⟨hCS, h754⟩ := colex_remainder_abs_le_direct_cauchy hm hK hlarge x
+  have hcoef : Real.sqrt (754 : ℝ) / 64 ≤ 1 / 2 :=
+    le_of_lt sqrt754_div64_lt_half
+  have hR : star x ⬝ᵥ (colexRemainder K *ᵥ x) ≤ (1 / 2 : ℝ) * colexQ K x := by
+    calc
+      star x ⬝ᵥ (colexRemainder K *ᵥ x) ≤
+          |star x ⬝ᵥ (colexRemainder K *ᵥ x)| := le_abs_self _
+      _ ≤ Real.sqrt (754 : ℝ) / 64 * colexQ K x := hCS.trans h754
+      _ ≤ (1 / 2 : ℝ) * colexQ K x := mul_le_mul_of_nonneg_right hcoef hq
+  rw [colex_incrementGram_eq_tridiagonal_sub_remainder]
+  simp only [Matrix.sub_mulVec, dotProduct_sub]
+  linarith
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.GlobalCompletion
+/-! A source-pinned kernel for the three-active-group Gram completion used in
+JRL PR 2974. This module does not assert the construction's analytic bounds or
+its final fixed-dimensional configuration theorem. -/
+
+open scoped BigOperators Matrix
+open Matrix
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+lemma square_sum_three_le (a b c : ℝ) :
+    (a + b + c)^2 ≤ 3 * a^2 + 3 * b^2 + 3 * c^2 := by
+  nlinarith [sq_nonneg (a-b), sq_nonneg (a-c), sq_nonneg (b-c)]
+
+/-- A whole-matrix completion from three quadratic group budgets. In particular,
+the hypotheses must bound each entire group, not each column independently. -/
+theorem three_group_completion
+    {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
+    (A B C : Matrix ι κ ℝ) (D : Matrix κ κ ℝ)
+    (hD : D.IsHermitian)
+    (hbudget : ∀ x : κ → ℝ,
+      3 * ∑ i, (A *ᵥ x) i ^ 2 +
+      3 * ∑ i, (B *ᵥ x) i ^ 2 +
+      3 * ∑ i, (C *ᵥ x) i ^ 2 ≤ x ⬝ᵥ (D *ᵥ x)) :
+    (D - (A + B + C)ᵀ * (A + B + C)).PosSemidef := by
+  apply Matrix.PosSemidef.of_dotProduct_mulVec_nonneg
+  · exact hD.sub (by simpa using Matrix.isHermitian_conjTranspose_mul_self (A+B+C))
+  intro x
+  have hsum : (∑ i, ((A+B+C) *ᵥ x) i ^ 2) ≤
+      3 * ∑ i, (A *ᵥ x) i ^ 2 +
+      3 * ∑ i, (B *ᵥ x) i ^ 2 +
+      3 * ∑ i, (C *ᵥ x) i ^ 2 := by
+    simp only [Matrix.add_mulVec, Pi.add_apply]
+    calc
+      _ ≤ ∑ i, (3 * (A *ᵥ x) i ^ 2 + 3 * (B *ᵥ x) i ^ 2 +
+          3 * (C *ᵥ x) i ^ 2) := Finset.sum_le_sum fun i _ => square_sum_three_le _ _ _
+      _ = _ := by simp [Finset.sum_add_distrib, Finset.mul_sum]
+  have hgram : x ⬝ᵥ (((A+B+C)ᵀ * (A+B+C)) *ᵥ x) =
+      ∑ i, ((A+B+C) *ᵥ x) i ^ 2 := by
+    rw [← Matrix.mulVec_mulVec, Matrix.dotProduct_mulVec]
+    rw [Matrix.vecMul_transpose]
+    simp only [dotProduct, pow_two]
+  simpa only [star_trivial, Matrix.sub_mulVec, dotProduct_sub, hgram, sub_nonneg] using
+    hsum.trans (hbudget x)
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.CompletionFactor
+/-! A fixed-coordinate-count PSD residual factor, for the global completion.
+Unlike an existential finite-dimensional Gram realization, this does not hide
+an unbounded auxiliary dimension. -/
+
+open scoped BigOperators Matrix MatrixOrder
+open Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- Every real PSD matrix has a Gram factor with exactly the same index type. -/
+theorem psd_same_size_gram_factor {κ : Type*} [Fintype κ] [DecidableEq κ]
+    (Q : Matrix κ κ ℝ) (hQ : Q.PosSemidef) :
+    ∃ V : Matrix κ κ ℝ, Vᵀ * V = Q := by
+  refine ⟨CFC.sqrt Q, ?_⟩
+  have hs := (CFC.sqrt_nonneg Q).isSelfAdjoint
+  have hstar : (CFC.sqrt Q)ᵀ = CFC.sqrt Q := by
+    simpa only [star_eq_conjTranspose, conjTranspose_eq_transpose_of_trivial] using hs.star_eq
+  rw [hstar, ← pow_two]
+  exact CFC.sq_sqrt Q hQ.nonneg
+
+/-- The residual occupies κ coordinates; the original output occupies ι.
+The factor has no additional dimension depending on the number of points. -/
+theorem three_group_completion_factor
+    {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
+    (A B C : Matrix ι κ ℝ) (D : Matrix κ κ ℝ)
+    (hD : D.IsHermitian)
+    (hbudget : ∀ x : κ → ℝ,
+      3 * ∑ i, (A *ᵥ x) i ^ 2 +
+      3 * ∑ i, (B *ᵥ x) i ^ 2 +
+      3 * ∑ i, (C *ᵥ x) i ^ 2 ≤ x ⬝ᵥ (D *ᵥ x)) :
+    ∃ V : Matrix κ κ ℝ, (A+B+C)ᵀ*(A+B+C) + Vᵀ*V = D := by
+  obtain ⟨V, hV⟩ := psd_same_size_gram_factor _
+    (three_group_completion A B C D hD hbudget)
+  refine ⟨V, ?_⟩
+  rw [hV]
+  abel
+
+/-- Exact cancellation of the combined macro and residual inner products. -/
+theorem completed_bilinear_identity
+    {ι κ : Type*} [Fintype ι] [Fintype κ]
+    (M : Matrix ι κ ℝ) (V D : Matrix κ κ ℝ)
+    (hfactor : Mᵀ*M + Vᵀ*V = D) (x y : κ → ℝ) :
+    (M *ᵥ x) ⬝ᵥ (M *ᵥ y) + (V *ᵥ x) ⬝ᵥ (V *ᵥ y) =
+      x ⬝ᵥ (D *ᵥ y) := by
+  rw [← hfactor, Matrix.add_mulVec, dotProduct_add]
+  congr 1 <;> rw [← Matrix.mulVec_mulVec] <;> symm <;>
+    rw [Matrix.dotProduct_mulVec, Matrix.vecMul_transpose]
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.TrigonometricChord
+/-! Actual trigonometric circle identities and uniform chord lower slope.
+These provide analytic inputs, not an assumed final Euclidean configuration. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+/-- The squared coordinate distance on a unit circle is the half-angle chord square. -/
+theorem unit_circle_chord_square (x y : ℝ) :
+    (Real.cos x-Real.cos y)^2+(Real.sin x-Real.sin y)^2 =
+      (2*Real.sin ((x-y)/2))^2 := by
+  have hx := Real.sin_sq_add_cos_sq x
+  have hy := Real.sin_sq_add_cos_sq y
+  have hh := Real.sin_sq_eq_half_sub ((x-y)/2)
+  have hc := Real.cos_sub x y
+  rw [show 2*((x-y)/2)=x-y by ring] at hh
+  nlinarith
+
+/-- Exact coordinate identity for a radius-R private circle. -/
+theorem circle_chord_coordinate_square (R x y : ℝ) (hR : R ≠ 0) :
+    (R*Real.cos (x/R)-R*Real.cos (y/R))^2+
+      (R*Real.sin (x/R)-R*Real.sin (y/R))^2 = (circleChord R (x-y))^2 := by
+  have h := unit_circle_chord_square (x/R) (y/R)
+  have he : (x/R-y/R)/2=(x-y)/(2*R) := by field_simp
+  rw [he] at h
+  dsimp [circleChord]
+  have hm := congrArg (fun z : ℝ => R^2*z) h
+  nlinarith only [hm]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.HarmonicLocalModel
+/-! Literal two-harmonic local distance model: feature monotonicity, cone bounds,
+and uniform lower separation transfer. This is independent of the global Gram construction. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+theorem harmonicEnergy_nonneg (θ b₁ b₂ δ : ℝ) : 0 ≤ harmonicEnergy θ b₁ b₂ δ := by
+  unfold harmonicEnergy
+  positivity
+
+
+
+
+
+theorem localDistanceModel_nonneg (R θ b₁ b₂ δ d : ℝ) :
+    0 ≤ localDistanceModel R θ b₁ b₂ δ d := Real.sqrt_nonneg _
+
+theorem localDistanceModel_square (R θ b₁ b₂ δ d : ℝ) :
+    (localDistanceModel R θ b₁ b₂ δ d)^2 =
+      (circleChord R d)^2+harmonicEnergy θ b₁ b₂ δ := by
+  exact Real.sq_sqrt (add_nonneg (sq_nonneg _) (harmonicEnergy_nonneg _ _ _ _))
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.TrigonometricFeatures
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+open scoped BigOperators
+
+
+
+
+
+
+
+/-- The full weighted five-coordinate difference gives precisely two harmonics. -/
+theorem trigFeature_difference_square (b₀ b₁ b₂ z w : ℝ) :
+    (∑ a : Fin 5, trigWeight b₀ b₁ b₂ a*(trigFeature z a-trigFeature w a)^2)=
+      (2*b₁*Real.sin ((z-w)/2))^2+(2*b₂*Real.sin (z-w))^2 := by
+  have h₁ := congrArg (fun x : ℝ => b₁^2*x) (unit_circle_chord_square z w)
+  have h₂ := congrArg (fun x : ℝ => b₂^2*x) (unit_circle_chord_square (2*z) (2*w))
+  rw [show (2*z-2*w)/2=z-w by ring] at h₂
+  simp only [Fin.sum_univ_succ,trigFeature,trigWeight,Matrix.cons_val_zero,Matrix.cons_val_succ,
+    Matrix.cons_val_fin_one,Fin.sum_univ_zero,add_zero,sub_self]
+  nlinarith only [h₁,h₂]
+
+
+
+
+
+
+
+
+
+
+
+/-- The same-cluster feature difference lives in one block and retains its harmonics. -/
+theorem clusteredFeature_difference_square {m : ℕ} (A : Fin m) (b₀ b₁ b₂ z w : ℝ) :
+    (∑ q : Fin m × Fin 5, trigWeight b₀ b₁ b₂ q.2*
+      (clusteredFeature A z q-clusteredFeature A w q)^2)=
+      (2*b₁*Real.sin ((z-w)/2))^2+(2*b₂*Real.sin (z-w))^2 := by
+  rw [Fintype.sum_prod_type]
+  have he : ∀ C : Fin m,
+      (∑ a : Fin 5, trigWeight b₀ b₁ b₂ a*
+        (clusteredFeature A z (C,a)-clusteredFeature A w (C,a))^2)=
+      if C=A then ∑ a : Fin 5, trigWeight b₀ b₁ b₂ a*(trigFeature z a-trigFeature w a)^2 else 0 := by
+    intro C
+    by_cases hC : C=A <;> simp [clusteredFeature,hC]
+  simp_rw [he]
+  simp only [Finset.sum_ite_eq',Finset.mem_univ,if_true]
+  exact trigFeature_difference_square b₀ b₁ b₂ z w
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.CompletedTrigonometricFeatures
+/-! Exact global factor-to-coordinate feature identities, following C1--C3.
+The matrix factor equality is supplied by the independent global PSD construction. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+open scoped BigOperators Matrix
+open Matrix
+
+theorem diagonal_bilinear_sum {κ : Type*} [Fintype κ] [DecidableEq κ]
+    (w x y : κ → ℝ) :
+    x ⬝ᵥ ((Matrix.diagonal w) *ᵥ y) = ∑ q, w q*x q*y q := by
+  simp only [Matrix.mulVec_diagonal,dotProduct,Pi.mul_apply]
+  apply Finset.sum_congr rfl
+  intro q _
+  ring
+
+
+
+
+
+/-- The actual completed coordinates have precisely the claimed same-cluster harmonics. -/
+theorem completed_feature_difference_square {ι : Type*} [Fintype ι] {m : ℕ}
+    (M : Matrix ι (Fin m × Fin 5) ℝ) (V : Matrix (Fin m × Fin 5) (Fin m × Fin 5) ℝ)
+    (b₀ b₁ b₂ : ℝ)
+    (hfactor : Mᵀ*M+Vᵀ*V=Matrix.diagonal (fun q => trigWeight b₀ b₁ b₂ q.2))
+    (A : Fin m) (z w : ℝ) :
+    (∑ q, ((M *ᵥ clusteredFeature A z) q-(M *ᵥ clusteredFeature A w) q)^2)+
+      (∑ q, ((V *ᵥ clusteredFeature A z) q-(V *ᵥ clusteredFeature A w) q)^2)=
+      (2*b₁*Real.sin ((z-w)/2))^2+(2*b₂*Real.sin (z-w))^2 := by
+  have h := completed_bilinear_identity M V _ hfactor
+    (clusteredFeature A z-clusteredFeature A w) (clusteredFeature A z-clusteredFeature A w)
+  rw [diagonal_bilinear_sum] at h
+  simp_rw [Matrix.mulVec_sub,Pi.sub_apply,dotProduct,mul_assoc,← sq] at h
+  exact h.trans (clusteredFeature_difference_square A b₀ b₁ b₂ z w)
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanClusterCoordinates
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+open scoped BigOperators Matrix
+open Matrix
+
+
+
+
+
+
+
+theorem privateCircle_difference_square {m : ℕ} (A : Fin m) (R yj yi : ℝ) :
+    (∑ q, (privateCircle A R yj q-privateCircle A R yi q)^2)=
+      (R*Real.cos (yj/R)-R*Real.cos (yi/R))^2+
+      (R*Real.sin (yj/R)-R*Real.sin (yi/R))^2 := by
+  rw [Fintype.sum_prod_type]
+  have he : ∀ B : Fin m, (∑ a : Fin 2,
+      (privateCircle A R yj (B,a)-privateCircle A R yi (B,a))^2)=
+      if B=A then (R*Real.cos (yj/R)-R*Real.cos (yi/R))^2+
+        (R*Real.sin (yj/R)-R*Real.sin (yi/R))^2 else 0 := by
+    intro B
+    by_cases h : B=A <;> simp [privateCircle,h,Fin.sum_univ_succ]
+  simp_rw [he]
+  simp
+
+/-- Actual Euclidean same-cluster distance, including all coordinate blocks. -/
+theorem clusterPoint_same_cluster_square {ι : Type*} [Fintype ι] {m : ℕ}
+    (centers : Fin m → ι → ℝ) (M : Matrix ι (Fin m × Fin 5) ℝ)
+    (V : Matrix (Fin m × Fin 5) (Fin m × Fin 5) ℝ) (S R axis b₀ b₁ b₂ : ℝ)
+    (hR : R ≠ 0)
+    (hfactor : Mᵀ*M+Vᵀ*V=Matrix.diagonal (fun q => trigWeight b₀ b₁ b₂ q.2))
+    (A : Fin m) (z w yj yi : ℝ) :
+    dist (clusterPoint centers M V S R axis A z yj)
+      (clusterPoint centers M V S R axis A w yi)^2=
+      (circleChord R (yj-yi))^2+(2*b₁*Real.sin ((z-w)/2))^2+
+        (2*b₂*Real.sin (z-w))^2 := by
+  rw [EuclideanSpace.dist_sq_eq]
+  simp only [clusterPoint,WithLp.ofLp_toLp,Fintype.sum_sum_type,Sum.elim_inl,Sum.elim_inr,
+    Real.dist_eq,sq_abs,add_sub_add_left_eq_sub,sub_self,zero_pow,Finset.sum_const_zero,zero_add]
+  rw [privateCircle_difference_square]
+  simp only [show (0 : ℝ)^2=0 by norm_num,Finset.sum_const_zero,zero_add]
+  have hc := circle_chord_coordinate_square R yj yi hR
+  have hf := completed_feature_difference_square M V b₀ b₁ b₂ hfactor A z w
+  linarith
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.Flattening
+open scoped BigOperators Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+lemma offDiagonalShift_entry {ι : Type*} [DecidableEq ι]
+    (D : Matrix ι ι ℝ) (hdiag : ∀ i, D i i = 0) (r : ℝ) (i j : ι) :
+    offDiagonalShift D r i j = D i j - 2*r + if i=j then 2*r else 0 := by
+  by_cases h : i=j
+  · subst j; simp [offDiagonalShift, hdiag]
+  · simp [offDiagonalShift, h]
+
+/-- The exact radius-subtraction identity on every zero-sum vector. Subtracting
+from the diagonal too would remove the final term and invalidate this theorem. -/
+theorem offDiagonalShift_zero_sum_quadratic
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (D : Matrix ι ι ℝ) (hdiag : ∀ i, D i i = 0) (r : ℝ)
+    (z : ι → ℝ) (hz : ∑ i, z i = 0) :
+    (∑ i, ∑ j, z i * offDiagonalShift D r i j * z j) =
+      (∑ i, ∑ j, z i * D i j * z j) + 2*r * ∑ i, z i ^ 2 := by
+  simp_rw [offDiagonalShift_entry D hdiag r, mul_add, mul_sub, add_mul, sub_mul]
+  simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+  have hconstant : (∑ i, ∑ j, z i * (2*r) * z j) = 0 := by
+    simp [← Finset.mul_sum, hz]
+  have hdelta : (∑ i, ∑ j, z i * (if i=j then 2*r else 0) * z j) =
+      2*r * ∑ i, z i ^ 2 := by
+    simp only [mul_ite, mul_zero, ite_mul, zero_mul]
+    simp only [Finset.sum_ite_eq, Finset.mem_univ, ite_true]
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro i hi
+    ring
+  rw [hconstant, sub_zero, hdelta]
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.IncidenceBridge
+open scoped BigOperators Matrix
+open Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+lemma pathIncidence_row_sum (m : ℕ) (i : Fin m) :
+    ∑ a, pathIncidence m i a = 0 := by
+  simp [pathIncidence, Finset.sum_sub_distrib]
+
+/-- The existing literal incrementGram definition is the conditional distance
+Gram of the actual consecutive-incidence matrix. -/
+theorem incrementGram_eq_incidence (m : ℕ) (D : Matrix (Fin (m+1)) (Fin (m+1)) ℝ) :
+    incrementGram D = -(1/2 : ℝ) • (pathIncidence m * D * (pathIncidence m)ᵀ) := by
+  ext i j
+  simp [incrementGram, pathIncidence, Matrix.mul_apply, Matrix.transpose_apply,
+    sub_mul, mul_sub, Finset.sum_sub_distrib]
+  ring
+
+lemma pathIncidence_transpose_mulVec_sum (m : ℕ) (x : Fin m → ℝ) :
+    ∑ a, ((pathIncidence m)ᵀ *ᵥ x) a = 0 := by
+  simp only [Matrix.mulVec, dotProduct, Matrix.transpose_apply]
+  rw [Finset.sum_comm]
+  simp [← Finset.sum_mul, pathIncidence_row_sum]
+
+
+lemma dotProduct_mulVec_eq_double_sum {ι : Type*} [Fintype ι]
+    (D : Matrix ι ι ℝ) (z : ι → ℝ) :
+    z ⬝ᵥ (D *ᵥ z) = ∑ i, ∑ j, z i * D i j * z j := by
+  simp [Matrix.mulVec, dotProduct, Finset.mul_sum, mul_assoc]
+
+theorem incrementGram_quadratic_eq_incidence (m : ℕ)
+    (D : Matrix (Fin (m+1)) (Fin (m+1)) ℝ) (x : Fin m → ℝ) :
+    x ⬝ᵥ (incrementGram D *ᵥ x) = -(1/2 : ℝ) *
+      (((pathIncidence m)ᵀ *ᵥ x) ⬝ᵥ (D *ᵥ ((pathIncidence m)ᵀ *ᵥ x))) := by
+  rw [incrementGram_eq_incidence, Matrix.smul_mulVec, dotProduct_smul,
+    ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, Matrix.dotProduct_mulVec]
+  rw [← Matrix.mulVec_transpose]
+  rfl
+
+/-- Exact conditional-Gram subtraction, using the literal incidence matrix and
+OFF-diagonal shift. No Euclidean-realizability assumption is used. -/
+theorem flattened_incrementGram_quadratic (m : ℕ)
+    (D : Matrix (Fin (m+1)) (Fin (m+1)) ℝ) (hdiag : ∀ i, D i i = 0)
+    (r : ℝ) (x : Fin m → ℝ) :
+    x ⬝ᵥ (incrementGram (offDiagonalShift D r) *ᵥ x) =
+      x ⬝ᵥ (incrementGram D *ᵥ x) -
+        r * ∑ a, (((pathIncidence m)ᵀ *ᵥ x) a)^2 := by
+  rw [incrementGram_quadratic_eq_incidence, incrementGram_quadratic_eq_incidence,
+    dotProduct_mulVec_eq_double_sum, dotProduct_mulVec_eq_double_sum,
+    offDiagonalShift_zero_sum_quadratic D hdiag r _
+      (pathIncidence_transpose_mulVec_sum m x)]
+  ring
+
+
+
+lemma pathIncidence_zero_coordinate (m : ℕ) (x : Fin (m+1) → ℝ) :
+    ((pathIncidence (m+1))ᵀ *ᵥ x) 0 = x 0 := by
+  have hfirst : ∀ i : Fin (m+1), ((0 : Fin (m+2)) = i.castSucc) ↔ i=0 := by
+    intro i
+    rw [Fin.ext_iff, Fin.ext_iff]
+    simp only [Fin.val_zero, Fin.val_castSucc]
+    omega
+  have hsecond : ∀ i : Fin (m+1), ¬((0 : Fin (m+2)) = i.succ) := by
+    intro i h
+    have hv := congrArg Fin.val h
+    simp only [Fin.val_zero, Fin.val_succ] at hv
+    omega
+  simp only [Matrix.mulVec, dotProduct, Matrix.transpose_apply, pathIncidence,
+    sub_mul, Finset.sum_sub_distrib, hfirst, hsecond, ite_mul, one_mul, zero_mul,
+    Finset.sum_ite_eq', Finset.mem_univ, ite_true, ite_false,
+    Finset.sum_const_zero, sub_zero]
+
+lemma pathIncidence_last_coordinate (m : ℕ) (x : Fin (m+1) → ℝ) :
+    ((pathIncidence (m+1))ᵀ *ᵥ x) (Fin.last (m+1)) = -x (Fin.last m) := by
+  have hfirst : ∀ i : Fin (m+1), ¬ Fin.last (m+1) = i.castSucc := by
+    intro i h
+    have hv := congrArg Fin.val h
+    simp only [Fin.val_last, Fin.val_castSucc] at hv
+    omega
+  have hsecond : ∀ i : Fin (m+1), (Fin.last (m+1) = i.succ) ↔ i=Fin.last m := by
+    intro i
+    rw [Fin.ext_iff, Fin.ext_iff]
+    simp only [Fin.val_last, Fin.val_succ]
+    omega
+  simp only [Matrix.mulVec, dotProduct, Matrix.transpose_apply, pathIncidence,
+    sub_mul, Finset.sum_sub_distrib, hfirst, hsecond, ite_mul, one_mul, zero_mul,
+    Finset.sum_ite_eq', Finset.mem_univ, ite_true, ite_false,
+    Finset.sum_const_zero, zero_sub, neg_mul, Finset.sum_neg_distrib]
+
+lemma pathIncidence_internal_coordinate (m : ℕ) (x : Fin (m+1) → ℝ) (i : Fin m) :
+    ((pathIncidence (m+1))ᵀ *ᵥ x) i.succ.castSucc = x i.succ - x i.castSucc := by
+  have hfirst : ∀ j : Fin (m+1), (i.succ.castSucc = j.castSucc) ↔ j=i.succ := by
+    intro j
+    rw [Fin.ext_iff, Fin.ext_iff]
+    simp only [Fin.val_castSucc, Fin.val_succ]
+    omega
+  have hsecond : ∀ j : Fin (m+1), (i.succ.castSucc = j.succ) ↔ j=i.castSucc := by
+    intro j
+    rw [Fin.ext_iff, Fin.ext_iff]
+    simp only [Fin.val_castSucc, Fin.val_succ]
+    omega
+  simp only [Matrix.mulVec, dotProduct, Matrix.transpose_apply, pathIncidence,
+    sub_mul, Finset.sum_sub_distrib, hfirst, hsecond, ite_mul, one_mul, zero_mul,
+    Finset.sum_ite_eq', Finset.mem_univ, ite_true]
+
+
+/-- The quadratic energy of the actual incidence transpose, including both
+boundary coordinates. -/
+theorem weighted_pathIncidence_energy (m : ℕ)
+    (w : Fin (m+2) → ℝ) (x : Fin (m+1) → ℝ) :
+    (∑ a, w a * (((pathIncidence (m+1))ᵀ *ᵥ x) a)^2) =
+      w 0 * x 0 ^ 2 +
+      (∑ i : Fin m, w i.succ.castSucc * (x i.castSucc - x i.succ)^2) +
+      w (Fin.last (m+1)) * x (Fin.last m)^2 := by
+  rw [Fin.sum_univ_castSucc, Fin.sum_univ_succ]
+  simp only [Fin.castSucc_zero, pathIncidence_zero_coordinate,
+    pathIncidence_internal_coordinate, pathIncidence_last_coordinate, neg_sq]
+  congr 2
+  apply Finset.sum_congr rfl
+  intro i hi
+  ring
+
+
+
+/-- Literal incidence formulation of the weighted colex tridiagonal reserve. -/
+theorem colex_tridiagonal_ge_incidence_weight {m : ℕ} (hm : 1 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K) (x : Fin (m+1) → ℝ) :
+    (1/4 : ℝ) * (∑ a : Fin (m+2), macroVertexWeight K a ^ 2 *
+        (((pathIncidence (m+1))ᵀ *ᵥ x) a)^2) ≤
+      x ⬝ᵥ (colexTridiagonal K *ᵥ x) := by
+  rw [weighted_pathIncidence_energy]
+  have ht := colex_tridiagonal_ge_quarter_weighted_path (m:=m+1) (by omega) hK x
+  simp only [macroVertexWeight, Fin.val_zero, ↓reduceIte, Fin.val_last,
+    Fin.val_castSucc, Fin.val_succ, Nat.add_eq_zero_iff, one_ne_zero,
+    and_false, ite_false] at *
+  simp only [Nat.add_sub_cancel, star_trivial] at ht
+  change colexANat K 1 ^ 2 / 4 * x 0 ^ 2 +
+    (∑ i : Fin m, colexANat K (i.val+1)^2 / 4 * (x i.castSucc - x i.succ)^2) +
+    colexANat K (m+1)^2 / 4 * x (Fin.last m)^2 ≤ _ at ht
+  simp only [mul_add, Finset.mul_sum]
+  convert ht using 1 <;> ring_nf
+
+
+lemma macroVertexWeight_ge_K {m : ℕ} (K : ℝ) (a : Fin (m+1)) :
+    K ≤ macroVertexWeight K a := by
+  unfold macroVertexWeight colexANat
+  have h : (0:ℝ) ≤ Nat.choose ((if a.val=0 then 1 else a.val)+1) 2 := by positivity
+  linarith
+
+/-- Both actual flattened colex reserves. Here there are m+2 macro vertices,
+m+1 increments, and r is the squared radius to subtract. -/
+theorem flattened_colex_two_reserves {m : ℕ} (hm : 1 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (m+2) : ℝ)^2 ≤ K)
+    (r : ℝ) (hr : r ≤ K^2/16) (x : Fin (m+1) → ℝ) :
+    (1/16 : ℝ) * (∑ a : Fin (m+2), macroVertexWeight K a ^ 2 *
+        (((pathIncidence (m+1))ᵀ *ᵥ x) a)^2) ≤
+      x ⬝ᵥ (incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r) *ᵥ x) ∧
+    (1/4 : ℝ) * (x ⬝ᵥ (colexTridiagonal K *ᵥ x)) ≤
+      x ⬝ᵥ (incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r) *ᵥ x) := by
+  let z := (pathIncidence (m+1))ᵀ *ᵥ x
+  have hL : 0 ≤ ∑ a, (z a)^2 := Finset.sum_nonneg fun a _ => sq_nonneg _
+  have hW : K^2 * (∑ a, (z a)^2) ≤
+      ∑ a, macroVertexWeight K a ^ 2 * (z a)^2 := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_le_sum
+    intro a ha
+    have hp := macroVertexWeight_ge_K K a
+    have hsq : K^2 ≤ macroVertexWeight K a ^ 2 := by nlinarith
+    exact mul_le_mul_of_nonneg_right hsq (sq_nonneg _)
+  have hG := colex_incrementGram_ge_half_tridiagonal_direct
+    (m:=m+1) (by omega) hK hlarge x
+  have hT := colex_tridiagonal_ge_incidence_weight hm hK x
+  simp only [star_trivial] at hG
+  have hh := radius_shift_preserves_two_reserves
+    (x ⬝ᵥ (incrementGram (colexSqData (m:=m+1) K) *ᵥ x))
+    (x ⬝ᵥ (colexTridiagonal K *ᵥ x))
+    (∑ a, macroVertexWeight K a ^ 2 * (z a)^2)
+    (∑ a, (z a)^2) r K hL (by linarith) (by dsimp [z]; linarith) hW hr
+  rw [flattened_incrementGram_quadratic (m+1) _ (colexSqData_diag K)]
+  dsimp [z] at hh
+  constructor <;> linarith [hh.1, hh.2]
+
+
+lemma offDiagonalShift_isHermitian {ι : Type*} [DecidableEq ι]
+    (D : Matrix ι ι ℝ) (hD : D.IsHermitian) (r : ℝ) :
+    (offDiagonalShift D r).IsHermitian := by
+  unfold Matrix.IsHermitian
+  ext i j
+  simp only [Matrix.conjTranspose_apply, star_trivial]
+  by_cases h : i=j
+  · subst j; rfl
+  · have hh := hD.apply i j
+    simp only [star_trivial] at hh
+    simp only [offDiagonalShift, h, Ne.symm h, ite_false]
+    rw [hh]
+
+/-- The complementary diagonal lower bound for the actual flattened Gram. -/
+theorem flattened_colex_diagonal_reserve {m : ℕ} (hm : 1 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (m+2) : ℝ)^2 ≤ K)
+    (r : ℝ) (hr : r ≤ K^2/16) (x : Fin (m+1) → ℝ) :
+    (∑ i, colexANat K (i.val+1)^2 * x i ^ 2) ≤
+      144*(K+(m+1 : ℕ)) *
+        (x ⬝ᵥ (incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r) *ᵥ x)) := by
+  have ht := colex_tridiagonal_ge_adjacent_diagonal (m:=m+1) (by omega) hK x
+  have hf := (flattened_colex_two_reserves hm hK hlarge r hr x).2
+  have hc : 0 ≤ 144*(K+(m+1 : ℕ)) := by positivity
+  have hh := mul_le_mul_of_nonneg_left hf hc
+  simp only [star_trivial] at ht
+  nlinarith
+
+/-- Strict positive definiteness of the actual flattened colex increment Gram.
+All hypotheses are explicit scalar bounds; realizability is not assumed. -/
+theorem flattened_colex_posDef {m : ℕ} (hm : 1 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (m+2) : ℝ)^2 ≤ K)
+    (r : ℝ) (hr : r ≤ K^2/16) :
+    (incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r)).PosDef := by
+  apply Matrix.PosDef.of_dotProduct_mulVec_pos
+    (incrementGram_isHermitian _
+      (offDiagonalShift_isHermitian _ (colexSqData_isHermitian K) r))
+  intro x hx
+  have hp := colexQ_pos hK hx
+  have ht := colex_tridiagonal_ge_Q (m:=m+1) (by omega) hK x
+  have hf := (flattened_colex_two_reserves hm hK hlarge r hr x).2
+  simp only [star_trivial] at ht ⊢
+  nlinarith
+
+
+/-- The flattened macro squared distances are actually realized by affinely
+independent points in the exact (vertex count minus one) Euclidean dimension. -/
+theorem flattened_colex_realizes {m : ℕ} (hm : 1 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (m+2) : ℝ)^2 ≤ K)
+    (r : ℝ) (hr : r ≤ K^2/16) :
+    ∃ p : Fin (m+2) → EuclideanSpace ℝ (Fin (m+1)),
+      AffineIndependent ℝ p ∧ ∀ i j,
+        ‖p j-p i‖^2 = offDiagonalShift (colexSqData (m:=m+1) K) r i j := by
+  exact posDef_incrementGram_realizes_in_euclideanSpace _
+    (offDiagonalShift_isHermitian _ (colexSqData_isHermitian K) r)
+    (fun i => by simp [offDiagonalShift])
+    (flattened_colex_posDef hm hK hlarge r hr)
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.PotentialSolve
+open scoped BigOperators Matrix
+open Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+lemma weighted_duality_sq {ι : Type*} [Fintype ι]
+    (P u z : ι → ℝ) (hP : ∀ i, P i ≠ 0) :
+    (u ⬝ᵥ z)^2 ≤ (∑ i, P i ^ 2 * u i ^ 2) * ∑ i, (z i / P i)^2 := by
+  have h := Finset.sum_mul_sq_le_sq_mul_sq Finset.univ
+    (fun i => P i * u i) (fun i => z i / P i)
+  have hh : ∀ i, (P i * u i) * (z i / P i) = u i * z i := by
+    intro i
+    field_simp [hP i]
+  simpa only [hh, mul_pow, dotProduct] using h
+
+
+
+
+/-- Arbitrary edge-potential energy bound. Since v may be any linear combination
+of columns, this is the uniform quadratic-form input to the whole-operator
+estimate, not an average or columnwise estimate. -/
+theorem flattened_colex_edge_solve_energy {m : ℕ} (hm : 1 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (m+2) : ℝ)^2 ≤ K)
+    (r : ℝ) (hr : r ≤ K^2/16) (x v : Fin (m+1) → ℝ)
+    (hsolve : incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r) *ᵥ x = v) :
+    x ⬝ᵥ (incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r) *ᵥ x) ≤
+      144*(K+(m+1:ℕ)) * ∑ i, (v i / colexANat K (i.val+1))^2 := by
+  let A := incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r)
+  let q := x ⬝ᵥ (A *ᵥ x)
+  let C := ∑ i, (v i / colexANat K (i.val+1))^2
+  have hA : A.PosDef := flattened_colex_posDef hm hK hlarge r hr
+  have hq0 : 0 ≤ q := by
+    simpa only [q, star_trivial] using hA.posSemidef.dotProduct_mulVec_nonneg x
+  have hC : 0 ≤ C := Finset.sum_nonneg fun i _ => sq_nonneg _
+  have hP : ∀ i : Fin (m+1), colexANat K (i.val+1) ≠ 0 := by
+    intro i
+    unfold colexANat
+    have hn : (0:ℝ) ≤ Nat.choose (i.val+1+1) 2 := by positivity
+    linarith
+  have hduality := weighted_duality_sq (fun i => colexANat K (i.val+1)) x v hP
+  have hqv : q = x ⬝ᵥ v := by dsimp [q,A]; rw [hsolve]
+  have hreserve := flattened_colex_diagonal_reserve hm hK hlarge r hr x
+  have hbound := mul_le_mul_of_nonneg_right hreserve hC
+  have hsq : q*q ≤ q*(144*(K+(m+1:ℕ))*C) := by
+    rw [← hqv] at hduality
+    dsimp [q,A,C] at *
+    nlinarith
+  change q ≤ 144*(K+(m+1:ℕ))*C
+  rcases eq_or_lt_of_le hq0 with hzero | hpos
+  · rw [← hzero]; positivity
+  · exact le_of_mul_le_mul_left hsq hpos
+
+/-- Whole coefficient-matrix version: the inequality holds for every vector
+of column coefficients, for the single linear solution X=A^{-1}Z. -/
+theorem flattened_colex_whole_solve_energy {m : ℕ} (hm : 1 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (m+2) : ℝ)^2 ≤ K)
+    (r : ℝ) (hr : r ≤ K^2/16)
+    {σ : Type*} [Fintype σ] (Z : Matrix (Fin (m+1)) σ ℝ) :
+    ∃ X : Matrix (Fin (m+1)) σ ℝ,
+      incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r) * X = Z ∧
+      ∀ t : σ → ℝ,
+        (X *ᵥ t) ⬝ᵥ (incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r) *ᵥ (X *ᵥ t)) ≤
+          144*(K+(m+1:ℕ)) * ∑ i, ((Z *ᵥ t) i / colexANat K (i.val+1))^2 := by
+  let A := incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r)
+  have hA : A.PosDef := flattened_colex_posDef hm hK hlarge r hr
+  have hdet : IsUnit A.det := (Matrix.isUnit_iff_isUnit_det A).mp hA.isUnit
+  let X := A⁻¹ * Z
+  have hX : A*X=Z := by
+    dsimp [X]
+    rw [← Matrix.mul_assoc, Matrix.mul_nonsing_inv A hdet, Matrix.one_mul]
+  refine ⟨X, hX, ?_⟩
+  intro t
+  apply flattened_colex_edge_solve_energy hm hK hlarge r hr
+  change A *ᵥ (X *ᵥ t) = Z *ᵥ t
+  rw [Matrix.mulVec_mulVec, hX]
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.WeightedSchur
+open scoped BigOperators Matrix
+open Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+lemma nonnegative_weighted_cauchy {ι : Type*} [Fintype ι]
+    (a w x : ι → ℝ) (ha : ∀ i, 0 ≤ a i) (hw : ∀ i, 0 < w i) :
+    (∑ i, a i*x i)^2 ≤ (∑ i, a i*w i) * ∑ i, a i/w i*x i^2 := by
+  have h := Finset.sum_mul_sq_le_sq_mul_sq Finset.univ
+    (fun i => Real.sqrt (a i)*Real.sqrt (w i))
+    (fun i => Real.sqrt (a i)/Real.sqrt (w i)*x i)
+  have hs : ∀ i, Real.sqrt (w i) ≠ 0 := fun i => ne_of_gt (Real.sqrt_pos.2 (hw i))
+  have hprod : ∀ i, (Real.sqrt (a i)*Real.sqrt (w i)) *
+      (Real.sqrt (a i)/Real.sqrt (w i)*x i) = a i*x i := by
+    intro i
+    have hh := Real.sq_sqrt (ha i)
+    field_simp [hs i]
+    rw [hh]
+    ring
+  have hf : ∀ i, (Real.sqrt (a i)*Real.sqrt (w i))^2 = a i*w i := by
+    intro i
+    rw [mul_pow, Real.sq_sqrt (ha i), Real.sq_sqrt (hw i).le]
+  have hg : ∀ i, (Real.sqrt (a i)/Real.sqrt (w i)*x i)^2 = a i/w i*x i^2 := by
+    intro i
+    rw [mul_pow, div_pow, Real.sq_sqrt (ha i), Real.sq_sqrt (hw i).le]
+  simpa only [hprod,hf,hg] using h
+
+/-- Finite weighted Schur test at the Hardy constant two, stated as a
+simultaneous quadratic-form bound for every input vector. -/
+theorem weighted_schur_two {ι : Type*} [Fintype ι]
+    (A : Matrix ι ι ℝ) (w : ι → ℝ)
+    (hA : ∀ i j, 0 ≤ A i j) (hw : ∀ i, 0 < w i)
+    (hrow : ∀ i, ∑ j, A i j*w j ≤ 2*w i)
+    (hcol : ∀ j, ∑ i, A i j*w i ≤ 2*w j)
+    (x : ι → ℝ) :
+    (∑ i, (A *ᵥ x) i ^ 2) ≤ 4*∑ j, x j ^ 2 := by
+  have hlocal : ∀ i, (A *ᵥ x) i ^ 2 ≤ 2*w i * ∑ j, A i j/w j*x j^2 := by
+    intro i
+    have hc := nonnegative_weighted_cauchy (A i) w x (hA i) hw
+    have hz : 0 ≤ ∑ j, A i j/w j*x j^2 := by
+      apply Finset.sum_nonneg
+      intro j hj
+      exact mul_nonneg (div_nonneg (hA i j) (hw j).le) (sq_nonneg _)
+    have hh := mul_le_mul_of_nonneg_right (hrow i) hz
+    simpa only [Matrix.mulVec, dotProduct] using hc.trans hh
+  calc
+    _ ≤ ∑ i, 2*w i * ∑ j, A i j/w j*x j^2 :=
+      Finset.sum_le_sum fun i _ => hlocal i
+    _ = ∑ j, (2*(∑ i, A i j*w i)/w j)*x j^2 := by
+      simp only [Finset.mul_sum]
+      rw [Finset.sum_comm]
+      apply Finset.sum_congr rfl
+      intro j hj
+      simp only [Finset.sum_div, Finset.sum_mul, Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro i hi
+      ring
+    _ ≤ ∑ j, 4*x j^2 := by
+      apply Finset.sum_le_sum
+      intro j hj
+      apply mul_le_mul_of_nonneg_right _ (sq_nonneg _)
+      apply (div_le_iff₀ (hw j)).2
+      linarith [hcol j]
+    _ = _ := by rw [Finset.mul_sum]
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.HardyWeights
+open scoped BigOperators Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+lemma sqrt_recip_increment {x : ℝ} (hx : 1 ≤ x) :
+    1/Real.sqrt x ≤ 2*(Real.sqrt x-Real.sqrt (x-1)) := by
+  have hs : 0 < Real.sqrt x := Real.sqrt_pos.2 (by linarith)
+  have h₁ := Real.sq_sqrt (show 0 ≤ x by linarith)
+  have h₂ := Real.sq_sqrt (show 0 ≤ x-1 by linarith)
+  apply (div_le_iff₀ hs).2
+  nlinarith [sq_nonneg (Real.sqrt x-Real.sqrt (x-1))]
+
+/-- Exact telescoping row estimate for the Hardy Schur weight. -/
+theorem sqrt_recip_prefix_sum (n : ℕ) :
+    (∑ j ∈ Finset.range n, 1/Real.sqrt (j+1 : ℕ)) ≤ 2*Real.sqrt n := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      rw [Finset.sum_range_succ]
+      have hp := sqrt_recip_increment (x:=(n+1:ℕ)) (by exact_mod_cast Nat.succ_le_succ (Nat.zero_le n))
+      norm_num only [Nat.cast_add, Nat.cast_one, add_sub_cancel_right] at hp ih ⊢
+      linarith
+
+lemma sqrt_recip_tail_increment {x : ℝ} (hx : 1 ≤ x) :
+    1/((x+1)*Real.sqrt (x+1)) ≤
+      2*(1/Real.sqrt x-1/Real.sqrt (x+1)) := by
+  let u := Real.sqrt x
+  let v := Real.sqrt (x+1)
+  have hu : 0 < u := Real.sqrt_pos.2 (by linarith)
+  have hv : 0 < v := Real.sqrt_pos.2 (by linarith)
+  have hu2 : u^2=x := Real.sq_sqrt (by linarith)
+  have hv2 : v^2=x+1 := Real.sq_sqrt (by linarith)
+  have hdiff : v^2-u^2=1 := by linarith
+  have hmul := congrArg (fun t : ℝ => u*t) hdiff
+  have hn := mul_nonneg (sq_nonneg (v-u)) (show 0 ≤ 2*v+u by linarith)
+  have hcore : u ≤ 2*(v-u)*v^2 := by nlinarith
+  have hfrac : 1/(v^2*v) ≤ 2*(v-u)/(u*v) := by
+    apply (div_le_div_iff₀ (mul_pos (sq_pos_of_pos hv) hv) (mul_pos hu hv)).2
+    have hm := mul_le_mul_of_nonneg_right hcore hv.le
+    nlinarith
+  have heq : 2*(v-u)/(u*v) = 2*(1/u-1/v) := by field_simp
+  change 1/((x+1)*v) ≤ 2*(1/u-1/v)
+  rw [← hv2, ← heq]
+  exact hfrac
+
+/-- Exact telescoping finite tail estimate, with the terminal correction kept. -/
+theorem sqrt_recip_tail_sum (j n : ℕ) (hj : 1 ≤ j) :
+    (∑ a ∈ Finset.range n,
+      1/((j+a+1 : ℕ)*Real.sqrt (j+a+1 : ℕ))) ≤
+      2*(1/Real.sqrt j-1/Real.sqrt (j+n : ℕ)) := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      rw [Finset.sum_range_succ]
+      have hp := sqrt_recip_tail_increment (x:=(j+n:ℕ)) (by exact_mod_cast (show 1 ≤ j+n by omega))
+      norm_num only [Nat.cast_add, Nat.cast_one, Nat.succ_eq_add_one, add_assoc] at hp ih ⊢
+      linarith
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.FiniteHardy
+open scoped BigOperators Matrix
+open Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+lemma sum_range_prefix_indicator (g : ℕ → ℝ) {i n : ℕ} (hi : i ≤ n) :
+    (∑ j ∈ Finset.range n, if j < i then g j else 0) = ∑ j ∈ Finset.range i, g j := by
+  rw [← Finset.sum_range_add_sum_Ico (fun j => if j < i then g j else 0) hi]
+  have h₁ : (∑ j ∈ Finset.range i, if j < i then g j else 0) = ∑ j ∈ Finset.range i, g j := by
+    apply Finset.sum_congr rfl
+    intro j hj
+    simp [Finset.mem_range.mp hj]
+  have h₂ : (∑ j ∈ Finset.Ico i n, if j < i then g j else 0) = 0 := by
+    apply Finset.sum_eq_zero
+    intro j hj
+    simp [not_lt.mpr (Finset.mem_Ico.mp hj).1]
+  rw [h₁,h₂,add_zero]
+
+lemma sum_range_suffix_indicator (g : ℕ → ℝ) {i n : ℕ} (hi : i ≤ n) :
+    (∑ j ∈ Finset.range n, if i ≤ j then g j else 0) = ∑ j ∈ Finset.Ico i n, g j := by
+  rw [← Finset.sum_range_add_sum_Ico (fun j => if i ≤ j then g j else 0) hi]
+  have h₁ : (∑ j ∈ Finset.range i, if i ≤ j then g j else 0) = 0 := by
+    apply Finset.sum_eq_zero
+    intro j hj
+    simp [not_le.mpr (Finset.mem_range.mp hj)]
+  have h₂ : (∑ j ∈ Finset.Ico i n, if i ≤ j then g j else 0) = ∑ j ∈ Finset.Ico i n, g j := by
+    apply Finset.sum_congr rfl
+    intro j hj
+    simp [(Finset.mem_Ico.mp hj).1]
+  rw [h₁,h₂,zero_add]
+
+
+
+
+
+lemma hardyWeight_pos {n : ℕ} (i : Fin n) : 0 < hardyWeight i := by
+  unfold hardyWeight
+  positivity
+
+lemma hardyMatrix_row {n : ℕ} (i : Fin n) :
+    ∑ j, hardyMatrix n i j * hardyWeight j ≤ 2*hardyWeight i := by
+  have heq : (∑ j, hardyMatrix n i j * hardyWeight j) =
+      (∑ j ∈ Finset.range i.val, 1/Real.sqrt (j+1 : ℕ))/(i.val+1 : ℕ) := by
+    simp only [hardyMatrix,hardyWeight,ite_mul,zero_mul]
+    rw [Fin.sum_univ_eq_sum_range (fun j => if j < i.val then 1/(i.val+1:ℕ)*(1/Real.sqrt (j+1:ℕ)) else 0)]
+    have hr := sum_range_prefix_indicator (fun j => 1/(i.val+1 : ℕ)*(1/Real.sqrt (j+1 : ℕ))) i.isLt.le
+    rw [hr]
+    rw [← Finset.mul_sum]
+    ring
+  rw [heq]
+  have hp := sqrt_recip_prefix_sum i.val
+  have hm : Real.sqrt (i.val : ℝ) ≤ Real.sqrt (i.val+1 : ℕ) := by
+    apply Real.sqrt_le_sqrt
+    exact_mod_cast Nat.le_succ i.val
+  apply (div_le_iff₀ (show (0:ℝ)<(i.val+1:ℕ) by positivity)).2
+  have hs := Real.sq_sqrt (show (0:ℝ)≤(i.val+1:ℕ) by positivity)
+  have hz : Real.sqrt (i.val+1:ℕ) ≠ 0 := ne_of_gt (by positivity)
+  have hx : 2*hardyWeight i*(i.val+1:ℕ) = 2*Real.sqrt (i.val+1:ℕ) := by
+    unfold hardyWeight
+    field_simp [hz]
+    nlinarith [hs]
+  rw [hx]
+  linarith
+
+lemma hardyMatrix_column {n : ℕ} (j : Fin n) :
+    ∑ i, hardyMatrix n i j * hardyWeight i ≤ 2*hardyWeight j := by
+  have heq : (∑ i, hardyMatrix n i j * hardyWeight i) =
+      ∑ i ∈ Finset.Ico (j.val+1) n, 1/((i+1:ℕ)*Real.sqrt (i+1:ℕ)) := by
+    simp only [hardyMatrix,hardyWeight,ite_mul,zero_mul]
+    rw [Fin.sum_univ_eq_sum_range (fun i => if j.val < i then 1/(i+1:ℕ)*(1/Real.sqrt (i+1:ℕ)) else 0)]
+    have hterm : ∀ i : ℕ, (if j.val < i then 1/(i+1:ℕ)*(1/Real.sqrt (i+1:ℕ)) else 0) =
+      (if j.val+1 ≤ i then 1/((i+1:ℕ)*Real.sqrt (i+1:ℕ)) else 0) := by
+      intro i
+      simp only [Nat.lt_iff_add_one_le,one_div_mul_one_div]
+    simp_rw [hterm]
+    exact sum_range_suffix_indicator _ j.isLt
+  rw [heq, Finset.sum_Ico_eq_sum_range]
+  have ht := sqrt_recip_tail_sum (j.val+1) (n-(j.val+1)) (by omega)
+  have ht' : (∑ a ∈ Finset.range (n-(j.val+1)),
+      1/((j.val+1+a+1:ℕ)*Real.sqrt (j.val+1+a+1:ℕ))) ≤ 2/Real.sqrt (j.val+1:ℕ) := by
+    have hnon : 0 ≤ 1/Real.sqrt (j.val+1+(n-(j.val+1)):ℕ) := by positivity
+    rw [div_eq_mul_one_div]
+    linarith
+  simpa [hardyWeight,div_eq_mul_inv] using ht'
+
+/-- Finite strict-prefix Hardy inequality, constant two in operator norm.
+There are no analytic operator estimates among the hypotheses. -/
+theorem finite_hardy_two (n : ℕ) (x : Fin n → ℝ) :
+    (∑ i, (hardyMatrix n *ᵥ x) i ^ 2) ≤ 4 * ∑ i, x i ^ 2 := by
+  apply weighted_schur_two (hardyMatrix n) hardyWeight
+  · intro i j
+    unfold hardyMatrix
+    split_ifs <;> positivity
+  · exact hardyWeight_pos
+  · exact hardyMatrix_row
+  · exact hardyMatrix_column
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.GeometricLocalSeparation
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+open scoped Matrix
+open Matrix
+
+
+
+/-- The literal Euclidean distance equals the local model, selecting the nonnegative root. -/
+theorem rulerPoint_local_distance {ι : Type*} [Fintype ι] {m : ℕ}
+    (centers : Fin m → ι → ℝ) (M : Matrix ι (Fin m × Fin 5) ℝ)
+    (V : Matrix (Fin m × Fin 5) (Fin m × Fin 5) ℝ)
+    (S R axis θ center b₀ b₁ b₂ : ℝ) (p k : ℕ) (A : Fin m) (i δ : ℕ)
+    (hR : R ≠ 0)
+    (hfactor : Mᵀ*M+Vᵀ*V=Matrix.diagonal (fun q => trigWeight b₀ b₁ b₂ q.2)) :
+    dist (rulerPoint centers M V S R axis θ center p k A (i+δ))
+      (rulerPoint centers M V S R axis θ center p k A i)=
+      localDistanceModel R θ b₁ b₂ δ (rulerArc p k A.val i δ) := by
+  have h := clusterPoint_same_cluster_square centers M V S R axis b₀ b₁ b₂ hR hfactor A
+    (θ*((i+δ : ℕ)-center)) (θ*((i : ℝ)-center))
+    (3*(primeRuler p k A.val (i+δ) : ℝ)) (3*(primeRuler p k A.val i : ℝ))
+  have hz : θ*((i+δ : ℕ)-center)-θ*((i : ℝ)-center)=θ*(δ : ℝ) := by push_cast; ring
+  have hy : 3*(primeRuler p k A.val (i+δ) : ℝ)-3*(primeRuler p k A.val i : ℝ)=
+      rulerArc p k A.val i δ := by
+    simp only [rulerArc,primeRulerGap,Int.cast_sub]
+    ring
+  rw [hz,hy] at h
+  have hm := localDistanceModel_square R θ b₁ b₂ δ (rulerArc p k A.val i δ)
+  unfold harmonicEnergy at hm
+  apply (sq_eq_sq₀ (dist_nonneg) (localDistanceModel_nonneg _ _ _ _ _ _)).1
+  change dist (clusterPoint centers M V S R axis A _ _)
+    (clusterPoint centers M V S R axis A _ _) ^ 2 = _
+  linarith
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.GeometricPotential
+open scoped BigOperators Matrix
+open Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+lemma gram_linear_combination_projection {ι E : Type*} [Fintype ι]
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (v : ι → E) (x : ι → ℝ) (i : ι) :
+    inner ℝ (v i) (∑ j, x j • v j) = (Matrix.gram ℝ v *ᵥ x) i := by
+  simp [inner_sum, real_inner_smul_right, Matrix.mulVec, dotProduct,
+    Matrix.gram_apply, mul_comm]
+
+lemma gram_linear_combination_norm_sq {ι E : Type*} [Fintype ι]
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (v : ι → E) (x : ι → ℝ) :
+    ‖∑ j, x j • v j‖^2 = x ⬝ᵥ (Matrix.gram ℝ v *ᵥ x) := by
+  rw [← real_inner_self_eq_norm_sq]
+  simp only [sum_inner, real_inner_smul_left,
+    gram_linear_combination_projection, dotProduct]
+
+
+
+
+
+
+lemma gram_increments_of_sq_distances {n : ℕ} {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (p : Fin (n+1) → E) (D : Matrix (Fin (n+1)) (Fin (n+1)) ℝ)
+    (hD : ∀ i j, ‖p j-p i‖^2 = D i j) :
+    Matrix.gram ℝ (fun i : Fin n => p i.succ-p i.castSucc) = incrementGram D := by
+  ext i j
+  have h11 := hD i.succ j.succ
+  have h10 := hD i.succ j.castSucc
+  have h01 := hD i.castSucc j.succ
+  have h00 := hD i.castSucc j.castSucc
+  simp only [norm_sub_sq_real] at h11 h10 h01 h00
+  simp only [Matrix.gram_apply, incrementGram, inner_sub_left, inner_sub_right]
+  nlinarith [real_inner_comm (p i.succ) (p j.succ),
+    real_inner_comm (p i.succ) (p j.castSucc),
+    real_inner_comm (p i.castSucc) (p j.succ),
+    real_inner_comm (p i.castSucc) (p j.castSucc)]
+
+lemma pathIncidence_mulVec_eq (n : ℕ) (z : Fin (n+1) → ℝ) (i : Fin n) :
+    (pathIncidence n *ᵥ z) i = z i.castSucc-z i.succ := by
+  simp [pathIncidence, Matrix.mulVec, dotProduct, sub_mul, Finset.sum_sub_distrib]
+
+lemma consecutive_potential_constant {n : ℕ} (a z : Fin (n+1) → ℝ)
+    (h : ∀ i : Fin n, a i.succ-a i.castSucc = z i.castSucc-z i.succ)
+    (j : Fin (n+1)) : a j+z j = a 0+z 0 := by
+  induction j using Fin.induction with
+  | zero => rfl
+  | succ i hi => have hh := h i; linarith
+
+
+
+
+/-- Whole-matrix norm control inside any actual realization of the flattened
+macro distances, so changing anchors does not require changing the embedding. -/
+theorem whole_solve_in_flattened_realization {m : ℕ} (hm : 1 ≤ m)
+    {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (m+2) : ℝ)^2 ≤ K)
+    (r : ℝ) (hr : r ≤ K^2/16)
+    (p : Fin (m+2) → EuclideanSpace ℝ (Fin (m+1)))
+    (hpd : ∀ i j, ‖p j-p i‖^2 = offDiagonalShift (colexSqData (m:=m+1) K) r i j)
+    {σ : Type*} [Fintype σ] (Z : Matrix (Fin (m+1)) σ ℝ) :
+    ∃ w : σ → EuclideanSpace ℝ (Fin (m+1)),
+      (∀ i a, inner ℝ (p i.succ-p i.castSucc) (w a) = Z i a) ∧
+      ∀ t : σ → ℝ, ‖∑ a, t a • w a‖^2 ≤
+        144*(K+(m+1:ℕ)) * ∑ i, ((Z *ᵥ t) i / colexANat K (i.val+1))^2 := by
+  let v : Fin (m+1) → EuclideanSpace ℝ (Fin (m+1)) :=
+    fun i => p i.succ-p i.castSucc
+  have hv : Matrix.gram ℝ v = incrementGram (offDiagonalShift (colexSqData (m:=m+1) K) r) :=
+    gram_increments_of_sq_distances p _ hpd
+  obtain ⟨X,hX,hbound⟩ := flattened_colex_whole_solve_energy hm hK hlarge r hr Z
+  let w : σ → EuclideanSpace ℝ (Fin (m+1)) := fun a => ∑ j, X j a • v j
+  refine ⟨w,?_,?_⟩
+  · intro i a
+    change inner ℝ (v i) (∑ j, X j a • v j) = _
+    rw [gram_linear_combination_projection, hv]
+    have hh := congrFun (congrFun hX i) a
+    simpa only [Matrix.mul_apply, Matrix.mulVec, dotProduct] using hh
+  · intro t
+    have hw : ∑ a, t a • w a = ∑ j, (X *ᵥ t) j • v j := by
+      simp only [w, Finset.smul_sum, smul_smul, Matrix.mulVec, dotProduct,
+        Finset.sum_smul]
+      rw [Finset.sum_comm]
+      apply Finset.sum_congr rfl
+      intro j hj
+      apply Finset.sum_congr rfl
+      intro a ha
+      rw [mul_comm]
+    rw [hw, gram_linear_combination_norm_sq, hv]
+    exact hbound t
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.TriangularBounds
+open scoped BigOperators Matrix
+open Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+/-- A uniform denominator bound controls the entire fine matrix. -/
+theorem fineTriangle_bound {n : ℕ} (P : Fin n → ℝ) {K : ℝ}
+    (hK : 0 < K) (hn : (n:ℝ) ≤ K) (hP : ∀ i, K ≤ P i) (x : Fin n → ℝ) :
+    (∑ i, (fineTriangle n P *ᵥ x) i ^ 2) ≤ ∑ i, x i ^ 2 := by
+  have ha : ∀ i j, (fineTriangle n P i j)^2 ≤ 1/K^2 := by
+    intro i j
+    unfold fineTriangle
+    split_ifs
+    · rw [div_pow,one_pow]
+      apply one_div_le_one_div_of_le (sq_pos_of_pos hK)
+      nlinarith [hP i]
+    · simp only [zero_pow (by norm_num : (2:ℕ) ≠ 0)]
+      positivity
+  have hx : 0 ≤ ∑ j, x j^2 := Finset.sum_nonneg (fun _ _ => sq_nonneg _)
+  have hl : ∀ i, (fineTriangle n P *ᵥ x) i ^ 2 ≤ ((n:ℝ)/K^2)*∑ j, x j^2 := by
+    intro i
+    have hc := Finset.sum_mul_sq_le_sq_mul_sq Finset.univ (fineTriangle n P i) x
+    have hs : ∑ j, (fineTriangle n P i j)^2 ≤ (n:ℝ)/K^2 := by
+      calc
+        _ ≤ ∑ j : Fin n, 1/K^2 := Finset.sum_le_sum fun j _ => ha i j
+        _ = _ := by simp; ring
+    exact hc.trans (mul_le_mul_of_nonneg_right hs hx)
+  calc
+    _ ≤ ∑ i : Fin n, ((n:ℝ)/K^2)*∑ j, x j^2 := Finset.sum_le_sum fun i _ => hl i
+    _ = ((n:ℝ)^2/K^2)*∑ j, x j^2 := by simp; ring
+    _ ≤ 1*∑ j, x j^2 := by
+      apply mul_le_mul_of_nonneg_right _ hx
+      apply (div_le_iff₀ (sq_pos_of_pos hK)).2
+      nlinarith [sq_nonneg ((n:ℝ)-K)]
+    _ = _ := one_mul _
+
+
+
+/-- The coarse triangular estimate consumes the proved Hardy inequality,
+not a per-column or unproved operator premise. -/
+theorem coarseTriangle_bound {n : ℕ} (P : Fin n → ℝ)
+    (hP : ∀ i, 0 < P i)
+    (hquad : ∀ i, (i.val:ℝ)*(i.val+1) ≤ 2*P i) (x : Fin n → ℝ) :
+    (∑ i, (coarseTriangle n P *ᵥ x) i ^ 2) ≤ 16*∑ i, x i ^ 2 := by
+  let q : Fin n → ℝ := fun i => (i.val:ℝ)*(i.val+1)/P i
+  have hq0 : ∀ i, 0 ≤ q i := by
+    intro i
+    exact div_nonneg (mul_nonneg (Nat.cast_nonneg _) (by positivity)) (hP i).le
+  have hq2 : ∀ i, q i ≤ 2 := by
+    intro i
+    exact (div_le_iff₀ (hP i)).2 (hquad i)
+  have he : ∀ i, (coarseTriangle n P *ᵥ x) i = q i*(hardyMatrix n *ᵥ x) i := by
+    intro i
+    simp only [Matrix.mulVec,dotProduct,Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro j hj
+    unfold coarseTriangle hardyMatrix q
+    split_ifs
+    · have hz : (i.val:ℝ)+1 ≠ 0 := by positivity
+      norm_num only [Nat.cast_add,Nat.cast_one]
+      field_simp
+    · ring
+  calc
+    _ = ∑ i, (q i)^2*(hardyMatrix n *ᵥ x) i^2 := by simp_rw [he,mul_pow]
+    _ ≤ ∑ i, 4*(hardyMatrix n *ᵥ x) i^2 := by
+      apply Finset.sum_le_sum
+      intro i hi
+      apply mul_le_mul_of_nonneg_right _ (sq_nonneg _)
+      nlinarith [hq0 i,hq2 i]
+    _ = 4*∑ i, (hardyMatrix n *ᵥ x) i^2 := by rw [Finset.mul_sum]
+    _ ≤ 4*(4*∑ i, x i^2) := mul_le_mul_of_nonneg_left (finite_hardy_two n x) (by norm_num)
+    _ = _ := by ring
+
+
+/-- The literal colex diagonal satisfies the coarse Hardy domination. -/
+lemma colex_triangle_denominator {K : ℝ} (hK : 0 ≤ K) (i : ℕ) :
+    (i:ℝ)*(i+1) ≤ 2*colexANat K (i+1) := by
+  unfold colexANat
+  push_cast [Nat.cast_choose_two]
+  nlinarith
+
+lemma colex_triangle_positive {K : ℝ} (hK : 0 < K) (i : ℕ) :
+    0 < colexANat K (i+1) := by
+  unfold colexANat
+  positivity
+
+/-- Both complementary triangular bounds with the actual colex diagonal. -/
+theorem colex_fine_coarse_triangle_bounds {n : ℕ} {K : ℝ}
+    (hK : 0 < K) (hn : (n:ℝ) ≤ K) (x : Fin n → ℝ) :
+    (∑ i, (fineTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i^2) ≤ ∑ i, x i^2 ∧
+    (∑ i, (coarseTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i^2) ≤ 16*∑ i, x i^2 := by
+  constructor
+  · apply fineTriangle_bound _ hK hn
+    intro i
+    unfold colexANat
+    exact le_add_of_nonneg_right (by positivity)
+  · apply coarseTriangle_bound
+    · exact fun i => colex_triangle_positive hK i.val
+    · exact fun i => colex_triangle_denominator hK.le i.val
+
+/-- Adding the diagonal keeps the fine and coarse whole-matrix constants 2 and 5. -/
+theorem colex_fine_coarse_full_bounds {n : ℕ} {K : ℝ}
+    (hK : 0 < K) (hn : (n:ℝ) ≤ K) (x : Fin n → ℝ) :
+    (∑ i, (x i-(fineTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i)^2) ≤ 4*∑ i, x i^2 ∧
+    (∑ i, (x i+(coarseTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i)^2) ≤ 25*∑ i, x i^2 := by
+  obtain ⟨hf,hc⟩ := colex_fine_coarse_triangle_bounds hK hn x
+  constructor
+  · calc
+      _ ≤ ∑ i, (2*x i^2+2*(fineTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i^2) := by
+        apply Finset.sum_le_sum
+        intro i hi
+        nlinarith [sq_nonneg (x i+(fineTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i)]
+      _ = 2*(∑ i, x i^2)+2*(∑ i, (fineTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i^2) := by
+        rw [Finset.sum_add_distrib,← Finset.mul_sum,← Finset.mul_sum]
+      _ ≤ _ := by linarith
+  · calc
+      _ ≤ ∑ i, (5*x i^2+(5/4:ℝ)*(coarseTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i^2) := by
+        apply Finset.sum_le_sum
+        intro i hi
+        nlinarith [sq_nonneg (4*x i-(coarseTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i)]
+      _ = 5*(∑ i, x i^2)+(5/4:ℝ)*(∑ i, (coarseTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i^2) := by
+        rw [Finset.sum_add_distrib,← Finset.mul_sum,← Finset.mul_sum]
+      _ ≤ _ := by linarith
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.LiteralIncidence
+open scoped BigOperators Matrix
+open Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+/-- Literal fine potential differences give the diagonal minus strict upper ones. -/
+theorem finePotential_incidence {n : ℕ} (K : ℝ) (i a : Fin n) :
+    (pathIncidence n *ᵥ finePotential K a) i =
+      (if i=a then colexANat K (i.val+1) else 0) -
+      (if i.val < a.val then 1 else 0) := by
+  rw [pathIncidence_mulVec_eq]
+  simp only [finePotential, Fin.val_castSucc, Fin.val_succ]
+  by_cases h : i=a
+  · subst a
+    simp [colexANat,Nat.choose_succ_succ]
+    ring
+  · have hv : i.val ≠ a.val := fun e => h (Fin.ext e)
+    by_cases hia : i.val < a.val
+    · have h₁ : i.val < a.val+1 := by omega
+      have h₂ : i.val+1<a.val+1 := by omega
+      simp only [h,h₁,h₂,hia,if_pos,if_false,Nat.cast_add,Nat.cast_one]
+      ring
+    · have h₁ : ¬ i.val < a.val+1 := by omega
+      have h₂ : ¬ i.val+1<a.val+1 := by omega
+      simp [h,h₁,h₂,hia]
+
+/-- Literal coarse potential differences give minus diagonal and strict lower ramp. -/
+theorem coarsePotential_incidence {n : ℕ} (K : ℝ) (i a : Fin n) :
+    (pathIncidence n *ᵥ coarsePotential K a) i =
+      -(if i=a then colexANat K (i.val+1) else 0) -
+      (if a.val < i.val then (i.val:ℝ) else 0) := by
+  rw [pathIncidence_mulVec_eq]
+  simp only [coarsePotential, Fin.val_castSucc, Fin.val_succ]
+  by_cases h : i=a
+  · subst a
+    simp [colexANat,Nat.choose_succ_succ]
+    ring
+  · have hv : i.val ≠ a.val := fun e => h (Fin.ext e)
+    by_cases hai : a.val < i.val
+    · have h₂ : a.val < i.val+1 := by omega
+      have hc : Nat.choose (i.val+1) 2 = Nat.choose i.val 2+i.val := by
+        simpa [Nat.add_comm] using Nat.choose_succ_succ i.val 1
+      simp only [h,h₂,hai,if_pos,if_false,hc,Nat.cast_add,Nat.cast_one,neg_zero]
+      ring
+    · have h₂ : ¬ a.val < i.val+1 := by omega
+      simp [h,h₂,hai]
+
+
+
+
+
+lemma fineIncidence_normalized {n : ℕ} {K : ℝ} (hK : 0 < K) (x : Fin n → ℝ) (i : Fin n) :
+    (fineIncidence n K *ᵥ x) i / colexANat K (i.val+1) =
+      x i-(fineTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i := by
+  have hp := ne_of_gt (colex_triangle_positive hK i.val)
+  have hfi : fineIncidence n K = fun i a => (if i=a then colexANat K (i.val+1) else 0) - (if i.val < a.val then 1 else 0) := by
+    ext i a
+    exact finePotential_incidence K i a
+  rw [hfi]
+  simp only [Matrix.mulVec,dotProduct,
+    sub_mul,ite_mul,zero_mul,Finset.sum_sub_distrib,sub_div,Finset.sum_div]
+  simp only [ite_div,zero_div,Finset.sum_ite_eq,Finset.mem_univ,if_true]
+  rw [mul_div_cancel_left₀ _ hp]
+  congr 1
+  apply Finset.sum_congr rfl
+  intro a ha
+  unfold fineTriangle
+  split_ifs <;> simp <;> ring
+
+lemma coarseIncidence_normalized {n : ℕ} {K : ℝ} (hK : 0 < K) (x : Fin n → ℝ) (i : Fin n) :
+    (coarseIncidence n K *ᵥ x) i / colexANat K (i.val+1) =
+      -(x i+(coarseTriangle n (fun j => colexANat K (j.val+1)) *ᵥ x) i) := by
+  have hp := ne_of_gt (colex_triangle_positive hK i.val)
+  have hci : coarseIncidence n K = fun i a => -(if i=a then colexANat K (i.val+1) else 0) - (if a.val < i.val then (i.val:ℝ) else 0) := by
+    ext i a
+    exact coarsePotential_incidence K i a
+  rw [hci]
+  simp only [Matrix.mulVec,dotProduct,
+    sub_mul,neg_mul,ite_mul,zero_mul,Finset.sum_sub_distrib,Finset.sum_neg_distrib,
+    sub_div,neg_div,Finset.sum_div]
+  simp only [ite_div,zero_div,Finset.sum_ite_eq,Finset.mem_univ,if_true]
+  rw [mul_div_cancel_left₀ _ hp]
+  have hs : (∑ a : Fin n, (if a.val < i.val then (i.val:ℝ)*x a else 0)/colexANat K (i.val+1)) =
+      ∑ a, coarseTriangle n (fun j => colexANat K (j.val+1)) i a*x a := by
+    apply Finset.sum_congr rfl
+    intro a ha
+    unfold coarseTriangle
+    split_ifs <;> simp <;> ring
+  simp only [ite_div,zero_div] at hs
+  rw [hs]
+  ring
+
+/-- Exact universal normalized incidence budgets for the literal vertex potentials. -/
+theorem literal_fine_coarse_incidence_bounds {n : ℕ} {K : ℝ}
+    (hK : 0 < K) (hn : (n:ℝ) ≤ K) (x : Fin n → ℝ) :
+    (∑ i, ((fineIncidence n K *ᵥ x) i / colexANat K (i.val+1))^2) ≤ 4*∑ i, x i^2 ∧
+    (∑ i, ((coarseIncidence n K *ᵥ x) i / colexANat K (i.val+1))^2) ≤ 25*∑ i, x i^2 := by
+  simp_rw [fineIncidence_normalized hK,coarseIncidence_normalized hK,neg_sq]
+  exact colex_fine_coarse_full_bounds hK hn x
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossGuards
+/-! Universal source-parameter cross guards, not finite sampled certificates.
+The hypotheses are k≥2 and K≥72247875/4, with the literal source formulas. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+theorem sourceOffset_lower (m : ℕ) (hm : 34000 ≤ m) :
+    (72247875/4 : ℝ) ≤ sourceOffset m := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have h := Nat.le_ceil ((m : ℝ)*((m : ℝ)-1)/64)
+  change (72247875/4 : ℝ) ≤ (⌈(m : ℝ)*((m : ℝ)-1)/64⌉₊ : ℝ)
+  nlinarith [sq_nonneg ((m : ℝ)-34000)]
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceLocalSpectrum
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+theorem sourceRadius_square (m k : ℕ) :
+    (sourceRadius m k)^2=17500*(m : ℝ)^2*(k : ℝ)^4 := by
+  unfold sourceRadius
+  rw [mul_pow,mul_pow,Real.sq_sqrt (by norm_num)]
+  ring
+
+theorem sourceRadius_pos (m k : ℕ) (hm : 0 < m) (hk : 0 < k) : 0 < sourceRadius m k := by
+  have hm' : (0 : ℝ) < m := by exact_mod_cast hm
+  have hk' : (0 : ℝ) < k := by exact_mod_cast hk
+  unfold sourceRadius
+  positivity
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceMixedBands
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+theorem sourceOffset_ge_fivehundred_m (m : ℕ) (hm : 34000 ≤ m) :
+    (500 : ℝ) * m ≤ sourceOffset m := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hm₀ : (0 : ℝ) ≤ m := by positivity
+  have hceil := Nat.le_ceil ((m : ℝ) * ((m : ℝ) - 1) / 64)
+  change (m : ℝ) * ((m : ℝ) - 1) / 64 ≤ (sourceOffset m : ℝ) at hceil
+  have hmul := mul_nonneg hm₀ (show (0 : ℝ) ≤ m - 34000 by linarith)
+  nlinarith
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceReserveBudgets
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+theorem sourceOffset_plus_m_upper (m : ℕ) (hm : 34000 ≤ m) :
+    (sourceOffset m : ℝ)+(m : ℝ) ≤ (m : ℝ)^2/63 := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hnonneg : 0 ≤ (m : ℝ)*((m : ℝ)-1)/64 := by
+    apply div_nonneg (mul_nonneg (by positivity) (by linarith)) (by norm_num)
+  have hceil := Nat.ceil_lt_add_one hnonneg
+  change (sourceOffset m : ℝ) < (m : ℝ)*((m : ℝ)-1)/64+1 at hceil
+  have hmsq : (34000 : ℝ)*m ≤ (m : ℝ)^2 := by nlinarith
+  nlinarith
+
+theorem sourceReserve0Sq_bound (m k : ℕ) (hm : 34000 ≤ m) :
+    sourceReserve0Sq m k ≤ (972/25 : ℝ)*(m : ℝ)^2*(k : ℝ)^4 := by
+  have hK := sourceOffset_lower m hm
+  have hKpos : (0 : ℝ) < sourceOffset m := by linarith
+  have hKsq : (100 : ℝ) ≤ (sourceOffset m : ℝ)^2 := by nlinarith
+  have hmulp := mul_le_mul_of_nonneg_left hKsq
+    (show 0 ≤ (972/25 : ℝ)*(m : ℝ)^2*(k : ℝ)^4 by positivity)
+  unfold sourceReserve0Sq
+  apply (div_le_iff₀ (sq_pos_of_pos hKpos)).2
+  nlinarith
+
+theorem sourceReserve1Sq_bound (m k : ℕ) (hm : 34000 ≤ m) :
+    sourceReserve1Sq m k ≤ (137781/8 : ℝ)*(m : ℝ)^2*(k : ℝ)^4 := by
+  have h := mul_le_mul_of_nonneg_left (sourceOffset_plus_m_upper m hm)
+    (show 0 ≤ (21168*(9/8 : ℝ)^4*32)*(k : ℝ)^4 by positivity)
+  unfold sourceReserve1Sq
+  nlinarith
+
+/-- The full T² reserve fits strictly inside the chosen radius square. -/
+theorem source_total_reserve_bound (m k : ℕ) (hm : 34000 ≤ m) :
+    2*sourceReserve0Sq m k+sourceReserve1Sq m k ≤ (sourceRadius m k)^2 := by
+  have h₀ := sourceReserve0Sq_bound m k hm
+  have h₁ := sourceReserve1Sq_bound m k hm
+  rw [sourceRadius_square]
+  nlinarith [mul_nonneg (sq_nonneg (m : ℝ)) (show 0 ≤ (k : ℝ)^4 by positivity)]
+
+
+
+
+
+
+
+
+
+
+theorem sourceReserve0_square (m k : ℕ) : (sourceReserve0 m k)^2=sourceReserve0Sq m k := by
+  apply Real.sq_sqrt
+  unfold sourceReserve0Sq
+  positivity
+
+theorem sourceReserve1_square (m k : ℕ) : (sourceReserve1 m k)^2=sourceReserve1Sq m k := by
+  apply Real.sq_sqrt
+  unfold sourceReserve1Sq
+  positivity
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceOperatorBridge
+/-! The source's actual three-group coefficient operator. This module starts
+with the rational anchored potential and a whole-family matrix estimate. -/
+
+open scoped BigOperators Matrix
+open Matrix
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+theorem sourceQuadraticPotential_self {m : ℕ} (k : ℕ) (A : Fin m) :
+    sourceQuadraticPotential k A A = 0 := by
+  simp [sourceQuadraticPotential]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Both literal incidence families are solved in the very same physical
+macro realization, with the *whole-family* fine/coarse operator estimates.
+The anchor-column shifts are handled separately. -/
+theorem sourceFineCoarseCoefficients_exist {n : ℕ} (hn : 1 ≤ n)
+    {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (n+2) : ℝ) ^ 2 ≤ K)
+    (r : ℝ) (hr : r ≤ K ^ 2 / 16)
+    (hnK : (n+1 : ℕ) ≤ K)
+    (p : Fin (n+2) → EuclideanSpace ℝ (Fin (n+1)))
+    (hpd : ∀ i j,
+      ‖p j-p i‖ ^ 2 =
+        offDiagonalShift (colexSqData (m:=n+1) K) r i j) :
+    ∃ F G : Fin (n+1) → EuclideanSpace ℝ (Fin (n+1)),
+      (∀ i a, inner ℝ (p i.succ-p i.castSucc) (F a) =
+        fineIncidence (n+1) K i a) ∧
+      (∀ i a, inner ℝ (p i.succ-p i.castSucc) (G a) =
+        coarseIncidence (n+1) K i a) ∧
+      (∀ t : Fin (n+1) → ℝ,
+        ‖∑ a, t a • F a‖ ^ 2 ≤
+          576 * (K+(n+1 : ℕ)) * ∑ a, t a ^ 2) ∧
+      (∀ t : Fin (n+1) → ℝ,
+        ‖∑ a, t a • G a‖ ^ 2 ≤
+          3600 * (K+(n+1 : ℕ)) * ∑ a, t a ^ 2) := by
+  obtain ⟨F, hFproj, hFenergy⟩ :=
+    whole_solve_in_flattened_realization hn hK hlarge r hr p hpd
+      (fineIncidence (n+1) K)
+  obtain ⟨G, hGproj, hGenergy⟩ :=
+    whole_solve_in_flattened_realization hn hK hlarge r hr p hpd
+      (coarseIncidence (n+1) K)
+  refine ⟨F, G, hFproj, hGproj, ?_, ?_⟩
+  · intro t
+    have hbound := (literal_fine_coarse_incidence_bounds
+      (by linarith : 0 < K) hnK t).1
+    have hfactor : 0 ≤ 144 * (K+(n+1 : ℕ)) := by positivity
+    calc
+      _ ≤ 144 * (K+(n+1 : ℕ)) *
+            ∑ i, ((fineIncidence (n+1) K *ᵥ t) i /
+              colexANat K (i.val+1)) ^ 2 := hFenergy t
+      _ ≤ 144 * (K+(n+1 : ℕ)) * (4 * ∑ a, t a ^ 2) :=
+        mul_le_mul_of_nonneg_left hbound hfactor
+      _ = _ := by ring
+
+  · intro t
+    have hbound := (literal_fine_coarse_incidence_bounds
+      (by linarith : 0 < K) hnK t).2
+    have hfactor : 0 ≤ 144 * (K+(n+1 : ℕ)) := by positivity
+    calc
+      _ ≤ 144 * (K+(n+1 : ℕ)) *
+            ∑ i, ((coarseIncidence (n+1) K *ᵥ t) i /
+              colexANat K (i.val+1)) ^ 2 := hGenergy t
+      _ ≤ 144 * (K+(n+1 : ℕ)) * (25 * ∑ a, t a ^ 2) :=
+        mul_le_mul_of_nonneg_left hbound hfactor
+      _ = _ := by ring
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Coordinates of a linear combination in the fixed macro Euclidean space. -/
+theorem euclidean_sum_norm_sq_eq {ι κ : Type*} [Fintype ι] [Fintype κ]
+    (B : κ → EuclideanSpace ℝ ι) (t : κ → ℝ) :
+    ‖∑ a, t a • B a‖ ^ 2 =
+      ∑ i : ι, (∑ a, t a * B a i) ^ 2 := by
+  rw [EuclideanSpace.real_norm_sq_eq]
+  congr 1
+  ext i
+  simp only [WithLp.ofLp_sum, WithLp.ofLp_smul, Finset.sum_apply,
+    Pi.smul_apply, smul_eq_mul]
+
+
+
+theorem sourceSlotMatrix_mulVec {ι κ : Type*}
+    [Fintype ι] [Fintype κ]
+    (B : κ → EuclideanSpace ℝ ι) (slot : Fin 5)
+    (x : κ × Fin 5 → ℝ) (i : ι) :
+    (sourceSlotMatrix B slot *ᵥ x) i =
+      ∑ a : κ, x (a,slot) * B a i := by
+  simp [sourceSlotMatrix, Matrix.mulVec, dotProduct,
+    Fintype.sum_prod_type, mul_comm]
+
+
+
+theorem sourceSlotMatrix_energy {ι κ : Type*}
+    [Fintype ι] [Fintype κ]
+    (B : κ → EuclideanSpace ℝ ι) (slot : Fin 5)
+    (b : ℝ)
+    (hB : ∀ t : κ → ℝ,
+      3 * (∑ i : ι, (∑ a : κ, t a * B a i) ^ 2) ≤
+        b ^ 2 * ∑ a : κ, t a ^ 2)
+    (x : κ × Fin 5 → ℝ) :
+    3 * (∑ i : ι, (sourceSlotMatrix B slot *ᵥ x) i ^ 2) ≤
+      b ^ 2 * ∑ a : κ, x (a,slot) ^ 2 := by
+  simpa only [sourceSlotMatrix_mulVec] using hB (fun a => x (a,slot))
+
+/-- Inactive feature slots only add nonnegative diagonal reserve. -/
+theorem source_three_active_slots_le_diagonal {κ : Type*}
+    [Fintype κ] [DecidableEq κ]
+    (b₀ b₁ : ℝ) (x : κ × Fin 5 → ℝ) :
+    b₀ ^ 2 * (∑ a : κ, x (a,0) ^ 2) +
+      b₁ ^ 2 * (∑ a : κ, x (a,1) ^ 2) +
+      b₀ ^ 2 * (∑ a : κ, x (a,4) ^ 2) ≤
+        x ⬝ᵥ (Matrix.diagonal
+          (fun q : κ × Fin 5 => trigWeight b₀ b₁ b₀ q.2) *ᵥ x) := by
+  have hpoint (a : κ) :
+      b₀ ^ 2 * x (a,0) ^ 2 +
+        b₁ ^ 2 * x (a,1) ^ 2 +
+        b₀ ^ 2 * x (a,4) ^ 2 ≤
+          ∑ s : Fin 5, trigWeight b₀ b₁ b₀ s * x (a,s) ^ 2 := by
+    simp [Fin.sum_univ_succ, trigWeight]
+    have h₂ : 0 ≤ b₁ ^ 2 * x (a,2) ^ 2 := by positivity
+    have h₃ : 0 ≤ b₀ ^ 2 * x (a,3) ^ 2 := by positivity
+    linarith
+  rw [diagonal_bilinear_sum]
+  rw [Fintype.sum_prod_type]
+  have h := Finset.sum_le_sum (s := Finset.univ)
+    (fun a (_ : a ∈ Finset.univ) => hpoint a)
+  simpa only [Finset.sum_add_distrib, Finset.mul_sum, pow_two,
+    mul_assoc] using h
+
+/-- The actual three occupied feature slots, once their whole-family budgets
+are known, admit a residual factor on the same finite feature index type. -/
+theorem source_three_group_completion_factor {ι κ : Type*}
+    [Fintype ι] [Fintype κ] [DecidableEq κ]
+    (B U : κ → EuclideanSpace ℝ ι) (b₀ b₁ : ℝ)
+    (hB : ∀ t : κ → ℝ,
+      3 * ‖∑ a, t a • B a‖ ^ 2 ≤ b₀ ^ 2 * ∑ a, t a ^ 2)
+    (hU : ∀ t : κ → ℝ,
+      3 * ‖∑ a, t a • U a‖ ^ 2 ≤ b₁ ^ 2 * ∑ a, t a ^ 2) :
+    ∃ V : Matrix (κ × Fin 5) (κ × Fin 5) ℝ,
+      (sourceSlotMatrix B 0 + sourceSlotMatrix U 1 +
+        sourceSlotMatrix (fun a => -B a) 4)ᵀ *
+      (sourceSlotMatrix B 0 + sourceSlotMatrix U 1 +
+        sourceSlotMatrix (fun a => -B a) 4) + Vᵀ * V =
+        Matrix.diagonal (fun q : κ × Fin 5 => trigWeight b₀ b₁ b₀ q.2) := by
+  let A₀ := sourceSlotMatrix B 0
+  let A₁ := sourceSlotMatrix U 1
+  let A₄ := sourceSlotMatrix (fun a => -B a) 4
+  have hBcoord (t : κ → ℝ) :
+      3 * (∑ i : ι, (∑ a : κ, t a * B a i) ^ 2) ≤
+        b₀ ^ 2 * ∑ a, t a ^ 2 := by
+    simpa only [euclidean_sum_norm_sq_eq] using hB t
+  have hUcoord (t : κ → ℝ) :
+      3 * (∑ i : ι, (∑ a : κ, t a * U a i) ^ 2) ≤
+        b₁ ^ 2 * ∑ a, t a ^ 2 := by
+    simpa only [euclidean_sum_norm_sq_eq] using hU t
+  have hCnorm (t : κ → ℝ) :
+      3 * ‖∑ a, t a • (-B a)‖ ^ 2 ≤
+        b₀ ^ 2 * ∑ a, t a ^ 2 := by
+    simpa only [smul_neg, Finset.sum_neg_distrib, norm_neg] using hB t
+  have hCcoord (t : κ → ℝ) :
+      3 * (∑ i : ι, (∑ a : κ, t a * (-B a) i) ^ 2) ≤
+        b₀ ^ 2 * ∑ a, t a ^ 2 := by
+    simpa only [euclidean_sum_norm_sq_eq] using hCnorm t
+  have hbudget (x : κ × Fin 5 → ℝ) :
+      3 * ∑ i, (A₀ *ᵥ x) i ^ 2 +
+      3 * ∑ i, (A₁ *ᵥ x) i ^ 2 +
+      3 * ∑ i, (A₄ *ᵥ x) i ^ 2 ≤
+        x ⬝ᵥ (Matrix.diagonal
+          (fun q : κ × Fin 5 => trigWeight b₀ b₁ b₀ q.2) *ᵥ x) := by
+    have h₀ := sourceSlotMatrix_energy B 0 b₀ hBcoord x
+    have h₁ := sourceSlotMatrix_energy U 1 b₁ hUcoord x
+    have h₄ := sourceSlotMatrix_energy (fun a => -B a) 4 b₀ hCcoord x
+    have hdiag := source_three_active_slots_le_diagonal b₀ b₁ x
+    dsimp [A₀, A₁, A₄]
+    linarith
+  obtain ⟨V, hV⟩ := three_group_completion_factor A₀ A₁ A₄
+    (Matrix.diagonal (fun q : κ × Fin 5 => trigWeight b₀ b₁ b₀ q.2))
+    (Matrix.isHermitian_diagonal _) hbudget
+  exact ⟨V, hV⟩
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.Parameters
+namespace Erdos488.Geometry.SeparatedDistances
+
+
+
+
+
+
+
+
+
+
+
+theorem harmonic_le_seventeen_of_le_50000 {n : ℕ} (hn : n ≤ 50000) :
+    (harmonic n : ℝ) ≤ 17 := by
+  by_cases hn0 : n = 0
+  · subst n
+    simp [harmonic]
+  have hnpos : 0 < n := Nat.pos_of_ne_zero hn0
+  have hn65536 : n ≤ 2 ^ 16 := by norm_num; omega
+  have hlog : Real.log (n : ℝ) ≤ Real.log ((2 : ℝ) ^ 16) := by
+    rw [Real.log_le_log_iff (by positivity) (by positivity)]
+    exact_mod_cast hn65536
+  have hlog2 : Real.log (2 : ℝ) ≤ 1 := by
+    have h := Real.log_le_sub_one_of_pos (show (0 : ℝ) < 2 by norm_num)
+    norm_num at h ⊢
+    exact h
+  have hh := harmonic_le_one_add_log n
+  rw [Real.log_pow] at hlog
+  norm_num at hlog
+  nlinarith
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceParameterBounds
+/-! Universal scalar gates for the actual #670 source macro offset. -/
+
+open scoped BigOperators Matrix
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- A finite harmonic estimate, anchored at 34000 and advanced by the exact
+successor identity; no improper integral or numerical sampling is used. -/
+theorem source_harmonic_linear_bound {m : ℕ} (hm : 34000 ≤ m) :
+    (harmonic m : ℝ) ≤ (m : ℝ) / 2000 := by
+  induction m, hm using Nat.le_induction with
+  | base =>
+      have h := Erdos488.Geometry.SeparatedDistances.harmonic_le_seventeen_of_le_50000
+        (n := 34000) (by norm_num)
+      have hval : ((34000 : ℕ) : ℝ) / 2000 = 17 := by norm_num
+      rw [hval]
+      exact h
+  | succ m hm ih =>
+      have hden : (2000 : ℝ) ≤ (m+1 : ℕ) := by
+        exact_mod_cast (show 2000 ≤ m+1 by omega)
+      have hrecip : ((m+1 : ℕ) : ℝ)⁻¹ ≤ (1/2000 : ℝ) := by
+        have hh := one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 2000) hden
+        simpa only [one_div] using hh
+      rw [harmonic_succ]
+      push_cast
+      push_cast at hrecip
+      linarith
+
+/-- The ceiling source offset retains its sharp quadratic lower bound. -/
+theorem sourceOffset_ge_quadratic (m : ℕ) :
+    (m : ℝ) * ((m : ℝ)-1) / 64 ≤ (sourceOffset m : ℝ) := by
+  have h := Nat.le_ceil ((m : ℝ)*((m : ℝ)-1)/64)
+  simpa only [sourceOffset] using h
+
+theorem sourceOffset_ge_macro_count (m : ℕ) (hm : 34000 ≤ m) :
+    (m : ℝ) ≤ (sourceOffset m : ℝ) := by
+  have h := sourceOffset_ge_fivehundred_m m hm
+  have hm0 : (0 : ℝ) ≤ m := Nat.cast_nonneg _
+  linarith
+
+theorem sourceOffset_ge_harmonic_reserve (m : ℕ) (hm : 34000 ≤ m) :
+    16384 * (harmonic m : ℝ) ^ 2 ≤ (sourceOffset m : ℝ) := by
+  have hmR : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hm0 : (0 : ℝ) ≤ m := Nat.cast_nonneg _
+  have hH0 : (0 : ℝ) ≤ harmonic m := by
+    exact_mod_cast (show (0 : ℚ) ≤ harmonic m by
+      unfold harmonic
+      positivity)
+  have hH := source_harmonic_linear_bound hm
+  have hHsq : (harmonic m : ℝ) ^ 2 ≤ ((m : ℝ)/2000) ^ 2 := by
+    nlinarith
+  have hK := sourceOffset_ge_quadratic m
+  have hm_sq : (34000 : ℝ)*m ≤ (m : ℝ)^2 := by
+    nlinarith [mul_nonneg hm0 (by linarith : (0 : ℝ) ≤ (m : ℝ)-34000)]
+  nlinarith [hHsq]
+
+
+
+theorem sourceFlatteningRadius_eq (m k : ℕ) (hk : 0 < k) :
+    sourceFlatteningRadius m k =
+      35000 * (m : ℝ) ^ 2 / ((9/8 : ℝ) ^ 6) := by
+  have hk0 : (k : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hk)
+  unfold sourceFlatteningRadius sourceMacroStep
+  rw [sourceRadius_square]
+  field_simp
+  ring
+
+theorem sourceFlatteningRadius_le_offset (m k : ℕ)
+    (hm : 34000 ≤ m) (hk : 0 < k) :
+    sourceFlatteningRadius m k ≤ (sourceOffset m : ℝ) ^ 2 / 16 := by
+  rw [sourceFlatteningRadius_eq m k hk]
+  have hmR : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hm0 : (0 : ℝ) ≤ m := Nat.cast_nonneg _
+  have hconst : (35000 : ℝ) / ((9/8 : ℝ) ^ 6) ≤
+      (33999 : ℝ) ^ 2 / (64 ^ 2 * 16) := by norm_num
+  have hconstmul := mul_le_mul_of_nonneg_right hconst (sq_nonneg (m : ℝ))
+  have hsq : (33999 : ℝ) ^ 2 ≤ ((m : ℝ)-1) ^ 2 := by
+    nlinarith [sq_nonneg ((m : ℝ)-34000)]
+  have hsqmul := mul_le_mul_of_nonneg_left hsq (sq_nonneg (m : ℝ))
+  have hK := sourceOffset_ge_quadratic m
+  have hK0 : 0 ≤ (m : ℝ)*((m : ℝ)-1)/64 := by
+    apply div_nonneg (mul_nonneg hm0 (by linarith)) (by norm_num)
+  have hKsq : ((m : ℝ)*((m : ℝ)-1)/64)^2 ≤
+      (sourceOffset m : ℝ)^2 := by
+    nlinarith [hK]
+  calc
+    35000 * (m : ℝ)^2 / (9/8 : ℝ)^6 =
+        (35000 / (9/8 : ℝ)^6) * (m : ℝ)^2 := by ring
+    _ ≤ (33999 : ℝ)^2 / (64^2*16) * (m : ℝ)^2 := hconstmul
+    _ = ((m : ℝ)^2 * (33999 : ℝ)^2) / (64^2*16) := by ring
+    _ ≤ ((m : ℝ)^2 * ((m : ℝ)-1)^2) / (64^2*16) := by
+      nlinarith only [hsqmul]
+    _ = ((m : ℝ)*((m : ℝ)-1)/64)^2/16 := by ring
+    _ ≤ (sourceOffset m : ℝ)^2/16 := by nlinarith only [hKsq]
+
+/-- Every scalar premise of the source macro-operator theorem follows from
+the original universal parameter range. -/
+theorem source_macro_operator_scalar_gates (m k : ℕ)
+    (hm : 34000 ≤ m) (hk : 2 ≤ k) :
+    10 ≤ (sourceOffset m : ℝ) ∧
+    16384 * (harmonic m : ℝ) ^ 2 ≤ (sourceOffset m : ℝ) ∧
+    (m : ℝ) ≤ (sourceOffset m : ℝ) ∧
+    sourceFlatteningRadius m k ≤ (sourceOffset m : ℝ) ^ 2 / 16 := by
+  refine ⟨?_, sourceOffset_ge_harmonic_reserve m hm,
+    sourceOffset_ge_macro_count m hm,
+    sourceFlatteningRadius_le_offset m k hm (by omega)⟩
+  have h := sourceOffset_lower m hm
+  linarith
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceQuadraticMatrix
+/-! The two extraction columns of the rational quadratic coefficient family.
+The reverse increment orientation agrees with the manuscript's `Z_B`; the
+existing `whole_solve_in_flattened_realization` uses forward increments, so
+its input is the negative of this matrix. -/
+
+open scoped BigOperators Matrix
+open Matrix
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+lemma sourceBPickUpper_mulVec (n : ℕ) (x : Fin (n+2) → ℝ) (i : Fin (n+1)) :
+    (sourceBPickUpper n *ᵥ x) i = x i.succ := by
+  simp [sourceBPickUpper, Matrix.mulVec, dotProduct]
+
+lemma sourceBPickLower_mulVec (n : ℕ) (x : Fin (n+2) → ℝ) (i : Fin (n+1)) :
+    (sourceBPickLower n *ᵥ x) i = x i.castSucc := by
+  simp [sourceBPickLower, Matrix.mulVec, dotProduct]
+
+lemma sourceBReverseMatrix_mulVec (n k : ℕ)
+    (x : Fin (n+2) → ℝ) (i : Fin (n+1)) :
+    (sourceBReverseMatrix n k *ᵥ x) i =
+      -(64 / 9 : ℝ) * x i.succ + (9 * (k : ℝ)^2) * x i.castSucc := by
+  simp [sourceBReverseMatrix, sourceBPickUpper, sourceBPickLower,
+    Matrix.mulVec, dotProduct, Finset.sum_add_distrib, add_mul]
+
+lemma sourceBPickUpper_contract (n : ℕ) (x : Fin (n+2) → ℝ) :
+    (∑ i : Fin (n+1), ((sourceBPickUpper n *ᵥ x) i)^2) ≤
+      ∑ A : Fin (n+2), (x A)^2 := by
+  simp_rw [sourceBPickUpper_mulVec]
+  conv_rhs => rw [Fin.sum_univ_succ]
+  exact le_add_of_nonneg_left (sq_nonneg (x 0))
+
+lemma sourceBPickLower_contract (n : ℕ) (x : Fin (n+2) → ℝ) :
+    (∑ i : Fin (n+1), ((sourceBPickLower n *ᵥ x) i)^2) ≤
+      ∑ A : Fin (n+2), (x A)^2 := by
+  simp_rw [sourceBPickLower_mulVec]
+  conv_rhs => rw [Fin.sum_univ_castSucc]
+  exact le_add_of_nonneg_right (sq_nonneg (x (Fin.last (n+1))))
+
+/-- The exact two-extraction operator estimate, stated as a quadratic form. -/
+theorem sourceBReverseMatrix_sq_bound (n k : ℕ) (x : Fin (n+2) → ℝ) :
+    (∑ i : Fin (n+1), (sourceBReverseMatrix n k *ᵥ x) i ^ 2) ≤
+      ((64 / 9 : ℝ) + 9 * (k : ℝ)^2)^2 *
+        ∑ A : Fin (n+2), x A ^ 2 := by
+  let a : ℝ := 64 / 9
+  let b : ℝ := 9 * (k : ℝ)^2
+  have ha : 0 ≤ a := by dsimp [a]; norm_num
+  have hb : 0 ≤ b := by dsimp [b]; positivity
+  have hrow (i : Fin (n+1)) :
+      (sourceBReverseMatrix n k *ᵥ x) i ^ 2 ≤
+        (a+b) * (a * x i.succ ^ 2 + b * x i.castSucc ^ 2) := by
+    rw [sourceBReverseMatrix_mulVec]
+    have hid : (a+b) * (a * x i.succ ^ 2 + b * x i.castSucc ^ 2) -
+        (-a*x i.succ+b*x i.castSucc)^2 =
+          a*b*(x i.succ+x i.castSucc)^2 := by ring
+    have hnonneg : 0 ≤ a*b*(x i.succ+x i.castSucc)^2 := by positivity
+    dsimp [a,b] at hid
+    nlinarith only [hid, hnonneg]
+  have hup : (∑ i : Fin (n+1), x i.succ ^ 2) ≤
+      ∑ A : Fin (n+2), x A ^ 2 := by
+    simpa only [sourceBPickUpper_mulVec] using sourceBPickUpper_contract n x
+  have hlo : (∑ i : Fin (n+1), x i.castSucc ^ 2) ≤
+      ∑ A : Fin (n+2), x A ^ 2 := by
+    simpa only [sourceBPickLower_mulVec] using sourceBPickLower_contract n x
+  calc
+    _ ≤ ∑ i : Fin (n+1),
+        (a+b) * (a*x i.succ^2+b*x i.castSucc^2) :=
+      Finset.sum_le_sum (fun i _ => hrow i)
+    _ = (a+b) * (a*(∑ i : Fin (n+1), x i.succ^2) +
+        b*(∑ i : Fin (n+1), x i.castSucc^2)) := by
+      simp [Finset.mul_sum, Finset.sum_add_distrib, mul_add]
+    _ ≤ (a+b) * (a*(∑ A : Fin (n+2), x A^2) +
+        b*(∑ A : Fin (n+2), x A^2)) := by
+      apply mul_le_mul_of_nonneg_left _ (add_nonneg ha hb)
+      exact add_le_add (mul_le_mul_of_nonneg_left hup ha)
+        (mul_le_mul_of_nonneg_left hlo hb)
+    _ = _ := by dsimp [a,b]; ring
+
+theorem sourceBReverseMatrix_weighted_sq_bound (n k : ℕ) {K : ℝ}
+    (hK : 0 < K) (x : Fin (n+2) → ℝ) :
+    (∑ i : Fin (n+1),
+      ((sourceBReverseMatrix n k *ᵥ x) i /
+        colexANat K (i.val+1))^2) ≤
+      (((64 / 9 : ℝ) + 9*(k : ℝ)^2)/K)^2 *
+        ∑ A : Fin (n+2), x A^2 := by
+  have hweight (i : Fin (n+1)) : K ≤ colexANat K (i.val+1) := by
+    unfold colexANat
+    have hchoose : (0 : ℝ) ≤ Nat.choose (i.val+1+1) 2 := by positivity
+    linarith
+  have hterm (i : Fin (n+1)) :
+      ((sourceBReverseMatrix n k *ᵥ x) i / colexANat K (i.val+1))^2 ≤
+        ((sourceBReverseMatrix n k *ᵥ x) i / K)^2 := by
+    have hp : 0 < colexANat K (i.val+1) := lt_of_lt_of_le hK (hweight i)
+    have hs : K^2 ≤ (colexANat K (i.val+1))^2 := by nlinarith [hweight i]
+    rw [div_pow, div_pow]
+    apply (div_le_div_iff₀ (sq_pos_of_pos hp) (sq_pos_of_pos hK)).2
+    exact mul_le_mul_of_nonneg_left hs (sq_nonneg _)
+  calc
+    _ ≤ ∑ i : Fin (n+1), ((sourceBReverseMatrix n k *ᵥ x) i / K)^2 :=
+      Finset.sum_le_sum (fun i _ => hterm i)
+    _ = (∑ i : Fin (n+1), (sourceBReverseMatrix n k *ᵥ x) i^2) / K^2 := by
+      simp only [div_pow, Finset.sum_div]
+    _ ≤ (((64 / 9 : ℝ) + 9*(k : ℝ)^2)^2 *
+        ∑ A : Fin (n+2), x A^2) / K^2 := by
+      gcongr
+      exact sourceBReverseMatrix_sq_bound n k x
+    _ = _ := by ring
+
+/-- In the source range, the paper's convenient `18k²/K` estimate follows. -/
+theorem sourceBReverseMatrix_weighted_18_bound (n k : ℕ) (hk : 2 ≤ k)
+    {K : ℝ} (hK : 0 < K) (x : Fin (n+2) → ℝ) :
+    (∑ i : Fin (n+1),
+      ((sourceBReverseMatrix n k *ᵥ x) i /
+        colexANat K (i.val+1))^2) ≤
+      (18*(k : ℝ)^2/K)^2 * ∑ A : Fin (n+2), x A^2 := by
+  have hk' : (2 : ℝ) ≤ k := by exact_mod_cast hk
+  have hcoeff : (64/9 : ℝ)+9*(k : ℝ)^2 ≤ 18*(k : ℝ)^2 := by
+    nlinarith [sq_nonneg ((k : ℝ)-2)]
+  have hnonneg : 0 ≤ (64/9 : ℝ)+9*(k : ℝ)^2 := by positivity
+  have hsq : (((64/9 : ℝ)+9*(k : ℝ)^2)/K)^2 ≤
+      (18*(k : ℝ)^2/K)^2 := by
+    have hd : ((64/9 : ℝ)+9*(k : ℝ)^2)/K ≤
+        18*(k : ℝ)^2/K := div_le_div_of_nonneg_right hcoeff (le_of_lt hK)
+    nlinarith [div_nonneg hnonneg (le_of_lt hK)]
+  calc
+    _ ≤ (((64/9 : ℝ)+9*(k : ℝ)^2)/K)^2 *
+        ∑ A : Fin (n+2), x A^2 :=
+      sourceBReverseMatrix_weighted_sq_bound n k hK x
+    _ ≤ (18*(k : ℝ)^2/K)^2 * ∑ A : Fin (n+2), x A^2 :=
+      mul_le_mul_of_nonneg_right hsq (Finset.sum_nonneg fun A _ => sq_nonneg _)
+
+/-- The matrix is the reverse difference of the actual rational anchor
+potential, including the endpoint columns. -/
+theorem sourceBReverseMatrix_eq_potential_difference (n k : ℕ)
+    (i : Fin (n+1)) (A : Fin (n+2)) :
+    sourceBReverseMatrix n k i A =
+      sourceQuadraticPotential k A i.succ -
+        sourceQuadraticPotential k A i.castSucc := by
+  unfold sourceBReverseMatrix sourceBPickUpper sourceBPickLower
+    sourceQuadraticPotential
+  split_ifs <;> simp only [Fin.val_succ, Fin.val_castSucc, Fin.ext_iff] at *
+    <;> first | omega | ring
+
+/-- The existing whole solve, instantiated with the *actual* consecutive
+quadratic-potential matrix. Its forward-edge input is `-Z_B`. -/
+theorem sourceBQuadraticCoefficients_whole_solve {n k : ℕ} (hn : 1 ≤ n)
+    (hk : 2 ≤ k) {K : ℝ} (hK : 10 ≤ K)
+    (hlarge : 16384 * (harmonic (n+2) : ℝ)^2 ≤ K)
+    (r : ℝ) (hr : r ≤ K^2/16)
+    (p : Fin (n+2) → EuclideanSpace ℝ (Fin (n+1)))
+    (hpd : ∀ i j, ‖p j-p i‖^2 =
+      offDiagonalShift (colexSqData (m:=n+1) K) r i j) :
+    ∃ B : Fin (n+2) → EuclideanSpace ℝ (Fin (n+1)),
+      (∀ A J, inner ℝ (p A-p J) (B A) = sourceQuadraticPotential k A J) ∧
+      (∀ t : Fin (n+2) → ℝ,
+        ‖∑ A, t A • B A‖^2 ≤
+          144*(K+(n+1:ℕ))*(18*(k : ℝ)^2/K)^2 *
+            ∑ A, t A^2) := by
+  let Z : Matrix (Fin (n+1)) (Fin (n+2)) ℝ :=
+    fun i A => -sourceBReverseMatrix n k i A
+  obtain ⟨B, hproj, henergy⟩ :=
+    whole_solve_in_flattened_realization hn hK hlarge r hr p hpd Z
+  refine ⟨B, ?_, ?_⟩
+  · intro A J
+    have hedges (i : Fin (n+1)) :
+        inner ℝ (p i.succ) (B A) - inner ℝ (p i.castSucc) (B A) =
+          sourceQuadraticPotential k A i.castSucc -
+            sourceQuadraticPotential k A i.succ := by
+      have h := hproj i A
+      rw [inner_sub_left] at h
+      change _ = -sourceBReverseMatrix n k i A at h
+      rw [sourceBReverseMatrix_eq_potential_difference] at h
+      linarith
+    have ha := consecutive_potential_constant
+      (fun j => inner ℝ (p j) (B A)) (sourceQuadraticPotential k A) hedges A
+    have hj := consecutive_potential_constant
+      (fun j => inner ℝ (p j) (B A)) (sourceQuadraticPotential k A) hedges J
+    rw [sourceQuadraticPotential_self] at ha
+    rw [inner_sub_left]
+    linarith
+  · intro t
+    have hZ (i : Fin (n+1)) :
+        (Z *ᵥ t) i = -(sourceBReverseMatrix n k *ᵥ t) i := by
+      simp only [Z, Matrix.mulVec, dotProduct, neg_mul,
+        Finset.sum_neg_distrib]
+    have hweighted := sourceBReverseMatrix_weighted_18_bound n k hk
+      (by linarith : 0 < K) t
+    calc
+      ‖∑ A, t A • B A‖^2 ≤
+          144*(K+(n+1:ℕ)) *
+            ∑ i, ((Z *ᵥ t) i / colexANat K (i.val+1))^2 := henergy t
+      _ = 144*(K+(n+1:ℕ)) *
+            ∑ i, ((sourceBReverseMatrix n k *ᵥ t) i /
+              colexANat K (i.val+1))^2 := by simp only [hZ, neg_div, even_two, Even.neg_pow]
+      _ ≤ 144*(K+(n+1:ℕ)) *
+            ((18*(k : ℝ)^2/K)^2 * ∑ A, t A^2) :=
+        mul_le_mul_of_nonneg_left hweighted (by positivity)
+      _ = _ := by ring
+
+/-- The whole-solve B estimate fits *each* of the two equal quadratic
+completion budgets, using the actual ceiling offset and source range. -/
+theorem sourceBQuadraticScalar_budget {n k : ℕ} (hm : 34000 ≤ n+2) :
+    3*(144*((sourceOffset (n+2) : ℝ)+(n+1:ℕ)) *
+      (18*(k : ℝ)^2/(sourceOffset (n+2) : ℝ))^2) ≤
+      sourceReserve0Sq (n+2) k := by
+  have hupper := sourceOffset_plus_m_upper (n+2) hm
+  have hcount : (((n+1 : ℕ) : ℝ) ≤ (n+2:ℕ)) := by
+    exact_mod_cast (show n+1 ≤ n+2 by omega)
+  have hmid : (sourceOffset (n+2) : ℝ)+(n+1:ℕ) ≤
+      ((n+2:ℕ) : ℝ)^2/63 := by linarith
+  have hfactor : 144*((sourceOffset (n+2) : ℝ)+(n+1:ℕ)) ≤
+      4*((n+2:ℕ) : ℝ)^2 := by
+    have hscaled := mul_le_mul_of_nonneg_left hmid
+      (by norm_num : (0 : ℝ) ≤ 144)
+    nlinarith only [hscaled, sq_nonneg (((n+2:ℕ) : ℝ))]
+  have hfactor' := mul_le_mul_of_nonneg_right hfactor
+    (sq_nonneg (18*(k : ℝ)^2/(sourceOffset (n+2) : ℝ)))
+  calc
+    _ = 3*((144*((sourceOffset (n+2) : ℝ)+(n+1:ℕ))) *
+        (18*(k : ℝ)^2/(sourceOffset (n+2) : ℝ))^2) := by ring
+    _ ≤ 3*((4*((n+2:ℕ) : ℝ)^2) *
+        (18*(k : ℝ)^2/(sourceOffset (n+2) : ℝ))^2) :=
+      mul_le_mul_of_nonneg_left hfactor' (by norm_num)
+    _ = sourceReserve0Sq (n+2) k := by
+      unfold sourceReserve0Sq
+      ring
+
+/-- Same-index vectors for the actual flattened source centers, with their
+quadratic projections and a whole-family bound in the paper's `b₀²/3 = b₂²/3`
+completion budget. -/
+theorem sourceBQuadraticCoefficients_source_budget {n k : ℕ}
+    (hm : 34000 ≤ n+2) (hk : 2 ≤ k)
+    (p : Fin (n+2) → EuclideanSpace ℝ (Fin (n+1)))
+    (hpd : ∀ i j, ‖p j-p i‖^2 =
+      offDiagonalShift (colexSqData (m:=n+1)
+        (sourceOffset (n+2) : ℝ))
+        (sourceFlatteningRadius (n+2) k) i j) :
+    ∃ B : Fin (n+2) → EuclideanSpace ℝ (Fin (n+1)),
+      (∀ A J, inner ℝ (p A-p J) (B A) = sourceQuadraticPotential k A J) ∧
+      (∀ t : Fin (n+2) → ℝ,
+        3*‖∑ A, t A • B A‖^2 ≤
+          sourceReserve0Sq (n+2) k * ∑ A, t A^2) := by
+  obtain ⟨hK, hlarge, _, hr⟩ :=
+    source_macro_operator_scalar_gates (n+2) k hm hk
+  obtain ⟨B, hproj, hbound⟩ :=
+    sourceBQuadraticCoefficients_whole_solve (by omega : 1 ≤ n)
+      hk hK hlarge (sourceFlatteningRadius (n+2) k) hr p hpd
+  refine ⟨B, hproj, ?_⟩
+  intro t
+  have hs := sourceBQuadraticScalar_budget (k:=k) hm
+  have hsum : 0 ≤ ∑ A : Fin (n+2), t A^2 :=
+    Finset.sum_nonneg (fun A _ => sq_nonneg _)
+  calc
+    3*‖∑ A, t A • B A‖^2 ≤
+        3*((144*((sourceOffset (n+2) : ℝ)+(n+1:ℕ)) *
+          (18*(k : ℝ)^2/(sourceOffset (n+2) : ℝ))^2) *
+            ∑ A, t A^2) :=
+      mul_le_mul_of_nonneg_left (hbound t) (by norm_num)
+    _ = (3*(144*((sourceOffset (n+2) : ℝ)+(n+1:ℕ)) *
+          (18*(k : ℝ)^2/(sourceOffset (n+2) : ℝ))^2)) *
+            ∑ A, t A^2 := by ring
+    _ ≤ sourceReserve0Sq (n+2) k * ∑ A, t A^2 :=
+      mul_le_mul_of_nonneg_right hs hsum
+
+
+
+
+
+
+
+/-- Acyclic downstream assembly of the literal source operator. This uses
+the two-diagonal *whole-matrix* quadratic B estimate when constructing the
+residual Gram factor; the older per-column assembly remains available. -/
+theorem source_actual_operator_completion_universal_B_matrix {n k : ℕ}
+    (hm : 34000 ≤ n+2) (hk : 2 ≤ k) :
+    ∃ p : Fin (n+2) → EuclideanSpace ℝ (Fin (n+1)),
+    ∃ B : Fin (n+2) → EuclideanSpace ℝ (Fin (n+1)),
+    ∃ F G : Fin (n+1) → EuclideanSpace ℝ (Fin (n+1)),
+    ∃ V : Matrix (Fin (n+2) × Fin 5) (Fin (n+2) × Fin 5) ℝ,
+      (∀ i j, ‖p j-p i‖ ^ 2 =
+        offDiagonalShift (colexSqData (m:=n+1)
+          (sourceOffset (n+2) : ℝ))
+          (sourceFlatteningRadius (n+2) k) i j) ∧
+      (∀ A J, inner ℝ (p A-p J) (B A) =
+        sourceQuadraticPotential k A J) ∧
+      (∀ i a, inner ℝ (p i.succ-p i.castSucc) (F a) =
+        fineIncidence (n+1) (sourceOffset (n+2) : ℝ) i a) ∧
+      (∀ i a, inner ℝ (p i.succ-p i.castSucc) (G a) =
+        coarseIncidence (n+1) (sourceOffset (n+2) : ℝ) i a) ∧
+      (sourceActiveMatrix k B F G)ᵀ * (sourceActiveMatrix k B F G) +
+        Vᵀ * V =
+        Matrix.diagonal (fun q : Fin (n+2) × Fin 5 =>
+          trigWeight (sourceReserve0 (n+2) k)
+            (sourceReserve1 (n+2) k)
+            (sourceReserve0 (n+2) k) q.2) := by
+  obtain ⟨hK, hlarge, hmacro, hr⟩ :=
+    source_macro_operator_scalar_gates (n+2) k hm hk
+  have hnK : (n+1 : ℕ) ≤ (sourceOffset (n+2) : ℝ) := by
+    have hh : ((n+1 : ℕ) : ℝ) ≤ (n+2 : ℕ) := by
+      exact_mod_cast (show n+1 ≤ n+2 by omega)
+    linarith
+  obtain ⟨p, _, hpd⟩ :=
+    flattened_colex_realizes (by omega : 1 ≤ n) hK hlarge
+      (sourceFlatteningRadius (n+2) k) hr
+  obtain ⟨B, hBproj, hBbudget⟩ :=
+    sourceBQuadraticCoefficients_source_budget hm hk p hpd
+  obtain ⟨F, G, hFproj, hGproj, hFbudget, hGbudget⟩ :=
+    sourceFineCoarseCoefficients_exist (by omega : 1 ≤ n) hK hlarge
+      (sourceFlatteningRadius (n+2) k) hr hnK p hpd
+  have hBnorm (t : Fin (n+2) → ℝ) :
+      3 * ‖∑ A, t A • B A‖ ^ 2 ≤
+        (sourceReserve0 (n+2) k) ^ 2 * ∑ A, t A ^ 2 := by
+    rw [sourceReserve0_square]
+    exact hBbudget t
+  have hUnorm (t : Fin (n+2) → ℝ) :
+      3 * ‖∑ A, t A • sourceSineCoefficient k F G A‖ ^ 2 ≤
+        (sourceReserve1 (n+2) k) ^ 2 * ∑ A, t A ^ 2 := by
+    rw [sourceReserve1_square]
+    exact sourceSineCoefficients_whole_budget k hm hk F G
+      hFbudget hGbudget t
+  obtain ⟨V, hV⟩ := source_three_group_completion_factor B
+    (sourceSineCoefficient k F G)
+    (sourceReserve0 (n+2) k) (sourceReserve1 (n+2) k)
+    hBnorm hUnorm
+  exact ⟨p, B, F, G, V, hpd, hBproj, hFproj, hGproj, hV⟩
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-! Connecting the source's actual colex macro realization and three-slot
+operator to the cross-cluster squared-distance identity. -/
+
+open scoped BigOperators Matrix
+open Matrix
+
+open Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem solution {n k : ℕ}
+    (hm : 34000 ≤ n+2) (hk : 2 ≤ k) (prime : ℕ) :
+    ∃ P : Fin (n+2) × Fin k →
+        EuclideanSpace ℝ (ClusterCoordinate (Fin (n+1)) (n+2)),
+      (∀ A : Fin (n+2), ∀ i j : Fin k, i.val < j.val →
+        dist (P (A,j)) (P (A,i)) =
+          sourceLocalDistance prime (n+2) k
+            (sourceReserve1 (n+2) k) (sourceReserve0 (n+2) k)
+            A.val i.val (j.val-i.val)) ∧
+      (∀ A J : Fin (n+2), A.val < J.val →
+        ∀ i j : Fin k,
+          dist (P (A,i)) (P (J,j))^2 =
+            (sourceCrossBaseline (sourceOffset (n+2) : ℝ) k
+                (sourcePairCode A J) +
+              sourceAlpha k i.val + sourceBeta k j.val)^2 -
+              2*sourceAlpha k i.val*sourceBeta k j.val) := by
+  obtain ⟨p, B, F, G, V, hpd, hB, hF, hG, hfactor⟩ :=
+    source_actual_operator_completion_universal_B_matrix hm hk
+  let R := sourceRadius (n+2) k
+  let b₀ := sourceReserve0 (n+2) k
+  let b₁ := sourceReserve1 (n+2) k
+  let axis := Real.sqrt (R^2-(2*b₀^2+b₁^2))
+  let P : Fin (n+2) × Fin k →
+      EuclideanSpace ℝ (ClusterCoordinate (Fin (n+1)) (n+2)) :=
+    fun q => rulerPoint (fun A t => p A t)
+      (sourceActiveMatrix k B F G) V
+      (sourceMacroStep (k : ℝ)) R axis (sourceTheta k)
+      (((k : ℝ)-1)/2) prime k q.1 q.2.val
+  refine ⟨P, ?_, ?_⟩
+  · intro A i j hij
+    have hR : R ≠ 0 :=
+      (sourceRadius_pos (n+2) k (by omega) (by omega)).ne'
+    have hdist := rulerPoint_local_distance (fun A t => p A t)
+      (sourceActiveMatrix k B F G) V
+      (sourceMacroStep (k : ℝ)) R axis (sourceTheta k)
+      (((k : ℝ)-1)/2) b₀ b₁ b₀ prime k A i.val
+      (j.val-i.val) hR hfactor
+    have hsum : i.val+(j.val-i.val)=j.val := by omega
+    simpa only [P, hsum, sourceLocalDistance, R, b₀, b₁] using hdist
+  · intro A J hAJ i j
+    have hreserve : 2*b₀^2+b₁^2 ≤ R^2 := by
+      dsimp [b₀, b₁, R]
+      rw [sourceReserve0_square, sourceReserve1_square]
+      exact source_total_reserve_bound (n+2) k hm
+    change dist
+      (clusterPoint (fun A t => p A t) (sourceActiveMatrix k B F G) V
+        (sourceMacroStep (k : ℝ)) R axis A
+        (sourceTheta k * ((i.val : ℝ)-((k : ℝ)-1)/2))
+        (3*(primeRuler prime k A.val i.val : ℝ)))
+      (clusterPoint (fun A t => p A t) (sourceActiveMatrix k B F G) V
+        (sourceMacroStep (k : ℝ)) R axis J
+        (sourceTheta k * ((j.val : ℝ)-((k : ℝ)-1)/2))
+        (3*(primeRuler prime k J.val j.val : ℝ))) ^ 2 = _
+    exact source_clusterPoint_cross_metric_square (by omega) _ p B F G V
+      hpd hB hF hG b₀ b₁ hfactor hreserve A J hAJ
+      i.val j.val
+      (3*(primeRuler prime k A.val i.val : ℝ))
+      (3*(primeRuler prime k J.val j.val : ℝ))

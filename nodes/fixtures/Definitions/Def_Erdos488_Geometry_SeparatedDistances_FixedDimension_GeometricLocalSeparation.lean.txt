@@ -1,0 +1,40 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+open scoped Matrix
+open Matrix
+
+/-- The actual trigonometric-ruler point; restricting i to Fin k gives the finite configuration. -/
+noncomputable def rulerPoint {ι : Type*} [Fintype ι] {m : ℕ}
+    (centers : Fin m → ι → ℝ) (M : Matrix ι (Fin m × Fin 5) ℝ)
+    (V : Matrix (Fin m × Fin 5) (Fin m × Fin 5) ℝ)
+    (S R axis θ center : ℝ) (p k : ℕ) (A : Fin m) (i : ℕ) :
+    EuclideanSpace ℝ (ClusterCoordinate ι m) :=
+  clusterPoint centers M V S R axis A (θ*((i : ℝ)-center))
+    (3*(primeRuler p k A.val i : ℝ))
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

@@ -1,0 +1,16 @@
+-- Generated probe, not executed. Import only one solution module per process.
+import Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget
+import Lean
+set_option pp.universes true
+set_option pp.fullNames true
+set_option pp.explicit true
+set_option pp.proofs true
+open Lean
+run_meta do
+  let env ← getEnv
+  let name := "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSineCoefficients_whole_budget".toName
+  let some ci := env.find? name | throwError "Requested generated declaration is absent"
+  let ty ← Lean.Meta.ppExpr ci.type
+  IO.println (Json.mkObj [("name", Json.str name.toString),
+    ("key", Json.str "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSineCoefficients_whole_budget::statement"),
+    ("typePretty", Json.str ty.pretty)]).compress

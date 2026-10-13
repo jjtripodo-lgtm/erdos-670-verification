@@ -1,0 +1,94 @@
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+
+namespace Erdos488.Geometry.SeparatedDistances
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- A fixed colex column is exactly its consecutive binomial interval. -/
+theorem colexLabel_column_exact (j : ℕ) :
+    (Finset.range j).image (fun i => colexLabel i j) =
+      Finset.Icc (Nat.choose j 2 + 1) (Nat.choose (j + 1) 2) := by
+  have hchoose : Nat.choose (j + 1) 2 = Nat.choose j 2 + j := by
+    rw [Nat.choose_succ_succ]
+    simp only [Nat.choose_one_right, Nat.succ_eq_add_one]
+    norm_num
+    omega
+  ext x
+  simp only [Finset.mem_image, Finset.mem_range, Finset.mem_Icc]
+  constructor
+  · rintro ⟨i, hi, rfl⟩
+    rw [hchoose]
+    simp only [colexLabel]
+    omega
+  · rintro ⟨hlo, hhi⟩
+    refine ⟨x - (Nat.choose j 2 + 1), ?_, ?_⟩
+    · rw [hchoose] at hhi
+      omega
+    · simp only [colexLabel]
+      omega
+
+/-- Across all columns below `n`, colex labels are exactly `1, ..., choose n 2`. -/
+theorem colexLabel_range_exact (n : ℕ) :
+    (Finset.range n).biUnion
+        (fun j => (Finset.range j).image (fun i => colexLabel i j)) =
+      Finset.Icc 1 (Nat.choose n 2) := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      rw [Finset.range_add_one, Finset.biUnion_insert]
+      · rw [ih, colexLabel_column_exact]
+        ext x
+        simp only [Finset.mem_union, Finset.mem_Icc]
+        rw [Nat.choose_succ_succ]
+        simp only [Nat.choose_one_right, Nat.succ_eq_add_one]
+        norm_num
+        omega
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances

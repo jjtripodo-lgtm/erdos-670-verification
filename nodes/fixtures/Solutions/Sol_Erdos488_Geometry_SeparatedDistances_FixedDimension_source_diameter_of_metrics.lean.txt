@@ -1,0 +1,624 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Real.Sqrt
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.HarmonicLocalModel
+/-! Literal two-harmonic local distance model: feature monotonicity, cone bounds,
+and uniform lower separation transfer. This is independent of the global Gram construction. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+theorem harmonicEnergy_nonneg (θ b₁ b₂ δ : ℝ) : 0 ≤ harmonicEnergy θ b₁ b₂ δ := by
+  unfold harmonicEnergy
+  positivity
+
+
+
+
+
+theorem localDistanceModel_nonneg (R θ b₁ b₂ δ d : ℝ) :
+    0 ≤ localDistanceModel R θ b₁ b₂ δ d := Real.sqrt_nonneg _
+
+theorem localDistanceModel_square (R θ b₁ b₂ δ d : ℝ) :
+    (localDistanceModel R θ b₁ b₂ δ d)^2 =
+      (circleChord R d)^2+harmonicEnergy θ b₁ b₂ δ := by
+  exact Real.sq_sqrt (add_nonneg (sq_nonneg _) (harmonicEnergy_nonneg _ _ _ _))
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanCrossCoordinates
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+open scoped BigOperators Matrix
+open Matrix
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- The absolute cross-error envelope follows from the square identity and a
+positive nominal lower bound. No adjacent or differential error bound is used. -/
+theorem cross_error_uniform_bound (D u α β B Tmin : ℝ) (hD : 0 ≤ D)
+    (hT : 0 < Tmin) (hu : Tmin ≤ u) (hB : |α*β| ≤ B)
+    (hsquare : D^2=u^2-2*α*β) : |D-u| ≤ 2*B/Tmin := by
+  have hden : 0 < D+u := by linarith
+  have heq : D-u=(-2*(α*β))/(D+u) := by
+    apply (eq_div_iff hden.ne').2
+    nlinarith
+  rw [heq,abs_div,abs_mul,abs_of_pos hden]
+  norm_num
+  have hbound := mul_le_mul_of_nonneg_left hB (show (0 : ℝ) ≤ 2 by norm_num)
+  have h₀ := div_le_div_of_nonneg_right hbound hden.le
+  have h₁ := div_le_div_of_nonneg_left (show 0 ≤ 2*B by nlinarith [abs_nonneg (α*β)]) hT
+    (show Tmin ≤ D+u by linarith)
+  simpa only [abs_mul] using h₀.trans h₁
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SineDigits
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+/-- The normalized sine digit never exceeds its centered coordinate in magnitude. -/
+theorem sineDigit_abs_le (θ center x : ℝ) (hθ : 0 < θ) :
+    |sineDigit θ center x| ≤ |x-center| := by
+  unfold sineDigit
+  rw [abs_div,abs_of_pos hθ]
+  calc
+    |Real.sin (θ*(x-center))|/θ ≤ |θ*(x-center)|/θ :=
+      div_le_div_of_nonneg_right Real.abs_sin_le_abs hθ.le
+    _ = |x-center| := by rw [abs_mul,abs_of_pos hθ]; field_simp
+
+/-- Centered coordinate bounds apply to every digit in the full interval. -/
+theorem sineDigit_centered_bound (θ center x : ℝ) (hθ : 0 < θ)
+    (hx : 0 ≤ x) (hxc : x ≤ 2*center) : |sineDigit θ center x| ≤ center := by
+  apply (sineDigit_abs_le θ center x hθ).trans
+  exact abs_le.mpr ⟨by linarith,by linarith⟩
+
+
+
+/-- Source-shaped finite digit bound, valid for all k and every legal index. -/
+theorem finite_sineDigit_bound (θ : ℝ) (k i : ℕ) (hθ : 0 < θ) (hi : i < k) :
+    |sineDigit θ (((k : ℝ)-1)/2) i| ≤ ((k : ℝ)-1)/2 := by
+  apply sineDigit_centered_bound θ (((k : ℝ)-1)/2) i hθ (by positivity)
+  have h : (i : ℝ)+1 ≤ k := by exact_mod_cast hi
+  linarith
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossGuards
+/-! Universal source-parameter cross guards, not finite sampled certificates.
+The hypotheses are k≥2 and K≥72247875/4, with the literal source formulas. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+
+theorem source_perturbation_quadratic_bound (k : ℝ) (hk : 2 ≤ k) :
+    sourcePerturbationBound k ≤ (117/128 : ℝ)*k^2 := by
+  unfold sourcePerturbationBound
+  nlinarith [sq_nonneg k]
+
+theorem source_baseline_lower (K k : ℝ) (hK : 72247875/4 ≤ K) :
+    (52668703791/2048 : ℝ)*k^2 ≤ sourceBaseline K k := by
+  have h := mul_le_mul_of_nonneg_left hK (show 0 ≤ (9/8 : ℝ)^3*k^2 by positivity)
+  unfold sourceBaseline sourceMacroStep
+  nlinarith
+
+theorem source_Tmin_lower (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    (52668701919/2048 : ℝ)*k^2 ≤ sourceTmin K k := by
+  have h₀ := source_baseline_lower K k hK
+  have h₁ := source_perturbation_quadratic_bound k hk
+  unfold sourceTmin
+  linarith
+
+theorem source_Tmin_pos (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    0 < sourceTmin K k := by
+  have h := source_Tmin_lower K k hK hk
+  nlinarith [sq_nonneg (k-2)]
+
+/-- The pointwise error is at most k times one exact rational, uniformly in K,k. -/
+theorem source_error_linear_bound (K k : ℝ) (hK : 72247875/4 ≤ K) (hk : 2 ≤ k) :
+    sourceError K k ≤ (648/5852077991 : ℝ)*k := by
+  have hT := source_Tmin_lower K k hK hk
+  have hTpos := source_Tmin_pos K k hK hk
+  have hm := mul_le_mul_of_nonneg_left hT (show 0 ≤ (648/5852077991 : ℝ)*k by positivity)
+  unfold sourceError
+  apply (div_le_iff₀ hTpos).2
+  nlinarith
+
+
+
+
+
+
+
+
+
+
+
+theorem sourceOffset_lower (m : ℕ) (hm : 34000 ≤ m) :
+    (72247875/4 : ℝ) ≤ sourceOffset m := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have h := Nat.le_ceil ((m : ℝ)*((m : ℝ)-1)/64)
+  change (72247875/4 : ℝ) ≤ (⌈(m : ℝ)*((m : ℝ)-1)/64⌉₊ : ℝ)
+  nlinarith [sq_nonneg ((m : ℝ)-34000)]
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossSpectrum
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+
+theorem sourceDigit_bound (k i : ℕ) (hk : 2 ≤ k) (hi : i < k) :
+    |sourceDigit k i| ≤ ((k : ℝ)-1)/2 := by
+  apply finite_sineDigit_bound
+  · have hk' : (0 : ℝ) < k := by exact_mod_cast (show 0 < k by omega)
+    positivity
+  · exact hi
+
+
+
+theorem source_digit_sum_bound (k i j : ℕ) (hk : 2 ≤ k) (hi : i < k) (hj : j < k) :
+    |sourceAlpha k i+sourceBeta k j| ≤ sourcePerturbationBound k := by
+  obtain ⟨hli,hui⟩ := abs_le.mp (sourceDigit_bound k i hk hi)
+  obtain ⟨hlj,huj⟩ := abs_le.mp (sourceDigit_bound k j hk hj)
+  have hk' : (0 : ℝ) ≤ k := by positivity
+  have hi₀ := mul_le_mul_of_nonneg_left hli hk'
+  have hi₁ := mul_le_mul_of_nonneg_left hui hk'
+  unfold sourceAlpha sourceBeta sourcePerturbationBound
+  apply abs_le.mpr
+  constructor <;> nlinarith
+
+theorem source_digit_product_bound (k i j : ℕ) (hk : 2 ≤ k) (hi : i < k) (hj : j < k) :
+    |sourceAlpha k i*sourceBeta k j| ≤ (9/8 : ℝ)^3*(k : ℝ)^3 := by
+  have hfi := sourceDigit_bound k i hk hi
+  have hfj := sourceDigit_bound k j hk hj
+  have hk' : (0 : ℝ) ≤ k := by positivity
+  have hi' : |sourceDigit k i| ≤ (k : ℝ) := by linarith
+  have hj' : |sourceDigit k j| ≤ (k : ℝ) := by linarith
+  have hp := mul_le_mul hi' hj' (abs_nonneg _) hk'
+  have hm := mul_le_mul_of_nonneg_left hp (show 0 ≤ (9/8 : ℝ)^3*(k : ℝ) by positivity)
+  have he : |sourceAlpha k i*sourceBeta k j|=
+      (9/8 : ℝ)^3*(k : ℝ)*(|sourceDigit k i| * |sourceDigit k j|) := by
+    unfold sourceAlpha sourceBeta
+    rw [abs_mul,abs_mul,abs_mul,abs_mul,abs_mul]
+    simp only [abs_of_nonneg hk']
+    norm_num
+    ring
+  rw [he]
+  nlinarith
+
+/-- Pointwise errors for the literal source digits, without assuming an error bound. -/
+theorem source_cross_error (D K : ℝ) (k a i j : ℕ) (hK : 72247875/4 ≤ K)
+    (hk : 2 ≤ k) (hi : i < k) (hj : j < k) (hD : 0 ≤ D)
+    (hsq : D^2=(sourceCrossBaseline K k a+sourceAlpha k i+sourceBeta k j)^2-
+      2*sourceAlpha k i*sourceBeta k j) :
+    |D-(sourceCrossBaseline K k a+sourceAlpha k i+sourceBeta k j)| ≤ sourceError K k := by
+  have hk' : (2 : ℝ) ≤ k := by exact_mod_cast hk
+  have hbase : sourceBaseline K k ≤ sourceCrossBaseline K k a := by
+    have h : 0 ≤ sourceMacroStep k*(a : ℝ) := by unfold sourceMacroStep; positivity
+    unfold sourceCrossBaseline
+    linarith
+  have hpert := (abs_le.mp (source_digit_sum_bound k i j hk hi hj)).1
+  have hu : sourceTmin K k ≤ sourceCrossBaseline K k a+sourceAlpha k i+sourceBeta k j := by
+    unfold sourceTmin
+    linarith
+  simpa only [sourceError,mul_assoc] using cross_error_uniform_bound D _ (sourceAlpha k i) (sourceBeta k j)
+    ((9/8 : ℝ)^3*(k : ℝ)^3) (sourceTmin K k) hD (source_Tmin_pos K k hK hk') hu
+    (source_digit_product_bound k i j hk hi hj) hsq
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceLocalSpectrum
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+
+theorem sourceRadius_square (m k : ℕ) :
+    (sourceRadius m k)^2=17500*(m : ℝ)^2*(k : ℝ)^4 := by
+  unfold sourceRadius
+  rw [mul_pow,mul_pow,Real.sq_sqrt (by norm_num)]
+  ring
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceMixedBands
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- A radius budget for the two harmonic features bounds every local length,
+without a restriction on the arc or the lag. -/
+theorem localDistanceModel_le_three_radius (R θ b₁ b₂ δ d : ℝ)
+    (hR : 0 ≤ R) (hbudget : b₁ ^ 2 + b₂ ^ 2 ≤ R ^ 2) :
+    localDistanceModel R θ b₁ b₂ δ d ≤ 3 * R := by
+  have hc₀ := Real.sin_sq_le_one (d / (2 * R))
+  have hc := mul_le_mul_of_nonneg_left hc₀ (show 0 ≤ 4 * R ^ 2 by positivity)
+  have hc' : (circleChord R d) ^ 2 ≤ 4 * R ^ 2 := by
+    unfold circleChord
+    nlinarith only [hc]
+  have he₀ := Real.sin_sq_le_one (θ * δ / 2)
+  have he₁ := Real.sin_sq_le_one (θ * δ)
+  have he₀' := mul_le_mul_of_nonneg_left he₀ (show 0 ≤ 4 * b₁ ^ 2 by positivity)
+  have he₁' := mul_le_mul_of_nonneg_left he₁ (show 0 ≤ 4 * b₂ ^ 2 by positivity)
+  have he : harmonicEnergy θ b₁ b₂ δ ≤ 4 * (b₁ ^ 2 + b₂ ^ 2) := by
+    unfold harmonicEnergy
+    nlinarith only [he₀', he₁']
+  have hs := localDistanceModel_square R θ b₁ b₂ δ d
+  have hpos := localDistanceModel_nonneg R θ b₁ b₂ δ d
+  nlinarith [sq_nonneg R]
+
+theorem sourceOffset_ge_fivehundred_m (m : ℕ) (hm : 34000 ≤ m) :
+    (500 : ℝ) * m ≤ sourceOffset m := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hm₀ : (0 : ℝ) ≤ m := by positivity
+  have hceil := Nat.le_ceil ((m : ℝ) * ((m : ℝ) - 1) / 64)
+  change (m : ℝ) * ((m : ℝ) - 1) / 64 ≤ (sourceOffset m : ℝ) at hceil
+  have hmul := mul_nonneg hm₀ (show (0 : ℝ) ≤ m - 34000 by linarith)
+  nlinarith
+
+theorem sourceRadius_le_onehundredthirtythree (m k : ℕ) :
+    sourceRadius m k ≤ 133 * (m : ℝ) * (k : ℝ) ^ 2 := by
+  have hR : 0 ≤ sourceRadius m k := by unfold sourceRadius; positivity
+  have hsq := sourceRadius_square m k
+  let t : ℝ := (m : ℝ) * (k : ℝ) ^ 2
+  have ht : 0 ≤ t := by dsimp [t]; positivity
+  have hsq' : (sourceRadius m k) ^ 2 = 17500 * t ^ 2 := by
+    dsimp [t]
+    nlinarith only [hsq]
+  calc
+    sourceRadius m k ≤ 133 * t := by nlinarith [sq_nonneg t]
+    _ = 133 * (m : ℝ) * (k : ℝ) ^ 2 := by dsimp [t]; ring
+
+theorem source_mixed_scalar_budget (m k : ℕ) (hm : 34000 ≤ m) (hk : 2 ≤ k) :
+    3 * sourceRadius m k + 1 ≤
+      sourceTmin (sourceOffset m) k - sourceError (sourceOffset m) k := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hk' : (2 : ℝ) ≤ k := by exact_mod_cast hk
+  have hK := sourceOffset_ge_fivehundred_m m hm
+  have hKfixed := sourceOffset_lower m hm
+  have hmul := mul_le_mul_of_nonneg_left hK (sq_nonneg (k : ℝ))
+  have hbase : 700 * (m : ℝ) * (k : ℝ) ^ 2 ≤
+      sourceBaseline (sourceOffset m) k := by
+    unfold sourceBaseline sourceMacroStep
+    nlinarith [hmul]
+  have hpert := source_perturbation_quadratic_bound (k : ℝ) hk'
+  have herr := source_error_linear_bound (sourceOffset m) k hKfixed hk'
+  have hmK := mul_le_mul_of_nonneg_right hm' (sq_nonneg (k : ℝ))
+  have hk₂ : (k : ℝ) ≤ (k : ℝ) ^ 2 := by nlinarith
+  have hT : 600 * (m : ℝ) * (k : ℝ) ^ 2 ≤
+      sourceTmin (sourceOffset m) k - sourceError (sourceOffset m) k := by
+    unfold sourceTmin
+    nlinarith
+  have hR := sourceRadius_le_onehundredthirtythree m k
+  have hmk : 1 ≤ (m : ℝ) * (k : ℝ) ^ 2 := by nlinarith [hmK]
+  nlinarith
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceReserveBudgets
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+
+theorem sourceOffset_plus_m_upper (m : ℕ) (hm : 34000 ≤ m) :
+    (sourceOffset m : ℝ)+(m : ℝ) ≤ (m : ℝ)^2/63 := by
+  have hm' : (34000 : ℝ) ≤ m := by exact_mod_cast hm
+  have hnonneg : 0 ≤ (m : ℝ)*((m : ℝ)-1)/64 := by
+    apply div_nonneg (mul_nonneg (by positivity) (by linarith)) (by norm_num)
+  have hceil := Nat.ceil_lt_add_one hnonneg
+  change (sourceOffset m : ℝ) < (m : ℝ)*((m : ℝ)-1)/64+1 at hceil
+  have hmsq : (34000 : ℝ)*m ≤ (m : ℝ)^2 := by nlinarith
+  nlinarith
+
+theorem sourceReserve0Sq_bound (m k : ℕ) (hm : 34000 ≤ m) :
+    sourceReserve0Sq m k ≤ (972/25 : ℝ)*(m : ℝ)^2*(k : ℝ)^4 := by
+  have hK := sourceOffset_lower m hm
+  have hKpos : (0 : ℝ) < sourceOffset m := by linarith
+  have hKsq : (100 : ℝ) ≤ (sourceOffset m : ℝ)^2 := by nlinarith
+  have hmulp := mul_le_mul_of_nonneg_left hKsq
+    (show 0 ≤ (972/25 : ℝ)*(m : ℝ)^2*(k : ℝ)^4 by positivity)
+  unfold sourceReserve0Sq
+  apply (div_le_iff₀ (sq_pos_of_pos hKpos)).2
+  nlinarith
+
+theorem sourceReserve1Sq_bound (m k : ℕ) (hm : 34000 ≤ m) :
+    sourceReserve1Sq m k ≤ (137781/8 : ℝ)*(m : ℝ)^2*(k : ℝ)^4 := by
+  have h := mul_le_mul_of_nonneg_left (sourceOffset_plus_m_upper m hm)
+    (show 0 ≤ (21168*(9/8 : ℝ)^4*32)*(k : ℝ)^4 by positivity)
+  unfold sourceReserve1Sq
+  nlinarith
+
+/-- The full T² reserve fits strictly inside the chosen radius square. -/
+theorem source_total_reserve_bound (m k : ℕ) (hm : 34000 ≤ m) :
+    2*sourceReserve0Sq m k+sourceReserve1Sq m k ≤ (sourceRadius m k)^2 := by
+  have h₀ := sourceReserve0Sq_bound m k hm
+  have h₁ := sourceReserve1Sq_bound m k hm
+  rw [sourceRadius_square]
+  nlinarith [mul_nonneg (sq_nonneg (m : ℝ)) (show 0 ≤ (k : ℝ)^4 by positivity)]
+
+
+
+
+
+
+
+
+
+
+theorem sourceReserve0_square (m k : ℕ) : (sourceReserve0 m k)^2=sourceReserve0Sq m k := by
+  apply Real.sq_sqrt
+  unfold sourceReserve0Sq
+  positivity
+
+theorem sourceReserve1_square (m k : ℕ) : (sourceReserve1 m k)^2=sourceReserve1Sq m k := by
+  apply Real.sq_sqrt
+  unfold sourceReserve1Sq
+  positivity
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+ -- Helpers from Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualCrossMetric
+/-! Connecting the source's actual colex macro realization and three-slot
+operator to the cross-cluster squared-distance identity. -/
+
+open scoped BigOperators Matrix
+open Matrix
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+
+
+theorem sourcePairCode_lt_choose {m : ℕ} (A J : Fin (m+1))
+    (hAJ : A.val < J.val) :
+    sourcePairCode A J < Nat.choose (m+1) 2 := by
+  have hstep : Nat.choose (J.val+1) 2 =
+      Nat.choose J.val 2 + J.val := by
+    rw [Nat.choose_succ_succ]
+    simp [Nat.choose_one_right, add_comm]
+  have hchoose : Nat.choose (J.val+1) 2 ≤ Nat.choose (m+1) 2 :=
+    Nat.choose_le_choose 2 (by omega)
+  dsimp [sourcePairCode]
+  omega
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-! A diameter bound for the literal point family produced by the source
+operator. The theorem uses its local and cross metric identities; it assumes
+no diameter or separation property of the points. -/
+
+open Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+theorem solution {m k : ℕ}
+    (hm : 34000 ≤ m+1) (hk : 2 ≤ k) (prime : ℕ)
+    (P : Fin (m+1) × Fin k → EuclideanSpace ℝ
+      (ClusterCoordinate (Fin m) (m+1)))
+    (hlocal : ∀ A : Fin (m+1), ∀ i j : Fin k, i.val < j.val →
+      dist (P (A,j)) (P (A,i)) =
+        sourceLocalDistance prime (m+1) k
+          (sourceReserve1 (m+1) k) (sourceReserve0 (m+1) k)
+          A.val i.val (j.val-i.val))
+    (hcross : ∀ A J : Fin (m+1), A.val < J.val →
+      ∀ i j : Fin k,
+        dist (P (A,i)) (P (J,j))^2 =
+          (sourceCrossBaseline (sourceOffset (m+1) : ℝ) k
+              (sourcePairCode A J) +
+            sourceAlpha k i.val + sourceBeta k j.val)^2 -
+            2*sourceAlpha k i.val*sourceBeta k j.val)
+    (x y : Fin (m+1) × Fin k) :
+    dist (P x) (P y) ≤
+      sourceMacroStep (k : ℝ) *
+        ((sourceOffset (m+1) : ℝ) + (Nat.choose (m+1) 2 : ℝ)) +
+      sourcePerturbationBound (k : ℝ) +
+      sourceError (sourceOffset (m+1) : ℝ) (k : ℝ) := by
+  let K : ℝ := sourceOffset (m+1)
+  let S : ℝ := sourceMacroStep (k : ℝ)
+  let A : ℝ := sourcePerturbationBound (k : ℝ)
+  let E : ℝ := sourceError K (k : ℝ)
+  let M : ℕ := Nat.choose (m+1) 2
+  have hm₀ : 34000 ≤ m+1 := hm
+  have hk' : (2 : ℝ) ≤ k := by exact_mod_cast hk
+  have hK : (72247875/4 : ℝ) ≤ K := sourceOffset_lower (m+1) hm
+  have hS : 0 ≤ S := by dsimp [S, sourceMacroStep]; positivity
+  have hA : 0 ≤ A := by
+    dsimp [A, sourcePerturbationBound]
+    have : (0 : ℝ) ≤ (k : ℝ) - 1 := by linarith
+    positivity
+  have hE : 0 ≤ E := by
+    dsimp [E, sourceError]
+    have ht := source_Tmin_pos K k hK hk'
+    positivity
+  have hM : 1 ≤ M := by
+    dsimp [M]
+    have h : Nat.choose 2 2 ≤ Nat.choose (m+1) 2 :=
+      Nat.choose_le_choose 2 (by omega)
+    simpa using h
+  have hM' : (1 : ℝ) ≤ M := by exact_mod_cast hM
+  have hlocalcap (B : Fin (m+1)) (i j : Fin k) (hij : i.val < j.val) :
+      dist (P (B,i)) (P (B,j)) ≤ S*(K+(M : ℝ))+A+E := by
+    have hreserve : (sourceReserve1 (m+1) k)^2 +
+        (sourceReserve0 (m+1) k)^2 ≤ (sourceRadius (m+1) k)^2 := by
+      rw [sourceReserve1_square, sourceReserve0_square]
+      have htotal := source_total_reserve_bound (m+1) k hm
+      have hzero : 0 ≤ sourceReserve0Sq (m+1) k := by
+        unfold sourceReserve0Sq
+        positivity
+      linarith
+    have hR : 0 ≤ sourceRadius (m+1) k := by
+      unfold sourceRadius
+      positivity
+    have hloc := localDistanceModel_le_three_radius
+      (sourceRadius (m+1) k) (sourceTheta k)
+      (sourceReserve1 (m+1) k) (sourceReserve0 (m+1) k)
+      ((j.val-i.val : ℕ) : ℝ) (rulerArc prime k B.val i.val (j.val-i.val))
+      hR hreserve
+    have hgap := source_mixed_scalar_budget (m+1) k hm hk
+    have hbase : sourceBaseline K k = S*(K+1) := rfl
+    have hT : sourceTmin K k = sourceBaseline K k - A := rfl
+    rw [dist_comm, hlocal B i j hij]
+    change sourceLocalDistance prime (m+1) k
+      (sourceReserve1 (m+1) k) (sourceReserve0 (m+1) k)
+      B.val i.val (j.val-i.val) ≤ _
+    have hloc' : sourceLocalDistance prime (m+1) k
+        (sourceReserve1 (m+1) k) (sourceReserve0 (m+1) k)
+        B.val i.val (j.val-i.val) ≤ 3*sourceRadius (m+1) k := by
+      simpa only [sourceLocalDistance] using hloc
+    rw [hT, hbase] at hgap
+    have hstep : S*(K+1) ≤ S*(K+(M : ℝ)) :=
+      mul_le_mul_of_nonneg_left (by linarith) hS
+    linarith
+  have hcrosscap (B C : Fin (m+1)) (hBC : B.val < C.val)
+      (i j : Fin k) :
+      dist (P (B,i)) (P (C,j)) ≤ S*(K+(M : ℝ))+A+E := by
+    have hsq := hcross B C hBC i j
+    have herr := source_cross_error
+      (dist (P (B,i)) (P (C,j))) K k (sourcePairCode B C)
+      i.val j.val hK hk i.isLt j.isLt dist_nonneg hsq
+    have hpert := source_digit_sum_bound k i.val j.val hk i.isLt j.isLt
+    have hcode := sourcePairCode_lt_choose B C hBC
+    have hcode' : (sourcePairCode B C : ℝ) ≤ (M : ℝ) - 1 := by
+      have hnat : sourcePairCode B C ≤ M-1 := by omega
+      exact_mod_cast hnat
+    have hbase : sourceCrossBaseline K k (sourcePairCode B C) =
+        S*(K+1+(sourcePairCode B C : ℝ)) := by
+      dsimp [sourceCrossBaseline, sourceBaseline, S]
+      ring
+    have hmul := mul_le_mul_of_nonneg_left hcode' hS
+    obtain ⟨herr₀, herr₁⟩ := abs_le.mp herr
+    obtain ⟨hpert₀, hpert₁⟩ := abs_le.mp hpert
+    dsimp [E, A] at *
+    rw [hbase] at herr₁
+    linarith
+  rcases x with ⟨B,i⟩
+  rcases y with ⟨C,j⟩
+  rcases lt_trichotomy B.val C.val with hxy | hsame | hyx
+  · simpa only [K, S, A, E, M] using hcrosscap B C hxy i j
+  · have hB : B = C := Fin.ext hsame
+    subst C
+    rcases lt_trichotomy i.val j.val with hij | heq | hji
+    · simpa only [K, S, A, E, M] using hlocalcap B i j hij
+    · have hi : i = j := Fin.ext heq
+      subst j
+      have hcap : 0 ≤ S*(K+(M : ℝ))+A+E := by positivity
+      simpa using hcap
+    · have h := hlocalcap B j i hji
+      simpa only [dist_comm, K, S, A, E, M] using h
+  · have h := hcrosscap C B hyx j i
+    simpa only [dist_comm, K, S, A, E, M] using h

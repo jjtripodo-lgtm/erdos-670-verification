@@ -1,0 +1,16 @@
+-- Generated probe, not executed. Import only one solution module per process.
+import Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics
+import Lean
+set_option pp.universes true
+set_option pp.fullNames true
+set_option pp.explicit true
+set_option pp.proofs true
+open Lean
+run_meta do
+  let env ← getEnv
+  let name := "solution".toName
+  let some ci := env.find? name | throwError "Requested generated declaration is absent"
+  let ty ← Lean.Meta.ppExpr ci.type
+  IO.println (Json.mkObj [("name", Json.str name.toString),
+    ("key", Json.str "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_actual_ruler_configuration_metrics::solution"),
+    ("typePretty", Json.str ty.pretty)]).compress

@@ -1,0 +1,22 @@
+theorem Erdos488.Geometry.SeparatedDistances.FixedDimension.source_diameter_of_metrics {m k : ℕ}
+    (hm : 34000 ≤ m+1) (hk : 2 ≤ k) (prime : ℕ)
+    (P : Fin (m+1) × Fin k → EuclideanSpace ℝ
+      (ClusterCoordinate (Fin m) (m+1)))
+    (hlocal : ∀ A : Fin (m+1), ∀ i j : Fin k, i.val < j.val →
+      dist (P (A,j)) (P (A,i)) =
+        sourceLocalDistance prime (m+1) k
+          (sourceReserve1 (m+1) k) (sourceReserve0 (m+1) k)
+          A.val i.val (j.val-i.val))
+    (hcross : ∀ A J : Fin (m+1), A.val < J.val →
+      ∀ i j : Fin k,
+        dist (P (A,i)) (P (J,j))^2 =
+          (sourceCrossBaseline (sourceOffset (m+1) : ℝ) k
+              (sourcePairCode A J) +
+            sourceAlpha k i.val + sourceBeta k j.val)^2 -
+            2*sourceAlpha k i.val*sourceBeta k j.val)
+    (x y : Fin (m+1) × Fin k) :
+    dist (P x) (P y) ≤
+      sourceMacroStep (k : ℝ) *
+        ((sourceOffset (m+1) : ℝ) + (Nat.choose (m+1) 2 : ℝ)) +
+      sourcePerturbationBound (k : ℝ) +
+      sourceError (sourceOffset (m+1) : ℝ) (k : ℝ) := by sorry

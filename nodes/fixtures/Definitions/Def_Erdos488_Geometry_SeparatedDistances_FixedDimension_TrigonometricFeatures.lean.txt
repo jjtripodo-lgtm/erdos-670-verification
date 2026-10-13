@@ -1,0 +1,35 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+open scoped BigOperators
+
+/-- The literal five coordinates used by the completed construction. -/
+noncomputable def trigFeature (z : ℝ) : Fin 5 → ℝ :=
+  ![1,Real.sin z,Real.cos z,Real.sin (2*z),Real.cos (2*z)]
+
+/-- One exact diagonal reserve block. -/
+def trigWeight (b₀ b₁ b₂ : ℝ) : Fin 5 → ℝ := ![b₀^2,b₁^2,b₁^2,b₂^2,b₂^2]
+
+
+
+
+
+
+
+
+
+/-- Embed a feature into its own five-coordinate macro-cluster block. -/
+noncomputable def clusteredFeature {m : ℕ} (A : Fin m) (z : ℝ) : Fin m × Fin 5 → ℝ :=
+  fun q => if q.1=A then trigFeature z q.2 else 0
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

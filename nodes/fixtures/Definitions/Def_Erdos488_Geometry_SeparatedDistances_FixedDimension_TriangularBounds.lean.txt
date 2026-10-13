@@ -1,0 +1,48 @@
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.LDL
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Real.Sqrt
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.NumberTheory.Harmonic.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy
+
+open scoped BigOperators Matrix
+open Matrix
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- Diagonal-weighted strict upper triangular fine incidence. -/
+noncomputable def fineTriangle (n : ℕ) (P : Fin n → ℝ) : Matrix (Fin n) (Fin n) ℝ :=
+  fun i j => if i.val < j.val then 1/P i else 0
+
+
+
+/-- Literal normalized lower-triangular coarse incidence. -/
+noncomputable def coarseTriangle (n : ℕ) (P : Fin n → ℝ) : Matrix (Fin n) (Fin n) ℝ :=
+  fun i j => if j.val < i.val then (i.val:ℝ)/P i else 0
+
+
+
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

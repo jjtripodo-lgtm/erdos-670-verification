@@ -1,0 +1,3 @@
+theorem Erdos488.Geometry.SeparatedDistances.colexTridiagonal_eq_path_potential_endpoint {m : ℕ} (hm : 2 ≤ m) (K : ℝ) :
+    colexTridiagonal K = colexPathEnergyMatrix K + colexPotentialMatrix K +
+      colexEndpointMatrix (lt_of_lt_of_le Nat.zero_lt_two hm) K := by sorry

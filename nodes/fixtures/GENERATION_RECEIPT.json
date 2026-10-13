@@ -1,0 +1,2614 @@
+{
+  "schema_version": 1,
+  "status": "GENERATED_PRIVATELY_NOT_COMPILED_NOT_UPLOAD_READY",
+  "node_policy": "compact",
+  "source_artifact_validation": {
+    "file_count": 228,
+    "uncompressed_bytes": 61803000,
+    "cap_bytes": 67108864
+  },
+  "extraction_provenance": {
+    "repository": "jjtripodo-lgtm/erdos-670-verification",
+    "wrapper_commit": "2b2b59a951c2df97230ab73d7ca50b672941be9e",
+    "harness_commit": "5510ffd94156d48dbe393ac619586b935212da79",
+    "workflow_run_url": "https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38350587663"
+  },
+  "node_count": 10,
+  "definition_bundle_count": 28,
+  "reachable_source_declarations": 442,
+  "original_definition_closure_count": 92,
+  "records": [
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.Defs",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.Edge",
+        "Erdos488.Geometry.SeparatedDistances.SeparatedConfiguration",
+        "Erdos488.Geometry.SeparatedDistances.SqDistanceData",
+        "Erdos488.Geometry.SeparatedDistances.colexLabel",
+        "Erdos488.Geometry.SeparatedDistances.edgeDistance",
+        "Erdos488.Geometry.SeparatedDistances.incrementGram"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.Edge",
+        "Erdos488.Geometry.SeparatedDistances.SeparatedConfiguration",
+        "Erdos488.Geometry.SeparatedDistances.SqDistanceData",
+        "Erdos488.Geometry.SeparatedDistances.colexLabel",
+        "Erdos488.Geometry.SeparatedDistances.edgeDistance",
+        "Erdos488.Geometry.SeparatedDistances.incrementGram"
+      ],
+      "imports": [
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.PosDef"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.PrefixSums",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.cumulativePoints",
+        "Erdos488.Geometry.SeparatedDistances.finSuccNeZeroEquiv",
+        "Erdos488.Geometry.SeparatedDistances.prefixMatrix",
+        "Erdos488.Geometry.SeparatedDistances.prefixSums"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.cumulativePoints",
+        "Erdos488.Geometry.SeparatedDistances.finSuccNeZeroEquiv",
+        "Erdos488.Geometry.SeparatedDistances.prefixMatrix",
+        "Erdos488.Geometry.SeparatedDistances.prefixSums"
+      ],
+      "imports": [
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.EuclideanRealization",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.finExtendZero",
+        "Erdos488.Geometry.SeparatedDistances.sqDistanceExtendZero"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.finExtendZero",
+        "Erdos488.Geometry.SeparatedDistances.sqDistanceExtendZero"
+      ],
+      "imports": [
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.Labels",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.colexLabel_column_exact",
+        "Erdos488.Geometry.SeparatedDistances.colexLabel_range_exact"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.colexLabel_column_exact",
+        "Erdos488.Geometry.SeparatedDistances.colexLabel_range_exact"
+      ],
+      "imports": [
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.ColexPositivity",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.colexA",
+        "Erdos488.Geometry.SeparatedDistances.colexANat",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance",
+        "Erdos488.Geometry.SeparatedDistances.colexEndpointMatrix",
+        "Erdos488.Geometry.SeparatedDistances.colexPathCoeff",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEdgeMatrix",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix",
+        "Erdos488.Geometry.SeparatedDistances.colexPotential",
+        "Erdos488.Geometry.SeparatedDistances.colexPotentialMatrix",
+        "Erdos488.Geometry.SeparatedDistances.colexQ",
+        "Erdos488.Geometry.SeparatedDistances.colexRemainder",
+        "Erdos488.Geometry.SeparatedDistances.colexS0",
+        "Erdos488.Geometry.SeparatedDistances.colexS2",
+        "Erdos488.Geometry.SeparatedDistances.colexSqData",
+        "Erdos488.Geometry.SeparatedDistances.colexTridiagonal",
+        "Erdos488.Geometry.SeparatedDistances.colexWeight"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.colexA",
+        "Erdos488.Geometry.SeparatedDistances.colexANat",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance",
+        "Erdos488.Geometry.SeparatedDistances.colexEndpointMatrix",
+        "Erdos488.Geometry.SeparatedDistances.colexPathCoeff",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEdgeMatrix",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix",
+        "Erdos488.Geometry.SeparatedDistances.colexPotential",
+        "Erdos488.Geometry.SeparatedDistances.colexPotentialMatrix",
+        "Erdos488.Geometry.SeparatedDistances.colexQ",
+        "Erdos488.Geometry.SeparatedDistances.colexRemainder",
+        "Erdos488.Geometry.SeparatedDistances.colexS0",
+        "Erdos488.Geometry.SeparatedDistances.colexS2",
+        "Erdos488.Geometry.SeparatedDistances.colexSqData",
+        "Erdos488.Geometry.SeparatedDistances.colexTridiagonal",
+        "Erdos488.Geometry.SeparatedDistances.colexWeight"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.TrigonometricChord",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.circleChord"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.circleChord"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.HarmonicLocalModel",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.harmonicEnergy",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.harmonicEnergy",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.TrigonometricFeatures",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusteredFeature",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.trigFeature",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.trigWeight"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusteredFeature",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.trigFeature",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.trigWeight"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.EuclideanClusterCoordinates",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.ClusterCoordinate",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusterPoint",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.privateCircle"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.ClusterCoordinate",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusterPoint",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.privateCircle"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.Flattening",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.offDiagonalShift"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.offDiagonalShift"
+      ],
+      "imports": [
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.IncidenceBridge",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.macroVertexWeight",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.pathIncidence"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.macroVertexWeight",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.pathIncidence"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.FiniteHardy",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.hardyMatrix",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.hardyWeight"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.hardyMatrix",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.hardyWeight"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.PrimeRulerSeparation",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.primeRuler",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.primeRulerGap"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.primeRuler",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.primeRulerGap"
+      ],
+      "imports": [
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Tactic"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.LocalRulerSeparation",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rulerArc"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rulerArc"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.GeometricLocalSeparation",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rulerPoint"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rulerPoint"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.TriangularBounds",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.coarseTriangle",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.fineTriangle"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.coarseTriangle",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.fineTriangle"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.LiteralIncidence",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.coarseIncidence",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.coarsePotential",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.fineIncidence",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.finePotential"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.coarseIncidence",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.coarsePotential",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.fineIncidence",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.finePotential"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SineDigits",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sineDigit"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sineDigit"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossGuards",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBaseline",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceError",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceMacroStep",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePerturbationBound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceTmin"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBaseline",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceError",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceMacroStep",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePerturbationBound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceTmin"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceCrossSpectrum",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceAlpha",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBeta",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceCrossBaseline",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceDigit"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceAlpha",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBeta",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceCrossBaseline",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceDigit"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceLocalSpectrum",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceLocalDistance",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRadius",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceTheta"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceLocalDistance",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRadius",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceTheta"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceReserveBudgets",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve0",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve0Sq",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1Sq"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve0",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve0Sq",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1Sq"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceOperatorBridge",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceActiveMatrix",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceCoarseShift",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceDirectedScale",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFineShift",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceQuadraticPotential",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSineCoefficient",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSlotMatrix"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceActiveMatrix",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceCoarseShift",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceDirectedScale",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFineShift",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceQuadraticPotential",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSineCoefficient",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSlotMatrix"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceParameterBounds",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFlatteningRadius"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFlatteningRadius"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceQuadraticMatrix",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBPickLower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBPickUpper",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBReverseMatrix"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBPickLower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBPickUpper",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBReverseMatrix"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualCrossMetric",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairCode",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairCode_surjective"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairCode",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairCode_surjective"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualSpectrum",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairDecode",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRealizedCrossDistance",
+        "_private.Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualSpectrum.0.Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairCode_exists_pair"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairDecode",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRealizedCrossDistance",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairCode_exists_pair"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric"
+      ]
+    },
+    {
+      "kind": "definition_bundle",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceAllNEmbedding",
+      "module": "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding",
+      "source_declarations": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceDeletionEmbedding",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceEdgeMap",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePadCoordinates",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSumPad"
+      ],
+      "axiom_names": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceDeletionEmbedding",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceEdgeMap",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePadCoordinates",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSumPad"
+      ],
+      "imports": [
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets"
+      ]
+    },
+    {
+      "kind": "theorem_node",
+      "theorem_name": "Erdos488.Geometry.SeparatedDistances.FixedDimension.direct_cross_spectrum_separated",
+      "theorem_module": "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated",
+      "solution_module": "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.DirectCrossSpectrum",
+      "source_lines": [
+        48,
+        121
+      ],
+      "source_command_range": [
+        2500,
+        6436
+      ],
+      "inline_helpers": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.bounded_step_gap",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.bounded_step_mono",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.bounded_step_sum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.cross_fine_polarization",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.direct_fine_guard_propagates",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.polarized_fine_gap",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rectangular_all_pairs_separated",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rectangular_endpoints",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rectangular_lex_gap",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.three_digit_all_pairs_separated"
+      ],
+      "reductions": [],
+      "imports": [
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding"
+      ],
+      "preamble_bytes": 2847,
+      "formal_statement_bytes": 1099,
+      "preamble_sha256": "05d940290ce9bb6526537be179a1d66c425f2227a4ed0573756746056a20a5e5",
+      "formal_statement_sha256": "c22a8ffddb40172247e78dc9935c923653c1dcbee9e804078afe28560242e3a6",
+      "staged_statement_sha256": "666df65ad5150ccae863cec97fa8e2d8d58c30f239e3b46aea5057cef0f1c49d",
+      "solution_sha256": "a3d68ddfb86a2041c7602dca630cf292d48b2a2984b1ca950940e2101c764883",
+      "solution_bytes": 15242
+    },
+    {
+      "kind": "theorem_node",
+      "theorem_name": "Erdos488.Geometry.SeparatedDistances.FixedDimension.fixed_dimension_erdos_670",
+      "theorem_module": "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670",
+      "solution_module": "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceFixedDimension670",
+      "source_lines": [
+        37,
+        80
+      ],
+      "source_command_range": [
+        1461,
+        3809
+      ],
+      "inline_helpers": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.augmented_length_cone",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.augmented_length_lower_gap",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.circleChord_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.circleChord_lower_difference",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusterCoordinate_card",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.cluster_edge_cases",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.cluster_minimum_distance",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.concrete_source_local_cross_gap",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.concrete_source_local_spectrum_separated",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.cross_error_uniform_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.every_large_n_cluster_parameters",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.finite_sineDigit_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.finite_sineDigit_source_step",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.finite_sineDigit_step",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.harmonicEnergy_le_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.harmonicEnergy_mono",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.harmonicEnergy_nonneg",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.hasDerivAt_circleChord",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.hasDerivAt_sineDigit",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.injective_of_unit_minimum_distance",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel_cone",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel_le_three_radius",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel_lower_gap",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel_nonneg",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.local_length_lower_difference",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.local_ruler_model_ge_one",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.local_ruler_model_separated",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.local_slope_guard_of_coarse_budget",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.primeRulerGap_different_lag",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.primeRulerGap_injective",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.primeRulerGap_linear_bounds",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.primeRulerGap_residue",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.primeRulerGap_same_lag_injective",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.primeRulerGap_window",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rulerArc_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rulerArc_order_forces_lag_order",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rulerArc_upper",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.same_lag_residue_injective",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.scaled_primeRulerGap_separated",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.separatedConfiguration_of_cluster_gaps",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sineDigit_abs_le",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sineDigit_centered_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sineDigit_lower_difference",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceDeletionEmbedding_injective",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceDigit_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceDigit_step",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceEdgeMap_injective",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_ge_fivehundred_m",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_plus_m_upper",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePadCoordinates_dist",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairCode_lt_choose",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairCode_ordered_injective",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairDecode_code",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairDecode_spec",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRadius_le_onehundredthirtythree",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRadius_pos",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRadius_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRealizedCrossDistance_eq",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRealizedCrossDistance_pair",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRealizedCrossDistance_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve0Sq_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve0_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1Sq_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSumPad_dist",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceTheta_feature_angle",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceTheta_pos",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_Tmin_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_Tmin_pos",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_actual_ruler_configuration_metrics_diameter",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_all_n_fixed_dimension_of_finite_sources",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_baseline_exceeds_fine_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_baseline_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_cluster_coordinate_card_le_fixed",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_cross_error",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_cross_spectrum_separated",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_delete_pad_fixed_dimension",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_diameter_cap_lt",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_diameter_restrict",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_digit_product_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_digit_sum_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_direct_carry_guard",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_direct_fine_guard",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_direct_macro_guard",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_error_linear_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_error_lt_Tmin",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_harmonic_reserve_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_local_angle_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_local_cosine_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_local_cross_gap",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_local_distance_ge_one",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_local_slope_guard",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_local_spectrum_separated",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_local_zero_guard",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_minimum_distance_of_metrics",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_minimum_restrict",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_mixed_scalar_budget",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_offset_cross_spectrum_separated",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_pad_properties",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_perturbation_quadratic_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_realized_cross_pairs_separated",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_rounded_diameter_lt",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_ruler_prime_exists",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_separatedConfiguration_of_metrics",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_separated_restrict",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_theta_scale",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_total_reserve_bound",
+        "_private.Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceAllNEmbedding.0.Erdos488.Geometry.SeparatedDistances.FixedDimension.source_edgeDistance_map",
+        "_private.Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceFixedDimension670.0.Erdos488.Geometry.SeparatedDistances.FixedDimension.finite_range_diam_lt_of_pairwise_lt"
+      ],
+      "reductions": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.direct_cross_spectrum_separated",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_actual_ruler_configuration_metrics",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_diameter_of_metrics"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Bertrand",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding",
+        "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated",
+        "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics",
+        "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics"
+      ],
+      "preamble_bytes": 3838,
+      "formal_statement_bytes": 444,
+      "preamble_sha256": "cf1362e8f2cb12f1a6a6a9033aabe4843a6e842919cc268e9745d09200fde844",
+      "formal_statement_sha256": "cdd908d5a57f52d7bfc320eed57f97cc0c4eb287227830f4a99ad906bed8e0fe",
+      "staged_statement_sha256": "2e17a513525e86e81e9e2002ad9738e8d44edd3e47d7157c7e1fd8cf2014b9d8",
+      "solution_sha256": "7ace6789984c572cb3de104e7bad5f45cc0486e743e18715d78587dd95d85964",
+      "solution_bytes": 97661
+    },
+    {
+      "kind": "theorem_node",
+      "theorem_name": "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSineCoefficients_whole_budget",
+      "theorem_module": "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget",
+      "solution_module": "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceOperatorBridge",
+      "source_lines": [
+        491,
+        555
+      ],
+      "source_command_range": [
+        21548,
+        24374
+      ],
+      "inline_helpers": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceCoarseShift_sq_sum_le",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceCoarseShift_sum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceCoarseShift_whole_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFineShift_sq_sum_le",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFineShift_sum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFineShift_whole_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1Sq_eq_operator_formula",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceTheta_pos",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_sharp_sine_triangle",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_shifted_sine_whole_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_theta_scale"
+      ],
+      "reductions": [],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding"
+      ],
+      "preamble_bytes": 3534,
+      "formal_statement_bytes": 649,
+      "preamble_sha256": "b6babea1e5273c9a639d5529d17351b9ddd42a24cd0077a061bcb840e9127d4d",
+      "formal_statement_sha256": "d6fb1ab324a1dd484bebd357f3e2ce786c35cd6b9dc1bf19f104ce8c02a58607",
+      "staged_statement_sha256": "4261e78bde1b343ac8dc80dd63ac95ba7577c1b082109494289ab8876bfdf48a",
+      "solution_sha256": "f9c484a029794c14fbed88f0574704edf88192aa79ee92fa796c09cd0ec2eb9a",
+      "solution_bytes": 14297
+    },
+    {
+      "kind": "theorem_node",
+      "theorem_name": "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_actual_ruler_configuration_metrics",
+      "theorem_module": "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics",
+      "solution_module": "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualCrossMetric",
+      "source_lines": [
+        252,
+        311
+      ],
+      "source_command_range": [
+        10728,
+        13615
+      ],
+      "inline_helpers": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.circle_chord_coordinate_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusterPoint_same_cluster_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusteredFeature_difference_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.coarseIncidence_normalized",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.coarsePotential_incidence",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.coarseTriangle_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.colex_fine_coarse_full_bounds",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.colex_fine_coarse_triangle_bounds",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.colex_triangle_denominator",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.colex_triangle_positive",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.colex_tridiagonal_ge_incidence_weight",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.completed_bilinear_identity",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.completed_feature_difference_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.consecutive_potential_constant",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.diagonal_bilinear_sum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.dotProduct_mulVec_eq_double_sum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.euclidean_sum_norm_sq_eq",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.fineIncidence_normalized",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.finePotential_incidence",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.fineTriangle_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.finite_hardy_two",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.flattened_colex_diagonal_reserve",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.flattened_colex_edge_solve_energy",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.flattened_colex_posDef",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.flattened_colex_realizes",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.flattened_colex_two_reserves",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.flattened_colex_whole_solve_energy",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.flattened_incrementGram_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.gram_increments_of_sq_distances",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.gram_linear_combination_norm_sq",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.gram_linear_combination_projection",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.hardyMatrix_column",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.hardyMatrix_row",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.hardyWeight_pos",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.harmonicEnergy_nonneg",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.incrementGram_eq_incidence",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.incrementGram_quadratic_eq_incidence",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.literal_fine_coarse_incidence_bounds",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel_nonneg",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.macroVertexWeight_ge_K",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.nonnegative_weighted_cauchy",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.offDiagonalShift_entry",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.offDiagonalShift_isHermitian",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.offDiagonalShift_zero_sum_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.pathIncidence_internal_coordinate",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.pathIncidence_last_coordinate",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.pathIncidence_mulVec_eq",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.pathIncidence_row_sum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.pathIncidence_transpose_mulVec_sum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.pathIncidence_zero_coordinate",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.privateCircle_difference_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.psd_same_size_gram_factor",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.rulerPoint_local_distance",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBPickLower_contract",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBPickLower_mulVec",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBPickUpper_contract",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBPickUpper_mulVec",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBQuadraticCoefficients_source_budget",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBQuadraticCoefficients_whole_solve",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBQuadraticScalar_budget",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBReverseMatrix_eq_potential_difference",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBReverseMatrix_mulVec",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBReverseMatrix_sq_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBReverseMatrix_weighted_18_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceBReverseMatrix_weighted_sq_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFineCoarseCoefficients_exist",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFlatteningRadius_eq",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFlatteningRadius_le_offset",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_ge_fivehundred_m",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_ge_harmonic_reserve",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_ge_macro_count",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_ge_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_plus_m_upper",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceQuadraticPotential_self",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRadius_pos",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRadius_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve0Sq_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve0_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1Sq_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSlotMatrix_energy",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSlotMatrix_mulVec",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_actual_operator_completion_universal_B_matrix",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_harmonic_linear_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_macro_operator_scalar_gates",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_three_active_slots_le_diagonal",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_three_group_completion_factor",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_total_reserve_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sqrt_recip_increment",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sqrt_recip_prefix_sum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sqrt_recip_tail_increment",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sqrt_recip_tail_sum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.square_sum_three_le",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sum_range_prefix_indicator",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sum_range_suffix_indicator",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.three_group_completion",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.three_group_completion_factor",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.trigFeature_difference_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.unit_circle_chord_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.weighted_duality_sq",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.weighted_pathIncidence_energy",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.weighted_schur_two",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.whole_solve_in_flattened_realization",
+        "Erdos488.Geometry.SeparatedDistances.affineIndependent_cumulativePoints",
+        "Erdos488.Geometry.SeparatedDistances.colexANat_le_K_add_sq",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_self",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_symm",
+        "Erdos488.Geometry.SeparatedDistances.colexIndexSq_div_weight_le",
+        "Erdos488.Geometry.SeparatedDistances.colexQ_nonneg",
+        "Erdos488.Geometry.SeparatedDistances.colexQ_pos",
+        "Erdos488.Geometry.SeparatedDistances.colexSqData_diag",
+        "Erdos488.Geometry.SeparatedDistances.colexSqData_isHermitian",
+        "Erdos488.Geometry.SeparatedDistances.colexWeight_ge_adjacent_square",
+        "Erdos488.Geometry.SeparatedDistances.colexWeight_inv_le",
+        "Erdos488.Geometry.SeparatedDistances.colexWeight_pos",
+        "Erdos488.Geometry.SeparatedDistances.colex_S0_le",
+        "Erdos488.Geometry.SeparatedDistances.colex_S2_le",
+        "Erdos488.Geometry.SeparatedDistances.colex_abs_sum_sq_le",
+        "Erdos488.Geometry.SeparatedDistances.colex_incrementGram_eq_tridiagonal_sub_remainder",
+        "Erdos488.Geometry.SeparatedDistances.colex_incrementGram_ge_half_tridiagonal_direct",
+        "Erdos488.Geometry.SeparatedDistances.colex_indexed_abs_sum_sq_le",
+        "Erdos488.Geometry.SeparatedDistances.colex_remainder_abs_le_direct_cauchy",
+        "Erdos488.Geometry.SeparatedDistances.colex_tridiagonal_ge_adjacent_diagonal",
+        "Erdos488.Geometry.SeparatedDistances.cumulativePoints_eq_sum_range",
+        "Erdos488.Geometry.SeparatedDistances.fin_reciprocal_sum_le_harmonic_succ",
+        "Erdos488.Geometry.SeparatedDistances.harmonic_le_seventeen_of_le_50000",
+        "Erdos488.Geometry.SeparatedDistances.incrementGram_isHermitian",
+        "Erdos488.Geometry.SeparatedDistances.linearIndependent_prefixSums",
+        "Erdos488.Geometry.SeparatedDistances.mixed_difference_block_eq_distance",
+        "Erdos488.Geometry.SeparatedDistances.norm_sq_block_sum_eq_gram_sum",
+        "Erdos488.Geometry.SeparatedDistances.one_le_harmonic_of_one_le",
+        "Erdos488.Geometry.SeparatedDistances.partial_sum_sub_partial_sum",
+        "Erdos488.Geometry.SeparatedDistances.posDef_exists_euclidean_independent_gram",
+        "Erdos488.Geometry.SeparatedDistances.posDef_exists_fd_independent_gram",
+        "Erdos488.Geometry.SeparatedDistances.posDef_incrementGram_realizes_in_euclideanSpace",
+        "Erdos488.Geometry.SeparatedDistances.posDef_incrementGram_realizes_in_euclideanSpace_ordered",
+        "Erdos488.Geometry.SeparatedDistances.prefixMatrix_columns_linearIndependent",
+        "Erdos488.Geometry.SeparatedDistances.prefixMatrix_det",
+        "Erdos488.Geometry.SeparatedDistances.prefixSums_eq_sum_range",
+        "Erdos488.Geometry.SeparatedDistances.radius_shift_preserves_two_reserves",
+        "Erdos488.Geometry.SeparatedDistances.rectangular_mixed_difference_telescope",
+        "Erdos488.Geometry.SeparatedDistances.sqDistanceExtendZero_diag",
+        "Erdos488.Geometry.SeparatedDistances.sqDistanceExtendZero_symmetric",
+        "_private.Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserveDirectCS.0.Erdos488.Geometry.SeparatedDistances.sqrt754_div64_lt_half",
+        "_private.Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserveDirectCS.0.Erdos488.Geometry.SeparatedDistances.sqrt_product_budget",
+        "_private.Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserveDirectCS.0.Erdos488.Geometry.SeparatedDistances.two_product_le_two_sqrt_product"
+      ],
+      "reductions": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSineCoefficients_whole_budget",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_clusterPoint_cross_metric_square",
+        "Erdos488.Geometry.SeparatedDistances.colex_remainder_quadratic_abs_le_product",
+        "Erdos488.Geometry.SeparatedDistances.colex_tridiagonal_ge_Q",
+        "Erdos488.Geometry.SeparatedDistances.colex_tridiagonal_ge_quarter_weighted_path"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding",
+        "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget",
+        "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square",
+        "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product",
+        "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q",
+        "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path"
+      ],
+      "preamble_bytes": 4013,
+      "formal_statement_bytes": 855,
+      "preamble_sha256": "08222428464d7f735d3f6acf8ea92b4663af7f1e1b4256da58a598638eb5861f",
+      "formal_statement_sha256": "e5f42c1be9427489aac66ca6e5686d46c796447e95ec7d54b53f808615fa642f",
+      "staged_statement_sha256": "67dfa66f75642f3b3dfcfb5a4f323af88bd1c78f77bd1bfa97b2326a7f33751b",
+      "solution_sha256": "ed28a6139766ea2676a7bb5121cd5d8d79687b253b4895404a2d9c03cfda1275",
+      "solution_bytes": 126308
+    },
+    {
+      "kind": "theorem_node",
+      "theorem_name": "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_clusterPoint_cross_metric_square",
+      "theorem_module": "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square",
+      "solution_module": "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualCrossMetric",
+      "source_lines": [
+        116,
+        203
+      ],
+      "source_command_range": [
+        4355,
+        8502
+      ],
+      "inline_helpers": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.anchored_projection_of_pathIncidence",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusterPoint_cross_metric_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusterPoint_cross_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusteredFeature_constant_norm",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.clusteredFeature_weighted_dot",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.coarsePotential_eq_colex",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.completed_bilinear_identity",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.completed_cross_feature_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.completed_feature_constant_norm",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.completed_feature_cross_cancel",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.consecutive_potential_constant",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.diagonal_bilinear_sum",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.euclidean_dot_inner",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.finePotential_eq_colex",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.macro_coordinate_expansion",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.pathIncidence_mulVec_eq",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.privateAxis_cross_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.privateCircle_cross_dot",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.privateCircle_cross_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.privateCircle_norm_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceActiveMatrix_anchor_projection",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceActiveMatrix_feature_apply",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceActiveMatrix_forward_projection_metric",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceActiveMatrix_projection_metric",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceActiveMatrix_reverse_projection_metric",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceCoarseCoefficient_anchor_projection",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceCoarseShift_anchor_projection",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceCrossBaseline_pairCode",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFineCoefficient_anchor_projection",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceFineShift_anchor_projection",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceQuadraticPotential_metric_identity",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSineCoefficient_anchor_projection",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSlotMatrix_clusteredFeature",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceSlotMatrix_mulVec",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceTheta_pos",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_macro_base_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_theta_scale",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sum_sq_sub",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.trigFeature_constant_norm",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_self",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_symm"
+      ],
+      "reductions": [],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding"
+      ],
+      "preamble_bytes": 3515,
+      "formal_statement_bytes": 1675,
+      "preamble_sha256": "cddd0949368aad6755d031b2101d80ff198af1bde5a5e4924607a84cde51f36f",
+      "formal_statement_sha256": "eb84ca481199023f356b3d5d725a7d4676c1b34e96a8cb5a36416991fe56c3a5",
+      "staged_statement_sha256": "ae05715922c2efe1b444fe9ced5978401443849fb1cdf7e99a829b5a77ec0709",
+      "solution_sha256": "fb7f89e3afa1fd2e342ed6fbb79db3be9eb7a13738af1b60ca6a321a2eaec00a",
+      "solution_bytes": 36875
+    },
+    {
+      "kind": "theorem_node",
+      "theorem_name": "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_diameter_of_metrics",
+      "theorem_module": "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics",
+      "solution_module": "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceActualDiameter",
+      "source_lines": [
+        10,
+        127
+      ],
+      "source_command_range": [
+        431,
+        5659
+      ],
+      "inline_helpers": [
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.cross_error_uniform_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.finite_sineDigit_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.harmonicEnergy_nonneg",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel_le_three_radius",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel_nonneg",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.localDistanceModel_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sineDigit_abs_le",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sineDigit_centered_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceDigit_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_ge_fivehundred_m",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceOffset_plus_m_upper",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourcePairCode_lt_choose",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRadius_le_onehundredthirtythree",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceRadius_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve0Sq_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve0_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1Sq_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.sourceReserve1_square",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_Tmin_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_Tmin_pos",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_baseline_lower",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_cross_error",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_digit_product_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_digit_sum_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_error_linear_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_mixed_scalar_budget",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_perturbation_quadratic_bound",
+        "Erdos488.Geometry.SeparatedDistances.FixedDimension.source_total_reserve_bound"
+      ],
+      "reductions": [],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Data.Nat.Prime.Defs",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding"
+      ],
+      "preamble_bytes": 3539,
+      "formal_statement_bytes": 1076,
+      "preamble_sha256": "38dde132976541cd3f62c60cd594eb058d43dce996a736260a27ce66d2a6a237",
+      "formal_statement_sha256": "c472d1bad9e0012c4894fffa9c4f27add5a612f938c6ddf3f2f0448883f4e156",
+      "staged_statement_sha256": "f2359a59a5b692c7e2eec29e56bba2cf53d949d6b578226bb89b78f7e7180268",
+      "solution_sha256": "e617b00094fa320d45421b2735a6cc988dfbf4e0e2023bbacf0d7f6e55c119f5",
+      "solution_bytes": 24127
+    },
+    {
+      "kind": "theorem_node",
+      "theorem_name": "Erdos488.Geometry.SeparatedDistances.colexTridiagonal_eq_path_potential_endpoint",
+      "theorem_module": "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint",
+      "solution_module": "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.ColexPositivity",
+      "source_lines": [
+        586,
+        652
+      ],
+      "source_command_range": [
+        23601,
+        26906
+      ],
+      "inline_helpers": [
+        "Erdos488.Geometry.SeparatedDistances.colexANat_sq_eq_pathCoeff_add_potential_add_pathCoeff",
+        "Erdos488.Geometry.SeparatedDistances.colexANat_sq_eq_pathCoeff_add_potential_one",
+        "Erdos488.Geometry.SeparatedDistances.colexA_eq_colexANat",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_increment",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_of_lt",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_self",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_symm",
+        "Erdos488.Geometry.SeparatedDistances.colexIncrementGram_adjacent",
+        "Erdos488.Geometry.SeparatedDistances.colexIncrementGram_diag",
+        "Erdos488.Geometry.SeparatedDistances.colexLabel_last",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEdgeMatrix_diag",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix_adjacent",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix_adjacent_rev",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix_diag_internal",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix_diag_last",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix_diag_zero",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix_distant_zero",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix_isHermitian",
+        "Erdos488.Geometry.SeparatedDistances.colexPotentialMatrix_apply",
+        "Erdos488.Geometry.SeparatedDistances.colexSqData_isHermitian",
+        "Erdos488.Geometry.SeparatedDistances.colexTridiagonal_isHermitian",
+        "Erdos488.Geometry.SeparatedDistances.incrementGram_isHermitian"
+      ],
+      "reductions": [],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding"
+      ],
+      "preamble_bytes": 3111,
+      "formal_statement_bytes": 278,
+      "preamble_sha256": "4e78f9306b13678c380e476a84a4564c5aaf0ff4a9c5ce0b0dee871a5e236999",
+      "formal_statement_sha256": "7bffd8c43d6f2e429c482da9ec75424b4e0adb6ea74b8761c204e6ff4ecd180c",
+      "staged_statement_sha256": "749725a5090871a14c5cbdde2806ae2f135b4837b3a5cc4e0e59c258084e972c",
+      "solution_sha256": "369bcd3a759dcecfc610553ef955270a27db9d8c8fefdfef9834f2234651afff",
+      "solution_bytes": 21465
+    },
+    {
+      "kind": "theorem_node",
+      "theorem_name": "Erdos488.Geometry.SeparatedDistances.colex_remainder_quadratic_abs_le_product",
+      "theorem_module": "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product",
+      "solution_module": "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.ColexPositivity",
+      "source_lines": [
+        873,
+        923
+      ],
+      "source_command_range": [
+        36819,
+        39048
+      ],
+      "inline_helpers": [
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_of_lt",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_self",
+        "Erdos488.Geometry.SeparatedDistances.colexDistance_symm",
+        "Erdos488.Geometry.SeparatedDistances.colexIncrementGram_distant",
+        "Erdos488.Geometry.SeparatedDistances.colexIncrementGram_distant_rev",
+        "Erdos488.Geometry.SeparatedDistances.colexRemainder_abs_entry_le",
+        "Erdos488.Geometry.SeparatedDistances.colexRemainder_adjacent",
+        "Erdos488.Geometry.SeparatedDistances.colexRemainder_diag",
+        "Erdos488.Geometry.SeparatedDistances.colexRemainder_distant",
+        "Erdos488.Geometry.SeparatedDistances.colexRemainder_distant_rev",
+        "Erdos488.Geometry.SeparatedDistances.colexRemainder_isHermitian",
+        "Erdos488.Geometry.SeparatedDistances.colexSqData_isHermitian",
+        "Erdos488.Geometry.SeparatedDistances.colexTridiagonal_isHermitian",
+        "Erdos488.Geometry.SeparatedDistances.incrementGram_isHermitian"
+      ],
+      "reductions": [],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding"
+      ],
+      "preamble_bytes": 3111,
+      "formal_statement_bytes": 256,
+      "preamble_sha256": "4e78f9306b13678c380e476a84a4564c5aaf0ff4a9c5ce0b0dee871a5e236999",
+      "formal_statement_sha256": "b5f0e6b1130d8be5eb564de49e311cc4481dc094b1971af058874e0d41704672",
+      "staged_statement_sha256": "ac42460987cfa77d2e6ee7dde97cd95a10d08907b055f1d1f0c0625a10a5c026",
+      "solution_sha256": "20f4c0c3661de0e49c38f7b9f090d1a91eb508922e32b1c07be24b09e0fbbd93",
+      "solution_bytes": 12672
+    },
+    {
+      "kind": "theorem_node",
+      "theorem_name": "Erdos488.Geometry.SeparatedDistances.colex_tridiagonal_ge_Q",
+      "theorem_module": "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q",
+      "solution_module": "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.ColexPositivity",
+      "source_lines": [
+        731,
+        793
+      ],
+      "source_command_range": [
+        30364,
+        33594
+      ],
+      "inline_helpers": [
+        "Erdos488.Geometry.SeparatedDistances.colexEndpointMatrix_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.colexPathCoeff_nonneg",
+        "Erdos488.Geometry.SeparatedDistances.colexPathCoeff_one_ge",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEdgeMatrix_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergy_tail_nonneg",
+        "Erdos488.Geometry.SeparatedDistances.colexPotentialMatrix_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.colexPotential_ge_weight",
+        "Erdos488.Geometry.SeparatedDistances.colexPotential_one_ge",
+        "Erdos488.Geometry.SeparatedDistances.colex_first_two_coercivity",
+        "Erdos488.Geometry.SeparatedDistances.colex_potential_ge_four",
+        "Erdos488.Geometry.SeparatedDistances.colex_potential_three",
+        "Erdos488.Geometry.SeparatedDistances.colex_tridiagonal_quadratic_eq",
+        "Erdos488.Geometry.SeparatedDistances.dotProduct_single_mulVec",
+        "Erdos488.Geometry.SeparatedDistances.two_coordinate_path_bound"
+      ],
+      "reductions": [
+        "Erdos488.Geometry.SeparatedDistances.colexTridiagonal_eq_path_potential_endpoint"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding",
+        "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint"
+      ],
+      "preamble_bytes": 3212,
+      "formal_statement_bytes": 218,
+      "preamble_sha256": "bd45ec63051817170a9336a14245e7821e2f8b89ea028c2716424fd9ea85227b",
+      "formal_statement_sha256": "a3164eea2b277f4bbf711218e01401e9812ccc99224b6a569f154b5372f963ab",
+      "staged_statement_sha256": "42c38c5aff1c04416312efb5c2474541df0a2e1ca67da2be65d2faf7a9987ad3",
+      "solution_sha256": "133c20d8ec682e7a7520f6bd543afb5094f46e0c0626534bea2af02529ee6cd5",
+      "solution_bytes": 12989
+    },
+    {
+      "kind": "theorem_node",
+      "theorem_name": "Erdos488.Geometry.SeparatedDistances.colex_tridiagonal_ge_quarter_weighted_path",
+      "theorem_module": "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path",
+      "solution_module": "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path",
+      "source_module": "Erdos488.Geometry.SeparatedDistances.FixedDimension.ColexReserve",
+      "source_lines": [
+        106,
+        158
+      ],
+      "source_command_range": [
+        5004,
+        7792
+      ],
+      "inline_helpers": [
+        "Erdos488.Geometry.SeparatedDistances.colexEndpointMatrix_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.colexPathCoeff_ge_quarter",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEdgeMatrix_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.colexPathEnergyMatrix_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.colexPotentialMatrix_quadratic",
+        "Erdos488.Geometry.SeparatedDistances.colexPotential_ge_weight",
+        "Erdos488.Geometry.SeparatedDistances.colexWeight_pos",
+        "Erdos488.Geometry.SeparatedDistances.colex_first_two_weighted_path",
+        "Erdos488.Geometry.SeparatedDistances.colex_potential_ge_four",
+        "Erdos488.Geometry.SeparatedDistances.colex_potential_three",
+        "Erdos488.Geometry.SeparatedDistances.colex_tridiagonal_quadratic_eq",
+        "Erdos488.Geometry.SeparatedDistances.dotProduct_single_mulVec"
+      ],
+      "reductions": [
+        "Erdos488.Geometry.SeparatedDistances.colexTridiagonal_eq_path_potential_endpoint"
+      ],
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+        "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Matrix.LDL",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Data.Matrix.Basic",
+        "Mathlib.Data.Sym.Card",
+        "Mathlib.LinearAlgebra.Matrix.Block",
+        "Mathlib.LinearAlgebra.Matrix.PosDef",
+        "Mathlib.NumberTheory.Harmonic.Bounds",
+        "Mathlib.Tactic",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+        "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding",
+        "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint"
+      ],
+      "preamble_bytes": 3403,
+      "formal_statement_bytes": 462,
+      "preamble_sha256": "874d361072fb230dc46ea399ca1eedc3963667534c61b04c710de64f1e35dad0",
+      "formal_statement_sha256": "03b63040b4fcc5f76df4dbad8f6ccce1f9e0e7992a93dc2bb67137ba3f343cd3",
+      "staged_statement_sha256": "0b219b889b6f9eca2cdf01b33f4b4897f8f6dd8fa00ff2b8ba367cf2af686b54",
+      "solution_sha256": "c44152aa0158bba7c55b46d258d8fbda569d4d6f5746f18d49989de76c08f870",
+      "solution_bytes": 12448
+    }
+  ],
+  "build_targets": [
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_PrefixSums",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_Labels",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum",
+    "Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding",
+    "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated",
+    "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670",
+    "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget",
+    "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics",
+    "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square",
+    "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics",
+    "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint",
+    "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product",
+    "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q",
+    "Theorems.Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path",
+    "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated",
+    "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670",
+    "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget",
+    "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics",
+    "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square",
+    "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics",
+    "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint",
+    "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product",
+    "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q",
+    "Solutions.Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path"
+  ],
+  "external_imports": [
+    "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+    "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+    "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+    "Mathlib.Analysis.InnerProductSpace.GramMatrix",
+    "Mathlib.Analysis.InnerProductSpace.PiL2",
+    "Mathlib.Analysis.Matrix.LDL",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.Analysis.Real.Sqrt",
+    "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+    "Mathlib.Data.Matrix.Basic",
+    "Mathlib.Data.Nat.ModEq",
+    "Mathlib.Data.Nat.Prime.Defs",
+    "Mathlib.Data.Sym.Card",
+    "Mathlib.LinearAlgebra.Matrix.Block",
+    "Mathlib.LinearAlgebra.Matrix.PosDef",
+    "Mathlib.NumberTheory.Bertrand",
+    "Mathlib.NumberTheory.Harmonic.Bounds",
+    "Mathlib.Tactic"
+  ],
+  "generator_sha256": "9140c9664bdb8fe72beb8f6ec007bdb66c3d6205c2a906bf0c5c071adc309eae",
+  "planner_sha256": "8180792a2b4fdd9fa629ead3e54165c3c34eedb3556f8cf8e18d8bee7a32251a",
+  "source_layout": "Every module has one namespace and no variable, section, mutual or notation commands; unsupported contexts fail closed",
+  "gates": {
+    "exact_transformed_build": "NOT_RUN",
+    "original_staged_type_comparison": "NOT_RUN",
+    "platform_environment_collision_checks": "NOT_RUN",
+    "node_metadata": "NOT_DRAFTED",
+    "platform_upload": "NOT_RUN"
+  },
+  "files": {
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_ColexPositivity.lean": {
+      "bytes": 4627,
+      "sha256": "4d2bec989066961471f47b00206fecbae51a44512cc736a96c76f45c89cd48a3"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_Defs.lean": {
+      "bytes": 1753,
+      "sha256": "4aaba97090458168a1be9d46b077fc301326fd7296441ca1397d8db68b2c3dd2"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_EuclideanRealization.lean": {
+      "bytes": 1133,
+      "sha256": "66ce1dc00ac8a46d6949123a024ece447cb720529253724419f73829578ee671"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates.lean": {
+      "bytes": 1709,
+      "sha256": "445b0a397679dbaaba855f6ed0659166ee5a0f35a9cc24c9eec390c40ce7d277"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_FiniteHardy.lean": {
+      "bytes": 1466,
+      "sha256": "8b61121bb22384bd8160bca3d5a71f32fc843716cafbda6753ca813b8aad63e1"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_Flattening.lean": {
+      "bytes": 450,
+      "sha256": "49064f18dda0f0feab59c812b5540a94ca4889bdbd1a4ab7835c2edc5f8f8572"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_GeometricLocalSeparation.lean": {
+      "bytes": 1714,
+      "sha256": "8be32b39aaab5322cf60cb63c521f0f732b881ec74b0425cf8416b079e4ea966"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel.lean": {
+      "bytes": 805,
+      "sha256": "2f1bd49d97db78422afbb7c7222686c7dd731af18fd3af03eba63a2da879784f"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_IncidenceBridge.lean": {
+      "bytes": 1496,
+      "sha256": "452b48957d4c2be7494b7f2c9d781f4aee89a635db2c31586e12eb2c09c70965"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LiteralIncidence.lean": {
+      "bytes": 2025,
+      "sha256": "4b111a582a62f4e96eaf7b3cea78ed98185d0f72eb8f285a937f302a41426946"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation.lean": {
+      "bytes": 867,
+      "sha256": "eed0182ab9efc9f4e7c0a26a7f3e8dcef0b8ad76c92cc0e9b475699733d8327d"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation.lean": {
+      "bytes": 744,
+      "sha256": "aaea21ce6f35340bcf935f946d577ec5ed63a2ed79ea9f74a2894b0862f0e136"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits.lean": {
+      "bytes": 449,
+      "sha256": "f80b166d644c7e678edaaa312c400abcbacf691fb4e3c6cb09eac556a54ca541"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualCrossMetric.lean": {
+      "bytes": 4069,
+      "sha256": "eae1d8925983801fabaa4c61dbe01ed0daa8d04775fd6009952ecd7a25453d13"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceActualSpectrum.lean": {
+      "bytes": 4279,
+      "sha256": "3496f7dad9ce010564801d342028cd437caab643765c8552b82531e50259e72f"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceAllNEmbedding.lean": {
+      "bytes": 3285,
+      "sha256": "4122ce6c154f5398672502428ba299b17453ffc86c0ac369963f1ae3a64b818e"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards.lean": {
+      "bytes": 1220,
+      "sha256": "59e0970bef375c7e176474709032eeb5199a905662bc43a3598e96a17563c6e0"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum.lean": {
+      "bytes": 1495,
+      "sha256": "00e792d0db95db027695aee64e144a773dc530ccd98836c5fecec1e43f9a106c"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum.lean": {
+      "bytes": 1799,
+      "sha256": "7078e2b511aa08a69298986b2209f56c30f1473ea8c1ec84d60eb81ccd4bbd2f"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceOperatorBridge.lean": {
+      "bytes": 4912,
+      "sha256": "43d56c8918a03423d603943ea562b56307b35635c16204c99f4ee0d38d182aca"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceParameterBounds.lean": {
+      "bytes": 3193,
+      "sha256": "a674768979e5a1c8fb89f9e259b1bd37a87665a8c4fec13a9fda173f67985b25"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceQuadraticMatrix.lean": {
+      "bytes": 3915,
+      "sha256": "7f2f4c2fb87d9a6aeb1584ce619dc1535f6d242e4c1d480737019fd3868e7488"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceReserveBudgets.lean": {
+      "bytes": 2140,
+      "sha256": "c94b237e36d8587b0dd96488367f5ea20de1db639628d4c25984057055a9bd3a"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TriangularBounds.lean": {
+      "bytes": 1753,
+      "sha256": "0b9b8905159334cc33d7842f0f7c185c532825f7e0a4a87fa921488074fa3f67"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord.lean": {
+      "bytes": 500,
+      "sha256": "9db1b1f592357e22386e819c8ce4f3bd56e12714f1467e0fb4c4357c3bb1746e"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures.lean": {
+      "bytes": 1027,
+      "sha256": "be9fde438044c42a4d0886e68797268dff79fa26c807fe106e8a56750b0b8c5b"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_Labels.lean": {
+      "bytes": 1740,
+      "sha256": "776cd6139e27609bf50a832f185a83d76d1d2635c59aeb13a3a95e6077a9452a"
+    },
+    "Definitions/Def_Erdos488_Geometry_SeparatedDistances_PrefixSums.lean": {
+      "bytes": 1739,
+      "sha256": "06639736961142492840f9342e1ebaa8bdc621aa7e7e889e939d07d6c20860d1"
+    },
+    "LICENSE": {
+      "bytes": 1068,
+      "sha256": "3587ec3f5eb141a9ec2a9470a10a8cae9bc904db51d2d7d4877bd5ff9751208e"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.formal_statement.lean.txt": {
+      "bytes": 1099,
+      "sha256": "c22a8ffddb40172247e78dc9935c923653c1dcbee9e804078afe28560242e3a6"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.preamble.lean.txt": {
+      "bytes": 2847,
+      "sha256": "05d940290ce9bb6526537be179a1d66c425f2227a4ed0573756746056a20a5e5"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.solution.lean.txt": {
+      "bytes": 15242,
+      "sha256": "a3d68ddfb86a2041c7602dca630cf292d48b2a2984b1ca950940e2101c764883"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.formal_statement.lean.txt": {
+      "bytes": 444,
+      "sha256": "cdd908d5a57f52d7bfc320eed57f97cc0c4eb287227830f4a99ad906bed8e0fe"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.preamble.lean.txt": {
+      "bytes": 3838,
+      "sha256": "cf1362e8f2cb12f1a6a6a9033aabe4843a6e842919cc268e9745d09200fde844"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.solution.lean.txt": {
+      "bytes": 97661,
+      "sha256": "7ace6789984c572cb3de104e7bad5f45cc0486e743e18715d78587dd95d85964"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.formal_statement.lean.txt": {
+      "bytes": 649,
+      "sha256": "d6fb1ab324a1dd484bebd357f3e2ce786c35cd6b9dc1bf19f104ce8c02a58607"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.preamble.lean.txt": {
+      "bytes": 3534,
+      "sha256": "b6babea1e5273c9a639d5529d17351b9ddd42a24cd0077a061bcb840e9127d4d"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.solution.lean.txt": {
+      "bytes": 14297,
+      "sha256": "f9c484a029794c14fbed88f0574704edf88192aa79ee92fa796c09cd0ec2eb9a"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.formal_statement.lean.txt": {
+      "bytes": 855,
+      "sha256": "e5f42c1be9427489aac66ca6e5686d46c796447e95ec7d54b53f808615fa642f"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.preamble.lean.txt": {
+      "bytes": 4013,
+      "sha256": "08222428464d7f735d3f6acf8ea92b4663af7f1e1b4256da58a598638eb5861f"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.solution.lean.txt": {
+      "bytes": 126308,
+      "sha256": "ed28a6139766ea2676a7bb5121cd5d8d79687b253b4895404a2d9c03cfda1275"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.formal_statement.lean.txt": {
+      "bytes": 1675,
+      "sha256": "eb84ca481199023f356b3d5d725a7d4676c1b34e96a8cb5a36416991fe56c3a5"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.preamble.lean.txt": {
+      "bytes": 3515,
+      "sha256": "cddd0949368aad6755d031b2101d80ff198af1bde5a5e4924607a84cde51f36f"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.solution.lean.txt": {
+      "bytes": 36875,
+      "sha256": "fb7f89e3afa1fd2e342ed6fbb79db3be9eb7a13738af1b60ca6a321a2eaec00a"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.formal_statement.lean.txt": {
+      "bytes": 1076,
+      "sha256": "c472d1bad9e0012c4894fffa9c4f27add5a612f938c6ddf3f2f0448883f4e156"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.preamble.lean.txt": {
+      "bytes": 3539,
+      "sha256": "38dde132976541cd3f62c60cd594eb058d43dce996a736260a27ce66d2a6a237"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.solution.lean.txt": {
+      "bytes": 24127,
+      "sha256": "e617b00094fa320d45421b2735a6cc988dfbf4e0e2023bbacf0d7f6e55c119f5"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.formal_statement.lean.txt": {
+      "bytes": 278,
+      "sha256": "7bffd8c43d6f2e429c482da9ec75424b4e0adb6ea74b8761c204e6ff4ecd180c"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.preamble.lean.txt": {
+      "bytes": 3111,
+      "sha256": "4e78f9306b13678c380e476a84a4564c5aaf0ff4a9c5ce0b0dee871a5e236999"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.solution.lean.txt": {
+      "bytes": 21465,
+      "sha256": "369bcd3a759dcecfc610553ef955270a27db9d8c8fefdfef9834f2234651afff"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.formal_statement.lean.txt": {
+      "bytes": 256,
+      "sha256": "b5f0e6b1130d8be5eb564de49e311cc4481dc094b1971af058874e0d41704672"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.preamble.lean.txt": {
+      "bytes": 3111,
+      "sha256": "4e78f9306b13678c380e476a84a4564c5aaf0ff4a9c5ce0b0dee871a5e236999"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.solution.lean.txt": {
+      "bytes": 12672,
+      "sha256": "20f4c0c3661de0e49c38f7b9f090d1a91eb508922e32b1c07be24b09e0fbbd93"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.formal_statement.lean.txt": {
+      "bytes": 218,
+      "sha256": "a3164eea2b277f4bbf711218e01401e9812ccc99224b6a569f154b5372f963ab"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.preamble.lean.txt": {
+      "bytes": 3212,
+      "sha256": "bd45ec63051817170a9336a14245e7821e2f8b89ea028c2716424fd9ea85227b"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.solution.lean.txt": {
+      "bytes": 12989,
+      "sha256": "133c20d8ec682e7a7520f6bd543afb5094f46e0c0626534bea2af02529ee6cd5"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.formal_statement.lean.txt": {
+      "bytes": 462,
+      "sha256": "03b63040b4fcc5f76df4dbad8f6ccce1f9e0e7992a93dc2bb67137ba3f343cd3"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.preamble.lean.txt": {
+      "bytes": 3403,
+      "sha256": "874d361072fb230dc46ea399ca1eedc3963667534c61b04c710de64f1e35dad0"
+    },
+    "Payloads/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.solution.lean.txt": {
+      "bytes": 12448,
+      "sha256": "c44152aa0158bba7c55b46d258d8fbda569d4d6f5746f18d49989de76c08f870"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated_solution.lean.txt": {
+      "bytes": 739,
+      "sha256": "5ec8a9ea0a35278b3fd3444826bd215706ac7d853b28be44083ada8e02b9821d"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated_statement.lean.txt": {
+      "bytes": 814,
+      "sha256": "c286be954b8c178c08a8cdcbb210b32aef5ca02f8a444a550abacfeaa5904224"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670_solution.lean.txt": {
+      "bytes": 727,
+      "sha256": "1beed99167310a375e1b465024a071dd99b48f62c112ebcd9f08b75273b3145d"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670_statement.lean.txt": {
+      "bytes": 796,
+      "sha256": "9f7dcbc8fe8d587d146f5ec6d2cca29bdf2c6403adae57fcfd57c59392e33f26"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget_solution.lean.txt": {
+      "bytes": 747,
+      "sha256": "414af73f5cbf8914ef1639652592d74edf584e2c849438576602403e5e1f2800"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget_statement.lean.txt": {
+      "bytes": 826,
+      "sha256": "87d668fd61d9d1e4a37ff7e77ecfed33c4f32bce2673959dca9dc7e7408326f7"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics_solution.lean.txt": {
+      "bytes": 759,
+      "sha256": "1d711d051636437f65a1a366c76f3a4730f92e99ff43bc329d64be0790dcdf55"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics_statement.lean.txt": {
+      "bytes": 844,
+      "sha256": "4b754b4e41ca6d92a70ba2b025ac191851001e63ec80969bd7ecf9f284fe0e54"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square_solution.lean.txt": {
+      "bytes": 755,
+      "sha256": "dd111acbaa753b287be918369488ba839d5520c827b3b4a89fdb4ff97b097314"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square_statement.lean.txt": {
+      "bytes": 838,
+      "sha256": "cdfd544a3f3f4c7fe7e8d928775f8b4b5de4408d30c28571298bc6ec6eac1a3b"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics_solution.lean.txt": {
+      "bytes": 729,
+      "sha256": "f427c7c1762fab79d9b363493d0564213ee5b4d37527dee5605b5adbfa59b38b"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics_statement.lean.txt": {
+      "bytes": 799,
+      "sha256": "b7a2ef96dffa227ca66f26f357f743882e32e02259de8839adf91e8f7e5e899e"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint_solution.lean.txt": {
+      "bytes": 733,
+      "sha256": "641292b74197268839fd5743cec90f9817c8b4da3ea12e8c4db727fb630c6655"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint_statement.lean.txt": {
+      "bytes": 805,
+      "sha256": "83edd302288866edcc1bad93654405d546200c950fc6d0e102e4cbf145a607c2"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product_solution.lean.txt": {
+      "bytes": 727,
+      "sha256": "543257fe2321d21d08732bb34a26535534acb36794f4cce1b14446bfa8bb1ed7"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product_statement.lean.txt": {
+      "bytes": 796,
+      "sha256": "3379f15c52278c8c6983ccb15940e4d5af02f2a9cd1579c9e21c057f21404666"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q_solution.lean.txt": {
+      "bytes": 691,
+      "sha256": "1ee42cc9cae4da89e9869aadd4302b4ecbd48ea18712cb1673a0b6a99009e497"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q_statement.lean.txt": {
+      "bytes": 742,
+      "sha256": "9200b6f4d38616c5234d28eae48dc89a5a2092751dcbb1e2d35b7f00e90e6396"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path_solution.lean.txt": {
+      "bytes": 731,
+      "sha256": "8bba47f30675c283811764590b67b0056899e1bdc5e46f9d14713f54ef2d6df1"
+    },
+    "Probes/Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path_statement.lean.txt": {
+      "bytes": 802,
+      "sha256": "f8db950da4e58321080dd71428265804a0fcd786b2f7da990749bb533c9e9e62"
+    },
+    "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.lean": {
+      "bytes": 15242,
+      "sha256": "a3d68ddfb86a2041c7602dca630cf292d48b2a2984b1ca950940e2101c764883"
+    },
+    "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.lean": {
+      "bytes": 97661,
+      "sha256": "7ace6789984c572cb3de104e7bad5f45cc0486e743e18715d78587dd95d85964"
+    },
+    "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.lean": {
+      "bytes": 14297,
+      "sha256": "f9c484a029794c14fbed88f0574704edf88192aa79ee92fa796c09cd0ec2eb9a"
+    },
+    "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.lean": {
+      "bytes": 126308,
+      "sha256": "ed28a6139766ea2676a7bb5121cd5d8d79687b253b4895404a2d9c03cfda1275"
+    },
+    "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.lean": {
+      "bytes": 36875,
+      "sha256": "fb7f89e3afa1fd2e342ed6fbb79db3be9eb7a13738af1b60ca6a321a2eaec00a"
+    },
+    "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.lean": {
+      "bytes": 24127,
+      "sha256": "e617b00094fa320d45421b2735a6cc988dfbf4e0e2023bbacf0d7f6e55c119f5"
+    },
+    "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.lean": {
+      "bytes": 21465,
+      "sha256": "369bcd3a759dcecfc610553ef955270a27db9d8c8fefdfef9834f2234651afff"
+    },
+    "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.lean": {
+      "bytes": 12672,
+      "sha256": "20f4c0c3661de0e49c38f7b9f090d1a91eb508922e32b1c07be24b09e0fbbd93"
+    },
+    "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.lean": {
+      "bytes": 12989,
+      "sha256": "133c20d8ec682e7a7520f6bd543afb5094f46e0c0626534bea2af02529ee6cd5"
+    },
+    "Solutions/Sol_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.lean": {
+      "bytes": 12448,
+      "sha256": "c44152aa0158bba7c55b46d258d8fbda569d4d6f5746f18d49989de76c08f870"
+    },
+    "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_direct_cross_spectrum_separated.lean": {
+      "bytes": 3946,
+      "sha256": "666df65ad5150ccae863cec97fa8e2d8d58c30f239e3b46aea5057cef0f1c49d"
+    },
+    "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_fixed_dimension_erdos_670.lean": {
+      "bytes": 4282,
+      "sha256": "2e17a513525e86e81e9e2002ad9738e8d44edd3e47d7157c7e1fd8cf2014b9d8"
+    },
+    "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_sourceSineCoefficients_whole_budget.lean": {
+      "bytes": 4183,
+      "sha256": "4261e78bde1b343ac8dc80dd63ac95ba7577c1b082109494289ab8876bfdf48a"
+    },
+    "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_actual_ruler_configuration_metrics.lean": {
+      "bytes": 4868,
+      "sha256": "67dfa66f75642f3b3dfcfb5a4f323af88bd1c78f77bd1bfa97b2326a7f33751b"
+    },
+    "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_clusterPoint_cross_metric_square.lean": {
+      "bytes": 5190,
+      "sha256": "ae05715922c2efe1b444fe9ced5978401443849fb1cdf7e99a829b5a77ec0709"
+    },
+    "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_FixedDimension_source_diameter_of_metrics.lean": {
+      "bytes": 4615,
+      "sha256": "f2359a59a5b692c7e2eec29e56bba2cf53d949d6b578226bb89b78f7e7180268"
+    },
+    "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colexTridiagonal_eq_path_potential_endpoint.lean": {
+      "bytes": 3389,
+      "sha256": "749725a5090871a14c5cbdde2806ae2f135b4837b3a5cc4e0e59c258084e972c"
+    },
+    "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colex_remainder_quadratic_abs_le_product.lean": {
+      "bytes": 3367,
+      "sha256": "ac42460987cfa77d2e6ee7dde97cd95a10d08907b055f1d1f0c0625a10a5c026"
+    },
+    "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_Q.lean": {
+      "bytes": 3430,
+      "sha256": "42c38c5aff1c04416312efb5c2474541df0a2e1ca67da2be65d2faf7a9987ad3"
+    },
+    "Theorems/Thm_Erdos488_Geometry_SeparatedDistances_colex_tridiagonal_ge_quarter_weighted_path.lean": {
+      "bytes": 3865,
+      "sha256": "0b219b889b6f9eca2cdf01b33f4b4897f8f6dd8fa00ff2b8ba367cf2af686b54"
+    },
+    "lake-manifest.json": {
+      "bytes": 3573,
+      "sha256": "3064fd8b6877cb16c53c3b65cb61902d25cfd603f261d90ab4a9dfde571f03f1"
+    },
+    "lakefile.toml": {
+      "bytes": 4781,
+      "sha256": "d39b47edda750887eff763565161f1bea164dc49c3b1538c4cde003e6047c431"
+    },
+    "lean-toolchain": {
+      "bytes": 25,
+      "sha256": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71"
+    },
+    "original_node_types.json": {
+      "bytes": 145135,
+      "sha256": "f6737081e16c706443c247bbbac880f3b17824ed28d3b91b7daaf16259563524"
+    }
+  }
+}

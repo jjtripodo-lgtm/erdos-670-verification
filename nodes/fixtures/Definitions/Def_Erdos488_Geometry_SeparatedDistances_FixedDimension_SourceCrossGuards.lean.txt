@@ -1,0 +1,42 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+
+/-! Universal source-parameter cross guards, not finite sampled certificates.
+The hypotheses are k≥2 and K≥72247875/4, with the literal source formulas. -/
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+noncomputable def sourceMacroStep (k : ℝ) : ℝ := (9/8 : ℝ)^3*k^2
+noncomputable def sourcePerturbationBound (k : ℝ) : ℝ := (9/8 : ℝ)*((9/8 : ℝ)*k+1)*((k-1)/2)
+noncomputable def sourceBaseline (K k : ℝ) : ℝ := sourceMacroStep k*(K+1)
+noncomputable def sourceTmin (K k : ℝ) : ℝ := sourceBaseline K k-sourcePerturbationBound k
+noncomputable def sourceError (K k : ℝ) : ℝ := 2*(9/8 : ℝ)^3*k^3/sourceTmin K k
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/-- Actual ceiling offset from the candidate, with its universal macro-size bound. -/
+noncomputable def sourceOffset (m : ℕ) : ℕ := ⌈(m : ℝ)*((m : ℝ)-1)/64⌉₊
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension

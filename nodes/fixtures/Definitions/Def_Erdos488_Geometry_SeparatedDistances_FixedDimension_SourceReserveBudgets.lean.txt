@@ -1,0 +1,57 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Data.Sym.Card
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Tactic
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_Defs
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricChord
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_HarmonicLocalModel
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_TrigonometricFeatures
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_EuclideanClusterCoordinates
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_PrimeRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_LocalRulerSeparation
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SineDigits
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossGuards
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceCrossSpectrum
+import Definitions.Def_Erdos488_Geometry_SeparatedDistances_FixedDimension_SourceLocalSpectrum
+
+namespace Erdos488.Geometry.SeparatedDistances.FixedDimension
+
+/-- Algebraically normalized squares of the source's constant/second-harmonic reserves. -/
+noncomputable def sourceReserve0Sq (m k : ℕ) : ℝ :=
+  3888*(m : ℝ)^2*(k : ℝ)^4/(sourceOffset m : ℝ)^2
+/-- Algebraically normalized square of the source's first-harmonic reserve. -/
+noncomputable def sourceReserve1Sq (m k : ℕ) : ℝ :=
+  (21168*(9/8 : ℝ)^4*32)*(k : ℝ)^4*((sourceOffset m : ℝ)+(m : ℝ))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+noncomputable def sourceReserve0 (m k : ℕ) : ℝ := Real.sqrt (sourceReserve0Sq m k)
+noncomputable def sourceReserve1 (m k : ℕ) : ℝ := Real.sqrt (sourceReserve1Sq m k)
+
+
+
+
+
+
+
+
+
+end Erdos488.Geometry.SeparatedDistances.FixedDimension
