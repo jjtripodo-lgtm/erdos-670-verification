@@ -7,6 +7,7 @@ on:
       - '.github/workflows/compatibility.yml'
       - 'scripts/**'
       - 'fixtures/**'
+      - 'palomar/**'
       - '*MANIFEST.json'
       - '*PATCHES.json'
       - '*SHA256.json'

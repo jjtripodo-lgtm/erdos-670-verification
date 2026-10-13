@@ -1,0 +1,19 @@
+name = "fixed670_palomar"
+version = "0.1.0"
+defaultTargets = ["Challenge", "Solution"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "065356127b1dc0016f66b7283ce0ce2c4055aa55"
+
+[[lean_lib]]
+name = "Erdos488"
+moreLeanArgs = ["--trust=0"]
+
+[[lean_lib]]
+name = "Challenge"
+
+[[lean_lib]]
+name = "Solution"
+moreLeanArgs = ["--trust=0"]

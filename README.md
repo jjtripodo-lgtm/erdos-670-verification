@@ -1,14 +1,16 @@
 # Fixed-dimension Erdős 670 compatibility checks
 
-This repository is a small mechanical test harness for the public formalization
-of fixed-dimensional separated Euclidean distances. It is not a Palomar
-submission repository or a Prove2Me node package.
+This repository contains the code-only [Palomar proof project](palomar/README.md)
+and reproducible compatibility checks for the public fixed-dimensional result.
+It is separate from the frozen manuscript repository. It is not a Prove2Me
+node package.
 
 The paper and original formalization remain in the separate
 [frozen v1.0.0 release](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/releases/tag/v1.0.0).
 Every run reads precisely 54 Lean source files from
 [commit 1e73a12ff1076dd11affadbf619ddbbef587133e](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/1e73a12ff1076dd11affadbf619ddbbef587133e/lean-fixed670).
-It neither changes that repository nor copies the paper into this one.
+The frozen release is archived as [DOI 10.5281/zenodo.23329194](https://doi.org/10.5281/zenodo.23329194).
+This repository neither changes that release nor copies the paper into this one.
 
 ## The theorem's scope
 
@@ -18,6 +20,27 @@ distinct points are at least one; distances attached to different unordered
 non-diagonal pairs differ by at least one; and every pair distance and the
 diameter are strictly below (37/50)n². These are explicit sufficient bounds,
 not claims of optimal dimension, threshold, coefficient, or priority.
+
+## Palomar project and current evidence
+
+The standalone project is `palomar/`. Its 54 proof modules, Solution, final
+axiom audit, and intact sandboxed Comparator passed in
+[hosted job 115100254416](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38337326194/job/115100254416).
+The same [run 38337326194](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38337326194)
+also passed Prove2Me's 54-module build and final axiom audit. The checked harness
+commit was `7f7c0d588f7510c59d44757ee8d4e41b545009cc`.
+Every published proof/configuration byte matches that Palomar job's recorded hashes.
+The additional metadata and documentation have been validated separately.
+Palomar's own independent-kernel verification, editorial review, submission
+and registration have not occurred.
+
+Submission selection is `project_path=palomar`, with repository-relative
+Comparator path `palomar/comparator.json`, metadata
+`palomar/formalization.yaml`, and the exact immutable published commit.
+The submission records the responsible human maintainer relationship separately
+from mechanical proof verification.
+The sole repository-root license is MIT. Other live Lean sources are absent;
+harness templates end in `.lean.txt`.
 
 ## Two separate checks
 
@@ -47,10 +70,11 @@ independent mathematical review, priority, or journal acceptance.
 SOURCE_MANIFEST.json contains every original and candidate source SHA256.
 PALOMAR_MIGRATION_PATCHES.json records the three exact edits, reasons and platform scopes; its first proof-step repair is shared with Prove2Me.
 FIXTURE_SHA256.json covers the minimal source/configuration templates; Lean
-templates end in `.lean.txt` so this harness has no repository-level Lean
-project. Generated candidate trees contain only the 54 proof files and the
-platform's allowlisted Lean/configuration/license files. Submission metadata,
-importers, manuscript files, reports, and prebuilt proof objects are omitted.
+templates end in `.lean.txt`. Generated test candidates contain only the 54
+proof files and the platform's allowlisted Lean/configuration/license files.
+The separately published `palomar/` tree also contains its reviewed submission
+metadata and source inventory. Importers, manuscript files, private reports,
+and prebuilt proof objects are omitted.
 
 Each matrix job gets a separate standard ubuntu-22.04 full virtual machine in
 a public repository. There are no third-party Actions, repository secrets,

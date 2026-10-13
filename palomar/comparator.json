@@ -1,0 +1,8 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "Erdos488.Geometry.SeparatedDistances.FixedDimension.fixed_dimension_erdos_670"
+  ],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"]
+}

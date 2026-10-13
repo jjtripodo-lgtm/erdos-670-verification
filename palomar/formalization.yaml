@@ -1,0 +1,51 @@
+version: v0.4
+project:
+  name: "Fixed-dimensional separated Euclidean distances below 0.74 n squared"
+  description: >-
+    For every natural n at least 68000, the formalization constructs n injectively
+    indexed points in the fixed Euclidean space R^458999. Distances between
+    distinct points are at least one, distances attached to different unordered
+    non-diagonal pairs differ by at least one, and both every pair distance and
+    the diameter are strictly below (37/50)n^2. The dimension and threshold are
+    explicit sufficient bounds; no optimality or independent priority review is
+    claimed. This code-only port preserves the theorem of the cited public
+    formalization. The full migrated build and final axiom audit have passed; the
+    hosted sandboxed Comparator check has also passed.
+  authors:
+    - "John Tripodo"
+  responsible_maintainers:
+    - "John Tripodo"
+  license: MIT
+classification:
+  arxiv: [math.CO, math.MG]
+  msc2020: []
+sources:
+  - title: "Separated Euclidean distances with diameter below 0.74n^2 in a fixed dimension"
+    type: paper
+    authors: ["John Tripodo"]
+    relationship: formalizes
+    url: "https://doi.org/10.5281/zenodo.23329194"
+    note: "The package states the fixed-dimensional theorem presented in this frozen v1.0.0 release. Citation only: manuscript content is excluded and retains its separate reserved-rights terms."
+related_formalizations:
+  - id: "https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/1e73a12ff1076dd11affadbf619ddbbef587133e/lean-fixed670"
+    relationship: "Compatibility port of the same theorem to Lean 4.35.0-rc2, with the substantive proof sources included."
+    note: "The source commit, all 54 original and migrated source hashes, and narrow compatibility repairs are recorded in SOURCE_MANIFEST.json and MIGRATION_PATCHES.json. No mathematical extension is claimed."
+automation:
+  methods:
+    - method: agent
+      tool_setup: "AI-assisted proof development and compatibility preparation using ChatGPT/Codex; no specific model identity is asserted."
+  notes: "John Tripodo directed AI-assisted proof development and compatibility preparation. No personal human proof verification is claimed. John accepts responsibility as the human maintainer, including handling reported issues and corrections."
+review:
+  status: unchecked
+  notes: >-
+    The cited original-toolchain development carries scoped build and axiom
+    receipts. Those receipts do not validate this Lean 4.35.0-rc2 migration.
+    All 54 migrated modules, the final Solution, and the exact final-theorem
+    axiom audit passed locally on Lean 4.35.0-rc2. Only propext, Classical.choice
+    and Quot.sound occur. The hosted build/audit/Comparator run passed:
+    https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38337326194.
+    Palomar's independent kernels and editorial review have not run.
+    No human independent mathematical or priority
+    review, journal acceptance, or platform endorsement is claimed.
+status:
+  notes: "The public Palomar build, final axiom audit and sandboxed Comparator preflight passed at verification harness commit 7f7c0d588f7510c59d44757ee8d4e41b545009cc (run 38337326194). Full Palomar independent-kernel verification, editorial review, submission and registration have not occurred."

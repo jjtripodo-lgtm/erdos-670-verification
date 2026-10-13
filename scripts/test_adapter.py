@@ -87,6 +87,33 @@ class AdapterTests(unittest.TestCase):
         self.assertNotIn("sudo sysctl", scripts)
         self.assertNotIn("apparmor_parser", scripts)
 
+    def test_palomar_submission_layout(self):
+        expected = {r["path"]: r["palomar_sha256"]
+                    for r in read_json("SOURCE_MANIFEST.json")["modules"]}
+        for name, sha in read_json("FIXTURE_SHA256.json").items():
+            if name.startswith("palomar/"):
+                expected[name.split("/", 1)[1].removesuffix(".txt")] = sha
+        self.assertEqual(len(expected), 62)
+        for name, sha in expected.items():
+            path = ROOT / "LICENSE" if name == "LICENSE" else ROOT / "palomar" / name
+            self.assertEqual(digest(path.read_bytes()), sha, name)
+        self.assertFalse((ROOT / "palomar/LICENSE").exists())
+        lean_files = list(ROOT.rglob("*.lean"))
+        self.assertEqual(len(lean_files), 57)
+        for path in lean_files:
+            self.assertTrue(path.is_relative_to(ROOT / "palomar"))
+            self.assertTrue(path.read_text().startswith("module\n"))
+            self.assertLessEqual(len(path.read_text().splitlines()), 10000)
+        challenge = ROOT / "palomar/Challenge.lean"
+        self.assertLessEqual(challenge.stat().st_size, 100 * 1024)
+        self.assertLessEqual(len(challenge.read_text().splitlines()), 1000)
+        for path in ROOT.rglob("*"):
+            if not path.is_file() or ".git" in path.parts or "__pycache__" in path.parts:
+                continue
+            self.assertFalse(path.is_symlink())
+            self.assertNotIn(path.suffix, {".pdf", ".tex", ".olean", ".ilean", ".o", ".so", ".a"})
+            self.assertIn(str(path.relative_to(ROOT)), set(read_json("PAYLOAD_SHA256.json")) | {"PAYLOAD_SHA256.json"})
+
     def test_actual_generation_and_tamper_rejection(self):
         if self.source_root is None:
             self.skipTest("Pass --source-root for the offline 54-module integration check")

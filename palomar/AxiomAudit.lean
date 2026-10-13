@@ -1,0 +1,5 @@
+module
+
+import Erdos488.Geometry.SeparatedDistances.FixedDimension.SourceFixedDimension670
+
+#print axioms Erdos488.Geometry.SeparatedDistances.FixedDimension.fixed_dimension_erdos_670
