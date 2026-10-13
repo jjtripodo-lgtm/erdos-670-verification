@@ -1,3 +1,5 @@
+import contextlib
+import io
 import json
 from pathlib import Path
 import tempfile
@@ -55,5 +57,34 @@ class NodesTests(unittest.TestCase):
     def test_network_and_build_phases_require_explicit_execution_flag(self):
         with patch('sys.argv',['node-preflight']),tempfile.TemporaryDirectory() as temp:
             with self.assertRaises(ValueError):v.main(['cache','--candidate',temp])
+    def test_axiom_display_option_is_scoped_to_print_command(self):
+        command=v.axiom_report_command('A.test')
+        self.assertEqual(command,'set_option pp.universes false in\n#print axioms A.test\n')
+        for invalid in ['A.test\nset_option pp.universes false','A.β','']:
+            with self.assertRaises(ValueError):v.axiom_report_command(invalid)
+    def test_exact_type_probe_bytes_and_detailed_options_are_preserved(self):
+        probes=list((v.HERE/'fixtures/Probes').glob('*.lean.txt'))
+        self.assertEqual(len(probes),20)
+        for path in probes:
+            original=path.read_text()
+            self.assertIn('set_option pp.universes true',original)
+            source=original+'\n'+v.axiom_report_command('solution')
+            self.assertTrue(source.startswith(original+'\n'))
+            self.assertEqual(source.count('set_option pp.universes false'),1)
+    def test_axiom_allowlist_is_unchanged_and_unknown_axioms_are_reported(self):
+        self.assertEqual(v.ALLOWED_AXIOMS,{'propext','Classical.choice','Quot.sound'})
+        v.require_allowed_axioms(v.ALLOWED_AXIOMS,v.ALLOWED_AXIOMS,'definition')
+        permitted=v.ALLOWED_AXIOMS|{'sorryAx'}
+        v.require_allowed_axioms({'sorryAx'},permitted,'statement')
+        for observed,allowed in [({'sorryAx'},v.ALLOWED_AXIOMS),({'customAxiom'},permitted),({'sorryAx.{u}'},permitted)]:
+            output=io.StringIO()
+            with contextlib.redirect_stdout(output),self.assertRaisesRegex(ValueError,'Unpermitted staged axiom'):
+                v.require_allowed_axioms(observed,allowed,'A.test::statement')
+            line=output.getvalue().strip()
+            self.assertTrue(line.startswith('AXIOM_ALLOWLIST_FAILURE '))
+            detail=json.loads(line.split(' ',1)[1])
+            self.assertEqual(detail,{'context':'A.test::statement','observed':sorted(observed),'permitted':sorted(allowed),'unexpected':sorted(observed-allowed)})
+    def test_axiom_parser_does_not_normalize_unexpected_names(self):
+        self.assertEqual(v.axioms("'test' depends on axioms: [sorryAx.{u}]",'test'),{'sorryAx.{u}'})
 
 if __name__=='__main__':unittest.main()

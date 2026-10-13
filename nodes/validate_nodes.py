@@ -138,6 +138,21 @@ def axioms(output,name):
     raise ValueError('Missing/ambiguous axiom report for '+name)
 
 
+def axiom_report_command(name):
+    require(name_ok(name),'Invalid axiom audit name')
+    # Scope display options to this command; the exact type probe keeps its options.
+    return 'set_option pp.universes false in\n#print axioms '+name+'\n'
+
+
+def require_allowed_axioms(observed,permitted,context):
+    unexpected=observed-permitted
+    if unexpected:
+        detail={'context':context,'observed':sorted(observed),
+                'permitted':sorted(permitted),'unexpected':sorted(unexpected)}
+        print('AXIOM_ALLOWLIST_FAILURE '+json.dumps(detail,sort_keys=True),flush=True)
+        raise ValueError('Unpermitted staged axiom for '+context+': '+', '.join(sorted(unexpected)))
+
+
 def validate_runtime(root,verifier):
     receipt=check(root)
     version=execute(['lean','--version'],root).strip()
@@ -179,17 +194,17 @@ def main(argv=None):
             tmp=Path(temporary)
             defs=[r for r in receipt['records'] if r['kind']=='definition_bundle']
             names=[n for r in defs for n in r['axiom_names']]
-            audit=''.join('import '+r['module']+'\n' for r in defs)+'\n'+''.join('#print axioms '+n+'\n' for n in names)
+            audit=''.join('import '+r['module']+'\n' for r in defs)+'\n'+''.join(axiom_report_command(n) for n in names)
             path=tmp/'DefinitionsAxioms.lean';path.write_text(audit)
             output=execute(['lake','--no-cache','env','lean','--trust=0',str(path)],root)
             for n in names:
-                ax=axioms(output,n);require(ax<=ALLOWED_AXIOMS,'Definition proof has unpermitted axiom')
+                ax=axioms(output,n);require_allowed_axioms(ax,ALLOWED_AXIOMS,n+'::definition')
                 report['definition_axioms'][n]=sorted(ax)
             for row in receipt['records']:
                 if row['kind']!='theorem_node':continue
                 name=row['theorem_name'];slug=name.replace('.','_')
                 for kind,decl in [('statement',name),('solution','solution')]:
-                    source=(root/'Probes'/(slug+'_'+kind+'.lean.txt')).read_text()+'\n#print axioms '+decl+'\n'
+                    source=(root/'Probes'/(slug+'_'+kind+'.lean.txt')).read_text()+'\n'+axiom_report_command(decl)
                     path=tmp/(slug+'_'+kind+'.lean');path.write_text(source)
                     output=execute(['lake','--no-cache','env','lean','--trust=0',str(path)],root)
                     facts=[]
@@ -205,7 +220,7 @@ def main(argv=None):
                     require(same,'Exact original/staged type differs; even universe display changes require review')
                     ax=axioms(output,decl)
                     permitted=ALLOWED_AXIOMS|({'sorryAx'} if kind=='statement' or row['reductions'] else set())
-                    require(ax<=permitted,'Unpermitted staged axiom')
+                    require_allowed_axioms(ax,permitted,name+'::'+kind)
                     report['types'].append({'node':name,'kind':kind,'exact_type_sha256':digest(facts[0]['typePretty'].encode()),'axioms':sorted(ax),'reductions':row['reductions'] if kind=='solution' else []})
                     print('TYPE_MATCH '+name+' '+kind,flush=True)
         check(root);dependencies(root,fetch=False)
