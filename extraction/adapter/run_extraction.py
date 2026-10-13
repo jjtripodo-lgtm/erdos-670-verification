@@ -145,6 +145,13 @@ def failure_capsule(step,exit_code,guard,stdout,stderr,project,tools,rows):
         allowed={str(tools/'environment_facts.lean'):'companions/environment_facts.lean.txt',
                  str(tools/'source_facts.lean'):'companions/source_facts.lean.txt'}
         allowed.update({str(project/r['path']):'sources/'+r['path'] for r in rows})
+        # Lean can render the exact same input path relative to the child cwd.
+        # Admit only aliases derived from our allowlist, never arbitrary basenames.
+        work=tools.parent/'work'
+        for filename,label in list(allowed.items()):
+            relative=os.path.relpath(filename,work)
+            allowed[relative]=label
+            allowed['./'+relative]=label
         seen=set()
         for line in (stderr[:32768]+b'\n'+stdout[:32768]).decode('utf-8',errors='replace').splitlines():
             for filename,label in allowed.items():
@@ -152,7 +159,7 @@ def failure_capsule(step,exit_code,guard,stdout,stderr,project,tools,rows):
                 parts=line[len(filename)+1:].split(':',2)
                 if len(parts)!=3 or not parts[0].isdigit() or not parts[1].isdigit():continue
                 message=parts[2].lstrip()
-                if not message.startswith('error:'):continue
+                if not re.match(r'error(?:\([A-Za-z0-9_.]{1,96}\))?:',message):continue
                 message=re.sub(r"(?<![A-Za-z0-9_])/(?:[^\s'\"<>]+)",'<path>',message)[:384]
                 key=(label,parts[0],parts[1],message)
                 if key in seen:continue

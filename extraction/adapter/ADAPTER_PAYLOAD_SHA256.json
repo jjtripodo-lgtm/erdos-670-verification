@@ -11,8 +11,8 @@
       "sha256": "490a26922d540d63595eb66641b69ccd4dcc1517d25534fee0845fb8707bd302"
     },
     "run_extraction.py": {
-      "bytes": 20373,
-      "sha256": "bc8cf023460b3799bab06d1757d6219e20ce75b41e9283c48cbfe4fc9c7140fe"
+      "bytes": 20778,
+      "sha256": "9b23a8164d7fff1c8f461439eff151513d4b48519d154b36d7de6660a1ac782d"
     },
     "export_artifact.py": {
       "bytes": 17509,
@@ -27,16 +27,16 @@
       "sha256": "73470b75bed19f06951653efa6c3e24d49866b1703a9389d4b9a69a483653210"
     },
     "test_adapter.py": {
-      "bytes": 20919,
-      "sha256": "016fd4aeb69d7acd4a27273352e45c94bc7fb1b6faed5b7e56decee946995533"
+      "bytes": 23424,
+      "sha256": "8da513d5ef7d27fe62b99417daa5ce1bbe7c8db1b1c05130de35dc354252c36d"
     },
     "companions/environment_facts.lean.txt": {
       "bytes": 1169,
       "sha256": "61ea68aa0a84ac3be9f8c1b8d7182b98034a59f69ed97f77c9f1e949d1f4a573"
     },
     "companions/source_facts.lean.txt": {
-      "bytes": 5272,
-      "sha256": "70b3d13a6b3c7b8af569e745c542fd89cc6de90facc73139ca0ffebe0d29f502"
+      "bytes": 5282,
+      "sha256": "d478417910d461a9dfe404fb7ebee7baeab9e404f2b64a50cb28287925cfa973"
     }
   }
 }

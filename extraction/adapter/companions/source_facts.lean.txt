@@ -99,7 +99,7 @@ unsafe def main (arguments : List String) : IO UInt32 := do
   let (world, diagnostics) ← Elab.processHeader imports settings diagnostics input
   let commands := Elab.Command.mkState world diagnostics settings
   let commands := { commands with infoState := { enabled := true } }
-  let completed ← IO.processCommands input cursor commands
+  let completed ← Lean.Elab.IO.processCommands input cursor commands
   if completed.commandState.messages.hasErrors then
     for problem in completed.commandState.messages.toList do
       IO.eprintln (← problem.toString)

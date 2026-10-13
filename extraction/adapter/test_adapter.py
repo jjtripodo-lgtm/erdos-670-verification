@@ -166,6 +166,37 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(upstream['headers'],[])
         self.assertLessEqual(len(failure_capsule('companion-00',1,None,b'',own*10000,project,tools,[]).encode()),8192)
 
+    def test_failure_capsule_accepts_named_lean_errors_and_exact_relative_aliases(self):
+        project=Path('/workspace/private/candidate');tools=Path('/workspace/private/tools')
+        for filename in (str(tools/'source_facts.lean'),'../tools/source_facts.lean','./../tools/source_facts.lean'):
+            own=(filename+":102:18: error(lean.unknownIdentifier): Unknown constant `IO.processCommands`\n").encode()
+            capsule=json.loads(failure_capsule('companion-00',1,None,own,b'',project,tools,[]))
+            self.assertEqual(len(capsule['headers']),1)
+            self.assertEqual(capsule['headers'][0],{'file':'companions/source_facts.lean.txt','line':102,'column':18,'message':'error(lean.unknownIdentifier): Unknown constant `IO.processCommands`'})
+            self.assertNotIn('/workspace/',json.dumps(capsule))
+
+    def test_failure_capsule_rejects_nonallowlisted_aliases_and_nonerrors(self):
+        project=Path('/workspace/private/candidate');tools=Path('/workspace/private/tools')
+        lines=['source_facts.lean:1:2: error: wrong bare basename',
+               '../other/source_facts.lean:1:2: error: wrong sibling',
+               '/upstream/tool.lean:1:2: error(lean.unknownIdentifier): upstream text',
+               '../tools/source_facts.lean:1:2: warning: not an error',
+               '../tools/source_facts.lean:1:2: error(unbounded label): not a valid label']
+        capsule=json.loads(failure_capsule('companion-00',1,None,'\n'.join(lines).encode(),b'',project,tools,[]))
+        self.assertEqual(capsule['headers'],[])
+
+    def test_failure_capsule_relative_project_path_has_stable_public_label(self):
+        project=Path('/workspace/private/candidate');tools=Path('/workspace/private/tools')
+        own=b'../candidate/Erdos488/A.lean:4:9: error(lean.invalidField): Invalid field\n'
+        capsule=json.loads(failure_capsule('companion-00',1,None,own,b'',project,tools,[{'path':'Erdos488/A.lean'}]))
+        self.assertEqual(capsule['headers'][0]['file'],'sources/Erdos488/A.lean')
+        self.assertLessEqual(len(failure_capsule('companion-00',1,None,own*10000,b'',project,tools,[{'path':'Erdos488/A.lean'}]).encode()),8192)
+
+    def test_source_companion_uses_explicit_frontend_api_namespace(self):
+        text=(HERE/'companions/source_facts.lean.txt').read_text()
+        self.assertIn('let completed ← Lean.Elab.IO.processCommands input cursor commands',text)
+        self.assertNotIn('let completed ← IO.processCommands input cursor commands',text)
+
     def test_exact_type_gate_never_guesses_away_differences(self):
         result=compare({'a':'Nat'},{'b':'Nat'},[{'original':'a','staged':'b'}]);self.assertEqual(result['status'],'EXACT_TYPE_TEXT_EQUAL');self.assertFalse(result['upload_ready'])
         self.assertEqual(compare({'a':'Sort u_1'},{'b':'Sort u_2'},[{'original':'a','staged':'b'}])['status'],'BLOCKED_TYPE_TEXT_DIFF')
