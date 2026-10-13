@@ -66,6 +66,14 @@ class AdapterTests(unittest.TestCase):
         self.assertIn("contents: read", workflow)
         self.assertIn("github.event.repository.private == false", workflow)
         self.assertIn("platform: [palomar, prove2me]", workflow)
+        # GitHub resolves job-level env before runner contexts exist.
+        before_steps = workflow.split("    steps:", 1)[0]
+        self.assertNotIn("runner.", before_steps)
+        for assignment in ["MATHLIB_CACHE_DIR=$RUNNER_TEMP/mathlib-cache",
+                           "LAKE_CACHE_DIR=$RUNNER_TEMP/lake-cache",
+                           "COMPARATOR_BWRAP=$RUNNER_TEMP/bwrap-bin/bwrap"]:
+            self.assertIn(assignment, workflow)
+        self.assertIn('} >> "$GITHUB_ENV"', workflow)
         for forbidden in ["secrets.", "uses:", "upload-artifact", "pull_request_target", "container:"]:
             self.assertNotIn(forbidden, workflow)
         scripts = "\n".join(p.read_text() for p in (ROOT / "scripts").glob("*") if p.suffix in {".py", ".sh"} and p.name != "test_adapter.py")

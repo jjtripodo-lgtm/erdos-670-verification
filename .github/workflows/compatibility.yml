@@ -34,9 +34,6 @@ jobs:
       PLATFORM: ${{ matrix.platform }}
       LEAN_NUM_THREADS: '2'
       MATHLIB_NO_CACHE_ON_UPDATE: '1'
-      MATHLIB_CACHE_DIR: ${{ runner.temp }}/mathlib-cache
-      LAKE_CACHE_DIR: ${{ runner.temp }}/lake-cache
-      COMPARATOR_BWRAP: ${{ runner.temp }}/bwrap-bin/bwrap
     defaults:
       run:
         shell: bash
@@ -45,6 +42,12 @@ jobs:
         id: harness
         run: |
           set -euo pipefail
+          # Runner paths are available at step execution, not in job-level env.
+          {
+            echo "MATHLIB_CACHE_DIR=$RUNNER_TEMP/mathlib-cache"
+            echo "LAKE_CACHE_DIR=$RUNNER_TEMP/lake-cache"
+            echo "COMPARATOR_BWRAP=$RUNNER_TEMP/bwrap-bin/bwrap"
+          } >> "$GITHUB_ENV"
           [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]]
           git init --quiet "$RUNNER_TEMP/verifier"
           git -C "$RUNNER_TEMP/verifier" remote add origin "https://github.com/$GITHUB_REPOSITORY.git"

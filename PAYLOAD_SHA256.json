@@ -1,5 +1,5 @@
 {
-  ".github/workflows/compatibility.yml": "f4312b8ae008058b57b9945a399df87410840f94f4a9cca287b78777b16a06c7",
+  ".github/workflows/compatibility.yml": "f2519811369c12b249075fcc3b95c62c907df788314962781e8df6936465097f",
   ".gitignore": "381baf73a18ba977491008877ccbed0dd013191f1ba362ae3a25af44abf56a51",
   "FIXTURE_SHA256.json": "1941fec23fc8802a810d17122ec3a6f572e50dd542d4141437aca1df6d0ad692",
   "LICENSE": "3587ec3f5eb141a9ec2a9470a10a8cae9bc904db51d2d7d4877bd5ff9751208e",
@@ -24,5 +24,5 @@
   "scripts/install_lean.sh": "afb455302add0f782ca97bbee8154395bfdb644aad8e7c1bfe137b903ef9607b",
   "scripts/make_candidate.py": "4693fb3e38dcb7ce4f973e046495bce64406d33514c87ff83b404e5ee3d16841",
   "scripts/run_checks.py": "5edf0f6652fcc0e9964da9fa062369fa23746d82fff1abeea45809039767f30e",
-  "scripts/test_adapter.py": "8f4ce6a1198691c34a822a3b4e0ed906bc3a3ad49175d785945dbdef872b7544"
+  "scripts/test_adapter.py": "a4de6a211f9d016df8f8492d4715f92ba1058ae383eb8a8fba5bb1fb2920e222"
 }
