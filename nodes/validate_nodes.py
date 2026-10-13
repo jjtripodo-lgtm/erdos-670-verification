@@ -153,6 +153,106 @@ def require_allowed_axioms(observed,permitted,context):
         raise ValueError('Unpermitted staged axiom for '+context+': '+', '.join(sorted(unexpected)))
 
 
+def kernel_type_bridge_source(statement_module,solution_module,theorem_name):
+    require(all(name_ok(n) for n in [statement_module,solution_module,theorem_name]),'Invalid kernel bridge name')
+    source='''import @STATEMENT_MODULE@
+import @SOLUTION_MODULE@
+import Lean
+set_option pp.universes true
+set_option pp.fullNames true
+set_option pp.explicit true
+set_option pp.proofs true
+namespace Fixed670KernelBridgeControls
+theorem indexWitness : (0 : Fin 2) = (0 : Fin 2) := rfl
+def changedIndexType : Prop := (0 : Fin 2) = (1 : Fin 2)
+end Fixed670KernelBridgeControls
+open Lean
+run_meta do
+  let env ← getEnv
+  let opts ← getOptions
+  let kernelEnv := env.toKernelEnv
+  unless kernelEnv.header.trustLevel == 0 do
+    throwError "Kernel type bridge requires trust level zero"
+  if debug.skipKernelTC.get opts then
+    throwError "Kernel type checking must not be skipped"
+  let checkControl := fun (name : Name) (type value : Expr) =>
+    kernelEnv.addDeclCore (Core.getMaxHeartbeats opts).toUSize
+      (maxRecDepth.get opts).toUSize
+      (.thmDecl { name, levelParams := [], type, value }) none
+  unless (checkControl `_fixed670_positive_control (mkConst ``True) (mkConst ``True.intro)).isOk do
+    throwError "Kernel positive control failed"
+  if (checkControl `_fixed670_changed_type_control (mkConst ``False) (mkConst ``True.intro)).isOk then
+    throwError "Kernel accepted altered-type negative control"
+  if (checkControl `_fixed670_changed_index_control
+      (mkConst ``Fixed670KernelBridgeControls.changedIndexType)
+      (mkConst ``Fixed670KernelBridgeControls.indexWitness)).isOk then
+    throwError "Kernel accepted altered-index negative control"
+  let theoremName := "@THEOREM@".toName
+  let some statement := env.find? theoremName | throwError "Statement declaration absent"
+  let some solution := env.find? `solution | throwError "Solution declaration absent"
+  unless statement.levelParams == solution.levelParams do
+    throwError "Exact universe parameter lists differ"
+  let bridgeName := `_fixed670_checked_solution_type
+  if env.contains bridgeName then throwError "Kernel bridge declaration already exists"
+  let bridge := Declaration.thmDecl {
+    name := bridgeName
+    levelParams := statement.levelParams
+    type := statement.type
+    value := mkConst `solution (solution.levelParams.map Level.param)
+  }
+  -- Direct synchronous kernel check: no elaborator unification, axiom, or cast.
+  -- The witness is the already-compiled solution constant, never the statement stub.
+  let checkedEnv ← ofExceptKernelException <|
+    kernelEnv.addDeclCore (Core.getMaxHeartbeats opts).toUSize
+      (maxRecDepth.get opts).toUSize bridge none
+  unless (checkedEnv.find? bridgeName).isSome do throwError "Kernel bridge missing after check"
+  let statementText := (← Lean.Meta.ppExpr statement.type).pretty
+  let solutionText := (← Lean.Meta.ppExpr solution.type).pretty
+  IO.println (Json.mkObj [
+    ("kind", Json.str "kernel_type_bridge"),
+    ("node", Json.str theoremName.toString),
+    ("status", Json.str "kernel_checked"),
+    ("trust_level", toJson kernelEnv.header.trustLevel.toNat),
+    ("controls", Json.str "positive_accepted_altered_type_and_index_rejected"),
+    ("statement_type", Json.str statementText),
+    ("solution_type", Json.str solutionText)
+  ]).compress
+'''
+    return source.replace('@STATEMENT_MODULE@',statement_module).replace('@SOLUTION_MODULE@',solution_module).replace('@THEOREM@',theorem_name)
+
+
+def check_kernel_type_bridge_record(output,name,original_type,solution_type):
+    records=[]
+    for line in output.splitlines():
+        try:value=json.loads(line)
+        except json.JSONDecodeError:continue
+        if isinstance(value,dict) and value.get('kind')=='kernel_type_bridge':records.append(value)
+    require(len(records)==1,'Missing/ambiguous kernel type bridge record')
+    record=records[0]
+    require(set(record)=={'kind','node','status','trust_level','controls','statement_type','solution_type'},'Unexpected kernel type bridge fields')
+    require(record['node']==name and record['status']=='kernel_checked' and type(record['trust_level']) is int and record['trust_level']==0,'Unverified kernel type bridge')
+    require(record['controls']=='positive_accepted_altered_type_and_index_rejected','Unverified kernel controls')
+    require(record['statement_type']==original_type,'Combined-environment statement differs from exact original type')
+    require(record['solution_type']==solution_type,'Combined-environment solution differs from isolated probe')
+    return {'method':'lean_kernel_checked_solution_constant','original_type_sha256':digest(original_type.encode()),
+            'solution_type_sha256':digest(solution_type.encode()),'trust_level':0,'controls':record['controls']}
+
+
+def kernel_type_bridge(row,root,temporary,original_type,solution_type):
+    name=row['theorem_name']
+    path=temporary/(name.replace('.','_')+'_kernel_type_bridge.lean')
+    path.write_text(kernel_type_bridge_source(row['theorem_module'],row['solution_module'],name))
+    output=execute(['lake','--no-cache','env','lean','--trust=0',str(path)],root)
+    result=check_kernel_type_bridge_record(output,name,original_type,solution_type)
+    print('KERNEL_TYPE_MATCH '+name+' solution',flush=True)
+    return result
+
+
+def require_exact_statement_for_bridge(kind,name,records):
+    require(kind=='solution' and any(t['node']==name and t['kind']=='statement' and t['comparison']=='exact_text' for t in records),
+            'Exact original/staged statement type differs; no normalization permitted')
+
+
 def validate_runtime(root,verifier):
     receipt=check(root)
     version=execute(['lean','--version'],root).strip()
@@ -214,19 +314,24 @@ def main(argv=None):
                         if isinstance(value,dict) and set(value)=={'name','key','typePretty'}:facts.append(value)
                     require(len(facts)==1 and facts[0]['name']==decl and facts[0]['key']==name+'::'+kind,'Missing/ambiguous exact type record')
                     same=facts[0]['typePretty']==original[name]
+                    comparison='exact_text';bridge=None
                     if not same:
                         import difflib
                         print('\n'.join(difflib.unified_diff(original[name].splitlines(),facts[0]['typePretty'].splitlines(),fromfile='original type',tofile='staged type'))[:16384])
-                    require(same,'Exact original/staged type differs; even universe display changes require review')
+                        require_exact_statement_for_bridge(kind,name,report['types'])
+                        bridge=kernel_type_bridge(row,root,tmp,original[name],facts[0]['typePretty'])
+                        comparison='kernel_checked_type'
                     ax=axioms(output,decl)
                     permitted=ALLOWED_AXIOMS|({'sorryAx'} if kind=='statement' or row['reductions'] else set())
                     require_allowed_axioms(ax,permitted,name+'::'+kind)
-                    report['types'].append({'node':name,'kind':kind,'exact_type_sha256':digest(facts[0]['typePretty'].encode()),'axioms':sorted(ax),'reductions':row['reductions'] if kind=='solution' else []})
-                    print('TYPE_MATCH '+name+' '+kind,flush=True)
+                    report['types'].append({'node':name,'kind':kind,'comparison':comparison,
+                        'original_type_sha256':digest(original[name].encode()),'staged_type_sha256':digest(facts[0]['typePretty'].encode()),
+                        'kernel_bridge':bridge,'axioms':sorted(ax),'reductions':row['reductions'] if kind=='solution' else []})
+                    print(('TYPE_MATCH ' if comparison=='exact_text' else 'TYPE_KERNEL_CHECKED ')+name+' '+kind,flush=True)
         check(root);dependencies(root,fetch=False)
         require(len(report['types'])==20 and len(report['definition_axioms'])==92,'Incomplete exact-text checks')
         report['status']='EXACT_TRANSFORMED_BUILD_TYPES_AND_AXIOMS_PASS'
-        report['note']='Theorem stubs intentionally contain sorry. Solution dependency stubs are intended platform reductions; this is preflight, not platform acceptance.'
+        report['note']='Every statement type matches the original exact dump. Solution types match exact text or are checked against that statement type by the synchronous Lean kernel; no proof-name normalization. Theorem stubs intentionally contain sorry. Solution dependency stubs are intended platform reductions; this is preflight, not platform acceptance.'
         return 0
     except Exception:
         report['status']='FAILED_CLOSED'

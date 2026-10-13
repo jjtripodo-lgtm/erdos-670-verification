@@ -30,14 +30,26 @@ these bytes on a separate standard Ubuntu VM and checks:
    4.33.1 with the exact nine dependency commits used for successful extraction
 2. The staged theorem is byte-for-byte its saved `preamble + formal_statement`;
    each staged solution is byte-for-byte the saved solution payload
-3. Every original/staged theorem and top-level `solution` type is exactly equal
-   as printed with the same Lean options; even a universe display-name change
-   stops for review rather than being silently normalized
+3. Every staged theorem type exactly matches its original detailed type dump.
+   Solutions use the same strict text comparison first. Only after a statement
+   has passed may a solution-only mismatch use a synchronous Lean-kernel check:
+   the already-compiled solution constant must have that exact statement type.
+   The bridge requires identical universe-parameter lists and trust level zero,
+   rejects altered-type/index negative controls, and rechecks both detailed type
+   strings against the isolated probes. No proof-name normalization is performed
 4. All 92 definition-material/proof declarations use only `propext`,
    `Classical.choice` and `Quot.sound`; no definition imports a theorem stub
 5. Solutions never import their own target. A solution can depend on `sorryAx`
    only through its explicitly listed reduction stubs; leaf solutions cannot
    have it. This is a preflight boundary, not platform proof acceptance
+
+The separate kernel probe may import the statement stub alongside an already
+compiled solution for type comparison only. Its checked witness is the solution
+constant, never the statement stub, and the solution's axiom audit still comes
+from its original isolated probe. The kernel API is called synchronously with
+checking enabled; no elaborator-unification result substitutes for kernel
+acceptance. Reports distinguish exact-text matches from kernel-checked matches
+and retain separate hashes for the unmodified original and staged type strings.
 
 The runner needs 16 GiB initially. The guarded build/cache/type-check commands
 require 8 GiB free disk and 1.5 GiB available RAM, with a 20-minute limit per
