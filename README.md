@@ -13,9 +13,16 @@ compiled all 28 definition bundles, 10 theorem stubs, and four solutions, then
 stopped on namespace lookup in a generated solution wrapper. The targeted repair
 preserves each solution's original namespace while exporting a global `solution`;
 the original theorem statements and proof bodies are unchanged.
-The repaired candidate awaits a fresh Lean 4.33.1 run. All 20 exact type
-comparisons and the definition-axiom checks remain **not run**. It is not yet
-platform-ready and has not been submitted to Prove2Me.
+The [namespace-repaired run](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38413205500)
+then compiled all 48 targets and accepted all 92 definition-axiom reports. It
+stopped at the first statement's axiom check after that statement's exact type
+comparison passed. The log did not identify the unexpected axiom.
+The current diagnostic repair turns off universe display only while printing
+axiom names and reports the exact unexpected set on failure. Detailed type
+comparison options, the axiom allowlist, and every proof fixture are unchanged.
+A fresh Lean 4.33.1 run must confirm the cause and complete all 20 type/axiom
+checks. This candidate is not yet platform-ready and has not been submitted
+to Prove2Me.
 
 The next step is the manual
 [Pinned Prove2Me transformed-node preflight](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/workflows/prove2me-nodes.yml):
