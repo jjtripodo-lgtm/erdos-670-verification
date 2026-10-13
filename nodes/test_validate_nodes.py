@@ -86,5 +86,37 @@ class NodesTests(unittest.TestCase):
             self.assertEqual(detail,{'context':'A.test::statement','observed':sorted(observed),'permitted':sorted(allowed),'unexpected':sorted(observed-allowed)})
     def test_axiom_parser_does_not_normalize_unexpected_names(self):
         self.assertEqual(v.axioms("'test' depends on axioms: [sorryAx.{u}]",'test'),{'sorryAx.{u}'})
+    def test_kernel_bridge_uses_synchronous_kernel_and_solution_witness(self):
+        source=v.kernel_type_bridge_source('Theorems.Target','Solutions.Target','Source.target')
+        self.assertIn('kernelEnv.addDeclCore',source)
+        self.assertIn('type := statement.type',source)
+        self.assertIn('value := mkConst `solution (solution.levelParams.map Level.param)',source)
+        self.assertIn('statement.levelParams == solution.levelParams',source)
+        self.assertIn('kernelEnv.header.trustLevel == 0',source)
+        self.assertIn('debug.skipKernelTC.get opts',source)
+        self.assertIn('Kernel accepted altered-type negative control',source)
+        self.assertIn('Kernel accepted altered-index negative control',source)
+        for forbidden in ['addDeclWithoutChecking','Meta.isDefEq','sorryAx','axiomDecl']:
+            self.assertNotIn(forbidden,source)
+        with self.assertRaises(ValueError):v.kernel_type_bridge_source('A\nimport B','C','D')
+    def test_kernel_bridge_requires_prior_exact_statement_match(self):
+        prior=[{'node':'A.target','kind':'statement','comparison':'exact_text'}]
+        v.require_exact_statement_for_bridge('solution','A.target',prior)
+        for kind,name,records in [('statement','A.target',prior),('solution','B.target',prior),('solution','A.target',[]),
+                                  ('solution','A.target',[{'node':'A.target','kind':'statement','comparison':'kernel_checked_type'}])]:
+            with self.assertRaises(ValueError):v.require_exact_statement_for_bridge(kind,name,records)
+    def test_kernel_bridge_record_preserves_both_unmodified_type_strings(self):
+        row={'kind':'kernel_type_bridge','node':'A.target','status':'kernel_checked','trust_level':0,
+             'controls':'positive_accepted_altered_type_and_index_rejected',
+             'statement_type':'original._proof_1','solution_type':'solution._proof_1'}
+        result=v.check_kernel_type_bridge_record(json.dumps(row),'A.target',row['statement_type'],row['solution_type'])
+        self.assertNotEqual(result['original_type_sha256'],result['solution_type_sha256'])
+        self.assertEqual(result['trust_level'],0)
+        for key,value in [('node','B.target'),('status','unchecked'),('trust_level',1),('trust_level',False),
+                          ('controls','not_run'),('statement_type','different'),('solution_type','different')]:
+            with self.assertRaises(ValueError):v.check_kernel_type_bridge_record(json.dumps({**row,key:value}),'A.target',row['statement_type'],row['solution_type'])
+        with self.assertRaises(ValueError):v.check_kernel_type_bridge_record(json.dumps(row)+'\n'+json.dumps(row),'A.target',row['statement_type'],row['solution_type'])
+        with self.assertRaises(ValueError):v.check_kernel_type_bridge_record('{}','A.target',row['statement_type'],row['solution_type'])
+        with self.assertRaises(ValueError):v.check_kernel_type_bridge_record(json.dumps({**row,'extra':True}),'A.target',row['statement_type'],row['solution_type'])
 
 if __name__=='__main__':unittest.main()

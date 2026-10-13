@@ -20,9 +20,16 @@ comparison passed. The log did not identify the unexpected axiom.
 The current diagnostic repair turns off universe display only while printing
 axiom names and reports the exact unexpected set on failure. Detailed type
 comparison options, the axiom allowlist, and every proof fixture are unchanged.
-A fresh Lean 4.33.1 run must confirm the cause and complete all 20 type/axiom
-checks. This candidate is not yet platform-ready and has not been submitted
-to Prove2Me.
+The [next run](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38418637347)
+passed that gate and completed 19 of 20 type/axiom checks. The final solution's
+detailed type text differed in generated proof-helper names. The current validator
+still requires every statement to match its original detailed type exactly.
+For a solution-only text mismatch, a separate synchronous Lean-kernel check must
+accept the compiled solution constant at that exact statement type, with
+altered-type/index negative controls and unchanged axiom restrictions. It does
+not strip or normalize proof names. This kernel-check route awaits hosted
+Lean 4.33.1 validation. The candidate is not yet platform-ready and has not
+been submitted to Prove2Me.
 
 The next step is the manual
 [Pinned Prove2Me transformed-node preflight](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/workflows/prove2me-nodes.yml):
