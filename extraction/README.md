@@ -1,5 +1,14 @@
 # Prove2Me declaration extraction
 
+## Version scope
+
+These tools and fixtures verify the archived v1.0.0 theorem
+(n ≥ 68000, dimension 458999, diameter < (37/50)n²).
+The [current finite result](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension)
+has its own [66-module proof](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/f1604c368efce996a9af4d46f581e676e49054f5/lean)
+for n ≥ 36354, dimension 81794, and diameter < (147/200)n².
+The version-specific checks below do not verify those revised constants.
+
 This is a preparation tool for the already-public fixed-dimensional Erdős 670
 formalization. It extracts declaration dependencies and source-position facts.
 It does not call Prove2Me, upload a node, generate a transformed proof, or certify

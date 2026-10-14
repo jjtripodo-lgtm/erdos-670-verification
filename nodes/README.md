@@ -1,10 +1,24 @@
 # Exact transformed-node preflight
 
+## Version scope
+
+These tools and fixtures verify the archived v1.0.0 theorem
+(n ≥ 68000, dimension 458999, diameter < (37/50)n²).
+The [current finite result](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension)
+has its own [66-module proof](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/f1604c368efce996a9af4d46f581e676e49054f5/lean)
+for n ≥ 36354, dimension 81794, and diameter < (147/200)n².
+The version-specific checks below do not verify those revised constants.
+
 These are code-only mechanical translations of the [frozen fixed-dimension
 formalization](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/1e73a12ff1076dd11affadbf619ddbbef587133e),
 using the real declaration/source-position facts from successful extraction
 [run 38350587663](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38350587663).
 The source theorem and mathematical claims are unchanged.
+
+The complete preflight passed in [run 38424315562](https://github.com/jjtripodo-lgtm/erdos-670-verification/actions/runs/38424315562)
+at harness commit `15b2e692621da7b01ea2412a89529860d78c8f09`: all 48 targets,
+20 theorem/solution type-and-axiom checks, and 92 definition axiom reports passed.
+This result is not a Prove2Me platform submission or acceptance.
 
 The compact decomposition has 28 definition bundles and 10 theorem/solution
 pairs. The main theorem plus the nine proofs longer than 40 lines become nodes;

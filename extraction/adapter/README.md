@@ -1,5 +1,14 @@
 # Extraction adapter
 
+## Version scope
+
+These tools and fixtures verify the archived v1.0.0 theorem
+(n ≥ 68000, dimension 458999, diameter < (37/50)n²).
+The [current finite result](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension)
+has its own [66-module proof](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/f1604c368efce996a9af4d46f581e676e49054f5/lean)
+for n ≥ 36354, dimension 81794, and diameter < (147/200)n².
+The version-specific checks below do not verify those revised constants.
+
 See [the extraction overview](../README.md) for the immutable source pins,
 execution and publication boundaries, resource limits, and remaining node checks.
 This directory contains independently authored Python support and two Lean
