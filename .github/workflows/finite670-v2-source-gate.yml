@@ -1,0 +1,37 @@
+name: Finite 670 v2 source and arithmetic gate
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/finite670-v2-source-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-pinned-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout verification repository
+        uses: actions/checkout@v4
+      - name: Checkout exact v2 proof snapshot
+        uses: actions/checkout@v4
+        with:
+          repository: jjtripodo-lgtm/erdos-670-fixed-dimension
+          ref: f1604c368efce996a9af4d46f581e676e49054f5
+          path: finite670-v2
+          persist-credentials: false
+      - name: Verify source and release integrity
+        working-directory: finite670-v2
+        run: |
+          python3 verify_release.py
+          python3 verification/finite670/verify_sources.py
+      - name: Verify exact finite arithmetic
+        working-directory: finite670-v2
+        run: python3 verification/finite670/validate_finite.py
+      - name: Report verification scope
+        run: |
+          echo 'PASS here means only source identity, release consistency and finite arithmetic.'
+          echo 'It does not independently compile Lean, audit kernel axioms, or reproduce Palomar.'
