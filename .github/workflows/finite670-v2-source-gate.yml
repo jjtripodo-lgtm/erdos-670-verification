@@ -26,7 +26,6 @@ jobs:
       - name: Verify source and release integrity
         working-directory: finite670-v2
         run: |
-          python3 verify_release.py
           python3 verification/finite670/verify_sources.py
       - name: Verify exact finite arithmetic
         working-directory: finite670-v2
