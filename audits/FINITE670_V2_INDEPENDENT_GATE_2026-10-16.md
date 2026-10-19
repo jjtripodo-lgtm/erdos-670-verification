@@ -1,5 +1,22 @@
 # Finite Erdős 670 v2 independent verification gate (2026-10-16)
 
+## Later evidence note, 19 October 2026
+
+The gate below is a historical 16 October record. The public theorem repository
+subsequently added an exact fixed-dimensional conjecture-statement adapter and
+now distributes [a later replay receipt and normalized logs](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/2caf66c312c5d498d17e1c150588684b66300e68/verification/replay_20261017)
+for its unchanged geometric proof plus adapter: all 68 local modules built from
+zero project objects, full fresh official-kernel replay, and five standard-only
+endpoint axiom audits. The depositing report describes a separate-provider
+environment; physical host identity is not independently attested. Pinned upstream
+compiled imports were reused. This is later scoped reproduction evidence, not a
+clean upstream source rebuild or an independently implemented kernel check.
+
+The historical OPEN status below must not erase that later execution evidence.
+No v2 compatibility port, Palomar production verification, Prove2Me submission,
+or outside specialist acceptance is asserted by this update. Existing fixtures
+and their v1-only scope remain unchanged.
+
 ## Scope
 
 The current theorem in `jjtripodo-lgtm/erdos-670-fixed-dimension` asserts, for every integer n ≥ 36354, an injective n-point configuration in R^81794, minimum distance ≥ 1, separation ≥ 1 between lengths of distinct unordered non-diagonal edges, and actual diameter < (147/200)n².

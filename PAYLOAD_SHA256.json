@@ -7,7 +7,7 @@
   "FIXTURE_SHA256.json": "1941fec23fc8802a810d17122ec3a6f572e50dd542d4141437aca1df6d0ad692",
   "LICENSE": "3587ec3f5eb141a9ec2a9470a10a8cae9bc904db51d2d7d4877bd5ff9751208e",
   "PALOMAR_MIGRATION_PATCHES.json": "42ea3a7e59901e56abd1ae2611d50d55556a2260b63b6e936e0f924bb3c0d1c2",
-  "README.md": "2dca394aa162d8a5e12c1e2d2c58103e5de34323d516ce81e324770b72864382",
+  "README.md": "b8cedbfc55447eeab4d0b594782bd8e5ace31c944ea4a069e0f0891d961e8b78",
   "SOURCE_MANIFEST.json": "29aedb0ee14354bececa54cc59a542d1b8308f4d7913742000c550eead8ee3b9",
   "extraction/README.md": "44a1e96190154cc6e30e1c6135b9aefe152ec274d8af85ad32c23db282b41812",
   "extraction/adapter/ADAPTER_PAYLOAD_SHA256.json": "2701084c7387915906882b05123c7e0c73c88bbb845866c53e3c8ab097f1b885",
@@ -215,5 +215,6 @@
   "scripts/install_lean.sh": "afb455302add0f782ca97bbee8154395bfdb644aad8e7c1bfe137b903ef9607b",
   "scripts/make_candidate.py": "3d77e4cf2d9fb37bbd010c8b316521e6a1198191dfdb832cd05d0e9264cbe54a",
   "scripts/run_checks.py": "5edf0f6652fcc0e9964da9fa062369fa23746d82fff1abeea45809039767f30e",
-  "scripts/test_adapter.py": "9f22ff512378faddb19f0336f88cdf7dde85c98002fb1f99f512400547ccdebd"
+  "scripts/test_adapter.py": "9f22ff512378faddb19f0336f88cdf7dde85c98002fb1f99f512400547ccdebd",
+  "audits/FINITE670_V2_INDEPENDENT_GATE_2026-10-16.md": "66d990f391e4276588f10dfb44454ff9530215e280ad5a6d90e3abd90c5fade3"
 }
