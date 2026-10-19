@@ -8,6 +8,12 @@ Its exact [66-module proof source](https://github.com/jjtripodo-lgtm/erdos-670-f
 and [verification scope](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/f1604c368efce996a9af4d46f581e676e49054f5/verification/finite670)
 are published separately.
 
+[Result and formalization status, 19 October 2026](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/blob/2caf66c312c5d498d17e1c150588684b66300e68/PUBLIC_STATUS.md)
+also explains the exact conjecture-statement adapter, later source-bound replay
+evidence reported from a separate provider, and separately scoped internal R29
+and epsilon-family formalizations. Those later results do not change the version
+checked by the compatibility fixtures in this repository.
+
 ## The version checked here
 
 This repository's Palomar and Prove2Me projects concern the archived
