@@ -1,6 +1,15 @@
 # Fixed-dimension Erdős 670: version-scoped compatibility checks
 
-The current finite manuscript and proof are in
+## Latest paper
+
+The new [Separated distances in fixed dimension](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/blob/fe4e6e004352056dbed6ea5fb051cdb3259ec4b6/paper/2026-10-20/Separated_Distances_in_Fixed_Dimension.pdf)
+(20 October 2026) presents the two-circle epsilon family, the dimension-29 prime-first result,
+and a separate written all-size R29 corollary. See its
+[editable sources and theorem scopes](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/fe4e6e004352056dbed6ea5fb051cdb3259ec4b6/paper/2026-10-20).
+The Palomar and Prove2Me checks recorded here remain scoped to the archived
+v1.0.0 theorem below; they do not verify this new paper.
+
+The 14 October finite manuscript and proof are in
 [erdos-670-fixed-dimension](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension).
 For every integer n ≥ 36354, that result gives n points in R^81794 with
 separated unordered-edge distances and diameter strictly below (147/200)n².
@@ -87,3 +96,4 @@ not authorize another platform submission.
 This code-only harness and the formalization are MIT licensed. The manuscript
 is linked, not copied or relicensed here; each manuscript version carries its
 own rights in the source repository. Upstream dependencies retain their licenses.
+
