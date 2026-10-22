@@ -24,8 +24,8 @@ sources:
     type: paper
     authors: ["John Tripodo"]
     relationship: formalizes
-    url: "https://doi.org/10.5281/zenodo.23329194"
-    note: "The package states the fixed-dimensional theorem presented in this frozen v1.0.0 release. Citation only: manuscript content is excluded and retains its separate reserved-rights terms."
+    url: "https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/blob/1e73a12ff1076dd11affadbf619ddbbef587133e/paper/fixed_dimension_670.pdf"
+    note: "The package states the fixed-dimensional theorem presented in this frozen v1.0.0 release. Former DOI 10.5281/zenodo.23329194 identifies the Zenodo deposit voluntarily withdrawn on 22 October 2026 solely for Zenodo policy compatibility; the mathematical claims and source version are unchanged. Citation only: manuscript content is excluded and retains its separate reserved-rights terms."
 related_formalizations:
   - id: "https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/1e73a12ff1076dd11affadbf619ddbbef587133e/lean-fixed670"
     relationship: "Compatibility port of the same theorem to Lean 4.35.0-rc2, with the substantive proof sources included."

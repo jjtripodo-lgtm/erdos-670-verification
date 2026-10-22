@@ -1,6 +1,6 @@
 # Fixed-dimensional separated Euclidean distances
 
-This code-only candidate ports the formalization from the [frozen v1.0.0 release](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/releases/tag/v1.0.0), archived as [DOI 10.5281/zenodo.23329194](https://doi.org/10.5281/zenodo.23329194), source commit `1e73a12ff1076dd11affadbf619ddbbef587133e`, to Lean 4.35.0-rc2 and Mathlib `065356127b1dc0016f66b7283ce0ce2c4055aa55`.
+This code-only candidate ports the formalization from the [frozen v1.0.0 release](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/releases/tag/v1.0.0), with its [original manuscript](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/blob/1e73a12ff1076dd11affadbf619ddbbef587133e/paper/fixed_dimension_670.pdf) still available. Former [DOI 10.5281/zenodo.23329194](https://doi.org/10.5281/zenodo.23329194) identifies the Zenodo deposit voluntarily withdrawn on 22 October 2026 solely for Zenodo policy compatibility. The port uses source commit `1e73a12ff1076dd11affadbf619ddbbef587133e` with Lean 4.35.0-rc2 and Mathlib `065356127b1dc0016f66b7283ce0ce2c4055aa55`.
 
 For every natural number `n >= 68000`, the theorem constructs `n` injectively indexed points in the single fixed Euclidean space `R^458999`. Distances between distinct points are at least one; distances belonging to distinct unordered non-diagonal pairs differ by at least one; and every pair distance and the diameter are strictly below `(37/50)n^2`. These are sufficient bounds, not optimality or priority claims.
 

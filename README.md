@@ -29,7 +29,7 @@ This repository's Palomar and Prove2Me projects concern the archived
 **v1.0.0 theorem: n ≥ 68000, dimension 458999, diameter < (37/50)n²**.
 They use precisely 54 original source modules from
 [commit 1e73a12ff1076dd11affadbf619ddbbef587133e](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/tree/1e73a12ff1076dd11affadbf619ddbbef587133e/lean-fixed670),
-archived at [DOI 10.5281/zenodo.23329194](https://doi.org/10.5281/zenodo.23329194).
+with its [original manuscript](https://github.com/jjtripodo-lgtm/erdos-670-fixed-dimension/blob/1e73a12ff1076dd11affadbf619ddbbef587133e/paper/fixed_dimension_670.pdf) retained at the same immutable source commit. Former [DOI 10.5281/zenodo.23329194](https://doi.org/10.5281/zenodo.23329194) identifies the Zenodo deposit voluntarily withdrawn on 22 October 2026 solely for Zenodo policy compatibility. The mathematical claims, original manuscript and verification evidence remain unchanged.
 The statement includes injectivity, unit minimum distance, separation of
 distinct unordered non-diagonal edges, and the actual set diameter bound.
 
